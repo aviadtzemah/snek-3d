@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <CustomBuild Include="C:\Dev\EngineForAnimationCourse\external\.cache\libigl-imgui\CMakeFiles\c9de9e906fefc017297a967846bb42ae\generate.stamp.rule">
+    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\libigl-imgui\CMakeFiles\12cba31f7f0a09356ea5d775cbc40348\generate.stamp.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CMake Rules">
-      <UniqueIdentifier>{C41D8330-3953-3EA8-9389-FFA178DD58D3}</UniqueIdentifier>
+      <UniqueIdentifier>{291CAB88-C8A7-3F6A-A82F-2DE9F41FBCB2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
