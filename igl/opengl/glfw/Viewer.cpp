@@ -69,7 +69,7 @@ namespace glfw
 	isPicked(false),
 	isActive(false),
     tipPosition(Eigen::Vector3d(0, 0, -0.8)), //TODO: see about tip position if there's problems with the collision
-    linkOffset(Eigen::Vector3d(0, 0, -1.2)),
+    linkOffset(Eigen::Vector3d(0, 0, -1.6)),
     linkLength(1.6),
     prevParent(-1),
     linkNum(0),
@@ -112,17 +112,26 @@ namespace glfw
 
   IGL_INLINE bool Viewer::arrange_links_and_set_parents() {
       // TODO: set up the camera so it would be around the head of the snake
+    
+      // scaling addition
+      data_list[0].MyScale(Eigen::Vector3d(1, 1, 1/1.6)); // normalizing the length to 1
+      data_list[0].MyScale(Eigen::Vector3d(1, 1, (linkNum-1)* linkLength));
+     
 
       // setting the links
-      for (int i = 0; i < linkNum; i++) {
+      for (int i = 1; i < linkNum; i++) {
           data_list[i].MyTranslate(linkOffset, true);
           tipPosition += linkOffset;
       }
 
       // setting the parents
-      for (int i = 0; i < linkNum-1; i++) {
+      for (int i = 1; i < linkNum-1; i++) {
           parents[i] = i+1;
       }
+
+      data_list[linkNum - 1].MyTranslate(-linkOffset * ((linkNum)/2), true);
+      tipPosition += -linkOffset * ((linkNum) / 2); // TODO: not sure about the calculation of this
+      data_list[linkNum - 1].MyScale(Eigen::Vector3d(0.5, 0.5, 1)); // for some reason only scaling the base sacles the whole skeleton. so we'll take it.
 
       return true;
   }
@@ -204,10 +213,11 @@ namespace glfw
     //  if (plugins[i]->post_load())
     //    return true;
 
+    
 
     // fabrik addition
-    linkNum++;
     data().SetCenterOfRotation(Eigen::Vector3d(0, 0, 0.8));
+    linkNum++;
 
     return true;
   }
