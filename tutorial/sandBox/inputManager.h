@@ -170,16 +170,19 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 			scn->data().SetCenterOfRotation(tmp);
 			break;
 		case GLFW_KEY_UP:
-			rndr->TranslateCamera(Eigen::Vector3f(0, 0.01f,0));
+			scn->direction = 1;
+			rndr->TranslateCamera(Eigen::Vector3f(0, 0.01f,0)); // TODO: move camera according to movement
 			break;
 		case GLFW_KEY_DOWN:
 			rndr->TranslateCamera(Eigen::Vector3f(0, -0.01f,0));
 
 			break;
 		case GLFW_KEY_LEFT:
-				rndr->TranslateCamera(Eigen::Vector3f(-0.01f, 0,0));
+			scn->direction = 3;
+			rndr->TranslateCamera(Eigen::Vector3f(-0.01f, 0,0));
 			break;
 		case GLFW_KEY_RIGHT:
+			scn->direction = 2;
 			rndr->TranslateCamera(Eigen::Vector3f(0.01f, 0, 0));
 			break;
 		case ' ':

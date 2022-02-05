@@ -8,8 +8,8 @@ project(libigl-imgui-download NONE)
 include(ExternalProject)
 ExternalProject_Add(libigl-imgui-download
                     TLS_VERIFY;OFF;GIT_CONFIG;advice.detachedHead=false;GIT_REPOSITORY;https://github.com/libigl/libigl-imgui.git;GIT_TAG;07ecd3858acc71e70f0f9b2dea20a139bdddf8ae
-                    SOURCE_DIR          "D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/cmake/../external/libigl-imgui"
-                    BINARY_DIR          "D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/build/libigl-imgui-build"
+                    SOURCE_DIR          "D:/University/Animation/Project/snek-3d/cmake/../external/libigl-imgui"
+                    BINARY_DIR          "D:/University/Animation/Project/snek-3d/build/libigl-imgui-build"
                     CONFIGURE_COMMAND   ""
                     BUILD_COMMAND       ""
                     INSTALL_COMMAND     ""

@@ -1,44 +1,44 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\glfw\CMakeFiles\f308226e528b0bc06176a8ef71021100\glfw-download-mkdir.rule">
+    <CustomBuild Include="D:\University\Animation\Project\snek-3d\external\.cache\glfw\CMakeFiles\55b4382c92fbfaf215e68225573a0664\glfw-download-mkdir.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\glfw\CMakeFiles\f308226e528b0bc06176a8ef71021100\glfw-download-download.rule">
+    <CustomBuild Include="D:\University\Animation\Project\snek-3d\external\.cache\glfw\CMakeFiles\55b4382c92fbfaf215e68225573a0664\glfw-download-download.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\glfw\CMakeFiles\f308226e528b0bc06176a8ef71021100\glfw-download-update.rule">
+    <CustomBuild Include="D:\University\Animation\Project\snek-3d\external\.cache\glfw\CMakeFiles\55b4382c92fbfaf215e68225573a0664\glfw-download-update.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\glfw\CMakeFiles\f308226e528b0bc06176a8ef71021100\glfw-download-patch.rule">
+    <CustomBuild Include="D:\University\Animation\Project\snek-3d\external\.cache\glfw\CMakeFiles\55b4382c92fbfaf215e68225573a0664\glfw-download-patch.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\glfw\CMakeFiles\f308226e528b0bc06176a8ef71021100\glfw-download-configure.rule">
+    <CustomBuild Include="D:\University\Animation\Project\snek-3d\external\.cache\glfw\CMakeFiles\55b4382c92fbfaf215e68225573a0664\glfw-download-configure.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\glfw\CMakeFiles\f308226e528b0bc06176a8ef71021100\glfw-download-build.rule">
+    <CustomBuild Include="D:\University\Animation\Project\snek-3d\external\.cache\glfw\CMakeFiles\55b4382c92fbfaf215e68225573a0664\glfw-download-build.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\glfw\CMakeFiles\f308226e528b0bc06176a8ef71021100\glfw-download-install.rule">
+    <CustomBuild Include="D:\University\Animation\Project\snek-3d\external\.cache\glfw\CMakeFiles\55b4382c92fbfaf215e68225573a0664\glfw-download-install.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\glfw\CMakeFiles\f308226e528b0bc06176a8ef71021100\glfw-download-test.rule">
+    <CustomBuild Include="D:\University\Animation\Project\snek-3d\external\.cache\glfw\CMakeFiles\55b4382c92fbfaf215e68225573a0664\glfw-download-test.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\glfw\CMakeFiles\efc6677225a3256f5b7e825ec143101f\glfw-download-complete.rule">
+    <CustomBuild Include="D:\University\Animation\Project\snek-3d\external\.cache\glfw\CMakeFiles\513bef5c99256be2f913a4227199fc21\glfw-download-complete.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\glfw\CMakeFiles\6f8fabc0c88360f31403dd8aca9e252f\glfw-download.rule">
+    <CustomBuild Include="D:\University\Animation\Project\snek-3d\external\.cache\glfw\CMakeFiles\d5de25d9b0b44b84a49d6372666f6826\glfw-download.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\glfw\CMakeLists.txt" />
+    <CustomBuild Include="D:\University\Animation\Project\snek-3d\external\.cache\glfw\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\glfw\CMakeFiles\glfw-download" />
+    <None Include="D:\University\Animation\Project\snek-3d\external\.cache\glfw\CMakeFiles\glfw-download" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CMake Rules">
-      <UniqueIdentifier>{F0669592-F0E7-3FFE-8A66-744B8B85B54C}</UniqueIdentifier>
+      <UniqueIdentifier>{C6DD7247-FB4B-3F4F-9CCB-A0E12BD9967C}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

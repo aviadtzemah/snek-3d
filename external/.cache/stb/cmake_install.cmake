@@ -1,4 +1,4 @@
-# Install script for directory: D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/stb
+# Install script for directory: D:/University/Animation/Project/snek-3d/external/.cache/stb
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/stb/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "D:/University/Animation/Project/snek-3d/external/.cache/stb/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

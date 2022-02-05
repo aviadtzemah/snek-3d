@@ -1,44 +1,44 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\libigl-imgui\CMakeFiles\f1585bbe97e363e4248d022388e2603d\libigl-imgui-download-mkdir.rule">
+    <CustomBuild Include="D:\University\Animation\Project\snek-3d\external\.cache\libigl-imgui\CMakeFiles\baf88b82c47ff3e1dc56634f8ea0b424\libigl-imgui-download-mkdir.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\libigl-imgui\CMakeFiles\f1585bbe97e363e4248d022388e2603d\libigl-imgui-download-download.rule">
+    <CustomBuild Include="D:\University\Animation\Project\snek-3d\external\.cache\libigl-imgui\CMakeFiles\baf88b82c47ff3e1dc56634f8ea0b424\libigl-imgui-download-download.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\libigl-imgui\CMakeFiles\f1585bbe97e363e4248d022388e2603d\libigl-imgui-download-update.rule">
+    <CustomBuild Include="D:\University\Animation\Project\snek-3d\external\.cache\libigl-imgui\CMakeFiles\baf88b82c47ff3e1dc56634f8ea0b424\libigl-imgui-download-update.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\libigl-imgui\CMakeFiles\f1585bbe97e363e4248d022388e2603d\libigl-imgui-download-patch.rule">
+    <CustomBuild Include="D:\University\Animation\Project\snek-3d\external\.cache\libigl-imgui\CMakeFiles\baf88b82c47ff3e1dc56634f8ea0b424\libigl-imgui-download-patch.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\libigl-imgui\CMakeFiles\f1585bbe97e363e4248d022388e2603d\libigl-imgui-download-configure.rule">
+    <CustomBuild Include="D:\University\Animation\Project\snek-3d\external\.cache\libigl-imgui\CMakeFiles\baf88b82c47ff3e1dc56634f8ea0b424\libigl-imgui-download-configure.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\libigl-imgui\CMakeFiles\f1585bbe97e363e4248d022388e2603d\libigl-imgui-download-build.rule">
+    <CustomBuild Include="D:\University\Animation\Project\snek-3d\external\.cache\libigl-imgui\CMakeFiles\baf88b82c47ff3e1dc56634f8ea0b424\libigl-imgui-download-build.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\libigl-imgui\CMakeFiles\f1585bbe97e363e4248d022388e2603d\libigl-imgui-download-install.rule">
+    <CustomBuild Include="D:\University\Animation\Project\snek-3d\external\.cache\libigl-imgui\CMakeFiles\baf88b82c47ff3e1dc56634f8ea0b424\libigl-imgui-download-install.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\libigl-imgui\CMakeFiles\f1585bbe97e363e4248d022388e2603d\libigl-imgui-download-test.rule">
+    <CustomBuild Include="D:\University\Animation\Project\snek-3d\external\.cache\libigl-imgui\CMakeFiles\baf88b82c47ff3e1dc56634f8ea0b424\libigl-imgui-download-test.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\libigl-imgui\CMakeFiles\5b2adae9cf2111dfafbcaa7277765259\libigl-imgui-download-complete.rule">
+    <CustomBuild Include="D:\University\Animation\Project\snek-3d\external\.cache\libigl-imgui\CMakeFiles\9fd28f2490e160b7b49da09b0999a24a\libigl-imgui-download-complete.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\libigl-imgui\CMakeFiles\12cba31f7f0a09356ea5d775cbc40348\libigl-imgui-download.rule">
+    <CustomBuild Include="D:\University\Animation\Project\snek-3d\external\.cache\libigl-imgui\CMakeFiles\605394e0ad6dfbb601efff5bb7a4992e\libigl-imgui-download.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\libigl-imgui\CMakeLists.txt" />
+    <CustomBuild Include="D:\University\Animation\Project\snek-3d\external\.cache\libigl-imgui\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\libigl-imgui\CMakeFiles\libigl-imgui-download" />
+    <None Include="D:\University\Animation\Project\snek-3d\external\.cache\libigl-imgui\CMakeFiles\libigl-imgui-download" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CMake Rules">
-      <UniqueIdentifier>{291CAB88-C8A7-3F6A-A82F-2DE9F41FBCB2}</UniqueIdentifier>
+      <UniqueIdentifier>{271F1B28-63BE-368F-9186-49722B0CC4F2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

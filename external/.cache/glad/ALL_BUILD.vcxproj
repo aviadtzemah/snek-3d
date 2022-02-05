@@ -22,7 +22,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{346209F5-0341-3A16-960C-837000648072}</ProjectGuid>
+    <ProjectGuid>{59F48824-6305-375B-8B5F-FBD2E3EDE4EF}</ProjectGuid>
     <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
     <Keyword>Win32Proj</Keyword>
     <Platform>x64</Platform>
@@ -105,11 +105,11 @@
     </Midl>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\glad\CMakeLists.txt">
+    <CustomBuild Include="D:\University\Animation\Project\snek-3d\external\.cache\glad\CMakeLists.txt">
       <UseUtf8Encoding>Always</UseUtf8Encoding>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/glad/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule D:/University/Animation/Project/snek-3d/external/.cache/glad/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SD:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/glad -BD:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/glad --check-stamp-file D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/glad/CMakeFiles/generate.stamp
+"D:\Program Files\CMake\bin\cmake.exe" -SD:/University/Animation/Project/snek-3d/external/.cache/glad -BD:/University/Animation/Project/snek-3d/external/.cache/glad --check-stamp-file D:/University/Animation/Project/snek-3d/external/.cache/glad/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -117,12 +117,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeDetermineSystem.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeSystem.cmake.in;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\ExternalProject-gitupdate.cmake.in;C:\Program Files\CMake\share\cmake-3.22\Modules\ExternalProject.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\FindGit.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\RepositoryInfo.txt.in;D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\glad\CMakeFiles\3.22.0-rc1\CMakeSystem.cmake;D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\glad\glad-download-prefix\tmp\glad-download-cfgcmd.txt.in;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\glad\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\Program Files\CMake\share\cmake-3.22\Modules\CMakeDetermineSystem.cmake;D:\Program Files\CMake\share\cmake-3.22\Modules\CMakeGenericSystem.cmake;D:\Program Files\CMake\share\cmake-3.22\Modules\CMakeInitializeConfigs.cmake;D:\Program Files\CMake\share\cmake-3.22\Modules\CMakeSystem.cmake.in;D:\Program Files\CMake\share\cmake-3.22\Modules\CMakeSystemSpecificInformation.cmake;D:\Program Files\CMake\share\cmake-3.22\Modules\CMakeSystemSpecificInitialize.cmake;D:\Program Files\CMake\share\cmake-3.22\Modules\ExternalProject-gitupdate.cmake.in;D:\Program Files\CMake\share\cmake-3.22\Modules\ExternalProject.cmake;D:\Program Files\CMake\share\cmake-3.22\Modules\FindGit.cmake;D:\Program Files\CMake\share\cmake-3.22\Modules\FindPackageHandleStandardArgs.cmake;D:\Program Files\CMake\share\cmake-3.22\Modules\FindPackageMessage.cmake;D:\Program Files\CMake\share\cmake-3.22\Modules\Platform\Windows.cmake;D:\Program Files\CMake\share\cmake-3.22\Modules\Platform\WindowsPaths.cmake;D:\Program Files\CMake\share\cmake-3.22\Modules\RepositoryInfo.txt.in;D:\University\Animation\Project\snek-3d\external\.cache\glad\CMakeFiles\3.22.2\CMakeSystem.cmake;D:\University\Animation\Project\snek-3d\external\.cache\glad\glad-download-prefix\tmp\glad-download-cfgcmd.txt.in;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\University\Animation\Project\snek-3d\external\.cache\glad\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/glad/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule D:/University/Animation/Project/snek-3d/external/.cache/glad/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SD:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/glad -BD:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/glad --check-stamp-file D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/glad/CMakeFiles/generate.stamp
+"D:\Program Files\CMake\bin\cmake.exe" -SD:/University/Animation/Project/snek-3d/external/.cache/glad -BD:/University/Animation/Project/snek-3d/external/.cache/glad --check-stamp-file D:/University/Animation/Project/snek-3d/external/.cache/glad/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -130,12 +130,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeDetermineSystem.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeSystem.cmake.in;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\ExternalProject-gitupdate.cmake.in;C:\Program Files\CMake\share\cmake-3.22\Modules\ExternalProject.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\FindGit.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\RepositoryInfo.txt.in;D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\glad\CMakeFiles\3.22.0-rc1\CMakeSystem.cmake;D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\glad\glad-download-prefix\tmp\glad-download-cfgcmd.txt.in;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\glad\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\Program Files\CMake\share\cmake-3.22\Modules\CMakeDetermineSystem.cmake;D:\Program Files\CMake\share\cmake-3.22\Modules\CMakeGenericSystem.cmake;D:\Program Files\CMake\share\cmake-3.22\Modules\CMakeInitializeConfigs.cmake;D:\Program Files\CMake\share\cmake-3.22\Modules\CMakeSystem.cmake.in;D:\Program Files\CMake\share\cmake-3.22\Modules\CMakeSystemSpecificInformation.cmake;D:\Program Files\CMake\share\cmake-3.22\Modules\CMakeSystemSpecificInitialize.cmake;D:\Program Files\CMake\share\cmake-3.22\Modules\ExternalProject-gitupdate.cmake.in;D:\Program Files\CMake\share\cmake-3.22\Modules\ExternalProject.cmake;D:\Program Files\CMake\share\cmake-3.22\Modules\FindGit.cmake;D:\Program Files\CMake\share\cmake-3.22\Modules\FindPackageHandleStandardArgs.cmake;D:\Program Files\CMake\share\cmake-3.22\Modules\FindPackageMessage.cmake;D:\Program Files\CMake\share\cmake-3.22\Modules\Platform\Windows.cmake;D:\Program Files\CMake\share\cmake-3.22\Modules\Platform\WindowsPaths.cmake;D:\Program Files\CMake\share\cmake-3.22\Modules\RepositoryInfo.txt.in;D:\University\Animation\Project\snek-3d\external\.cache\glad\CMakeFiles\3.22.2\CMakeSystem.cmake;D:\University\Animation\Project\snek-3d\external\.cache\glad\glad-download-prefix\tmp\glad-download-cfgcmd.txt.in;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\University\Animation\Project\snek-3d\external\.cache\glad\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/glad/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule D:/University/Animation/Project/snek-3d/external/.cache/glad/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SD:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/glad -BD:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/glad --check-stamp-file D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/glad/CMakeFiles/generate.stamp
+"D:\Program Files\CMake\bin\cmake.exe" -SD:/University/Animation/Project/snek-3d/external/.cache/glad -BD:/University/Animation/Project/snek-3d/external/.cache/glad --check-stamp-file D:/University/Animation/Project/snek-3d/external/.cache/glad/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -143,12 +143,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeDetermineSystem.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeSystem.cmake.in;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\ExternalProject-gitupdate.cmake.in;C:\Program Files\CMake\share\cmake-3.22\Modules\ExternalProject.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\FindGit.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\RepositoryInfo.txt.in;D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\glad\CMakeFiles\3.22.0-rc1\CMakeSystem.cmake;D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\glad\glad-download-prefix\tmp\glad-download-cfgcmd.txt.in;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\glad\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">D:\Program Files\CMake\share\cmake-3.22\Modules\CMakeDetermineSystem.cmake;D:\Program Files\CMake\share\cmake-3.22\Modules\CMakeGenericSystem.cmake;D:\Program Files\CMake\share\cmake-3.22\Modules\CMakeInitializeConfigs.cmake;D:\Program Files\CMake\share\cmake-3.22\Modules\CMakeSystem.cmake.in;D:\Program Files\CMake\share\cmake-3.22\Modules\CMakeSystemSpecificInformation.cmake;D:\Program Files\CMake\share\cmake-3.22\Modules\CMakeSystemSpecificInitialize.cmake;D:\Program Files\CMake\share\cmake-3.22\Modules\ExternalProject-gitupdate.cmake.in;D:\Program Files\CMake\share\cmake-3.22\Modules\ExternalProject.cmake;D:\Program Files\CMake\share\cmake-3.22\Modules\FindGit.cmake;D:\Program Files\CMake\share\cmake-3.22\Modules\FindPackageHandleStandardArgs.cmake;D:\Program Files\CMake\share\cmake-3.22\Modules\FindPackageMessage.cmake;D:\Program Files\CMake\share\cmake-3.22\Modules\Platform\Windows.cmake;D:\Program Files\CMake\share\cmake-3.22\Modules\Platform\WindowsPaths.cmake;D:\Program Files\CMake\share\cmake-3.22\Modules\RepositoryInfo.txt.in;D:\University\Animation\Project\snek-3d\external\.cache\glad\CMakeFiles\3.22.2\CMakeSystem.cmake;D:\University\Animation\Project\snek-3d\external\.cache\glad\glad-download-prefix\tmp\glad-download-cfgcmd.txt.in;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">D:\University\Animation\Project\snek-3d\external\.cache\glad\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/glad/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule D:/University/Animation/Project/snek-3d/external/.cache/glad/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SD:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/glad -BD:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/glad --check-stamp-file D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/glad/CMakeFiles/generate.stamp
+"D:\Program Files\CMake\bin\cmake.exe" -SD:/University/Animation/Project/snek-3d/external/.cache/glad -BD:/University/Animation/Project/snek-3d/external/.cache/glad --check-stamp-file D:/University/Animation/Project/snek-3d/external/.cache/glad/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -156,22 +156,22 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeDetermineSystem.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeSystem.cmake.in;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\ExternalProject-gitupdate.cmake.in;C:\Program Files\CMake\share\cmake-3.22\Modules\ExternalProject.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\FindGit.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\RepositoryInfo.txt.in;D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\glad\CMakeFiles\3.22.0-rc1\CMakeSystem.cmake;D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\glad\glad-download-prefix\tmp\glad-download-cfgcmd.txt.in;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\glad\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">D:\Program Files\CMake\share\cmake-3.22\Modules\CMakeDetermineSystem.cmake;D:\Program Files\CMake\share\cmake-3.22\Modules\CMakeGenericSystem.cmake;D:\Program Files\CMake\share\cmake-3.22\Modules\CMakeInitializeConfigs.cmake;D:\Program Files\CMake\share\cmake-3.22\Modules\CMakeSystem.cmake.in;D:\Program Files\CMake\share\cmake-3.22\Modules\CMakeSystemSpecificInformation.cmake;D:\Program Files\CMake\share\cmake-3.22\Modules\CMakeSystemSpecificInitialize.cmake;D:\Program Files\CMake\share\cmake-3.22\Modules\ExternalProject-gitupdate.cmake.in;D:\Program Files\CMake\share\cmake-3.22\Modules\ExternalProject.cmake;D:\Program Files\CMake\share\cmake-3.22\Modules\FindGit.cmake;D:\Program Files\CMake\share\cmake-3.22\Modules\FindPackageHandleStandardArgs.cmake;D:\Program Files\CMake\share\cmake-3.22\Modules\FindPackageMessage.cmake;D:\Program Files\CMake\share\cmake-3.22\Modules\Platform\Windows.cmake;D:\Program Files\CMake\share\cmake-3.22\Modules\Platform\WindowsPaths.cmake;D:\Program Files\CMake\share\cmake-3.22\Modules\RepositoryInfo.txt.in;D:\University\Animation\Project\snek-3d\external\.cache\glad\CMakeFiles\3.22.2\CMakeSystem.cmake;D:\University\Animation\Project\snek-3d\external\.cache\glad\glad-download-prefix\tmp\glad-download-cfgcmd.txt.in;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">D:\University\Animation\Project\snek-3d\external\.cache\glad\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\glad\ZERO_CHECK.vcxproj">
-      <Project>{8A9F703F-ED46-3D35-A48F-619ADB132A4B}</Project>
+    <ProjectReference Include="D:\University\Animation\Project\snek-3d\external\.cache\glad\ZERO_CHECK.vcxproj">
+      <Project>{75B95202-58B8-3EF4-857E-FDE4B7B9EF92}</Project>
       <Name>ZERO_CHECK</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </ProjectReference>
-    <ProjectReference Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\glad\glad-download.vcxproj">
-      <Project>{9AC46A3C-2704-36A4-8F84-394C94124D67}</Project>
+    <ProjectReference Include="D:\University\Animation\Project\snek-3d\external\.cache\glad\glad-download.vcxproj">
+      <Project>{D6FAC60B-CE5D-3A19-A7CD-75FA6C0C9232}</Project>
       <Name>glad-download</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>

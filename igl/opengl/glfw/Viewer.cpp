@@ -67,7 +67,13 @@ namespace glfw
     selected_data_index(0),
     next_data_id(1),
 	isPicked(false),
-	isActive(false)
+	isActive(false),
+    tipPosition(Eigen::Vector3d(0, 0, -0.8)), //TODO: see about tip position if there's problems with the collision
+    linkOffset(Eigen::Vector3d(0, 0, -1.2)),
+    linkLength(1.6),
+    prevParent(-1),
+    linkNum(0),
+    direction(0)
   {
     data_list.front().id = 0;
 
@@ -102,6 +108,23 @@ namespace glfw
 
   IGL_INLINE Viewer::~Viewer()
   {
+  }
+
+  IGL_INLINE bool Viewer::arrange_links_and_set_parents() {
+      // TODO: set up the camera so it would be around the head of the snake
+
+      // setting the links
+      for (int i = 0; i < linkNum; i++) {
+          data_list[i].MyTranslate(linkOffset, true);
+          tipPosition += linkOffset;
+      }
+
+      // setting the parents
+      for (int i = 0; i < linkNum-1; i++) {
+          parents[i] = i+1;
+      }
+
+      return true;
   }
 
   IGL_INLINE bool Viewer::load_mesh_from_file(
@@ -180,6 +203,11 @@ namespace glfw
     //for (unsigned int i = 0; i<plugins.size(); ++i)
     //  if (plugins[i]->post_load())
     //    return true;
+
+
+    // fabrik addition
+    linkNum++;
+    data().SetCenterOfRotation(Eigen::Vector3d(0, 0, 0.8));
 
     return true;
   }
@@ -361,6 +389,12 @@ namespace glfw
 	  }
 
 	  return prevTrans;
+  }
+
+  // our functions
+
+  IGL_INLINE bool Viewer::AnimateFabrik() {
+      return true;
   }
 
 } // end namespace

@@ -2,10 +2,10 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\libigl-imgui\x64\Debug\ZERO_CHECK</FullPath>
+      <FullPath>D:\University\Animation\Project\snek-3d\external\.cache\libigl-imgui\x64\Debug\ZERO_CHECK</FullPath>
     </ProjectOutput>
     <ProjectOutput>
-      <FullPath>D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\libigl-imgui\x64\Debug\libigl-imgui-download</FullPath>
+      <FullPath>D:\University\Animation\Project\snek-3d\external\.cache\libigl-imgui\x64\Debug\libigl-imgui-download</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

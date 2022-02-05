@@ -1,14 +1,14 @@
 # Target labels
  libigl-imgui-download
 # Source files and their labels
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/libigl-imgui/CMakeFiles/libigl-imgui-download
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/libigl-imgui/CMakeFiles/12cba31f7f0a09356ea5d775cbc40348/libigl-imgui-download.rule
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/libigl-imgui/CMakeFiles/5b2adae9cf2111dfafbcaa7277765259/libigl-imgui-download-complete.rule
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/libigl-imgui/CMakeFiles/f1585bbe97e363e4248d022388e2603d/libigl-imgui-download-build.rule
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/libigl-imgui/CMakeFiles/f1585bbe97e363e4248d022388e2603d/libigl-imgui-download-configure.rule
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/libigl-imgui/CMakeFiles/f1585bbe97e363e4248d022388e2603d/libigl-imgui-download-download.rule
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/libigl-imgui/CMakeFiles/f1585bbe97e363e4248d022388e2603d/libigl-imgui-download-install.rule
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/libigl-imgui/CMakeFiles/f1585bbe97e363e4248d022388e2603d/libigl-imgui-download-mkdir.rule
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/libigl-imgui/CMakeFiles/f1585bbe97e363e4248d022388e2603d/libigl-imgui-download-patch.rule
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/libigl-imgui/CMakeFiles/f1585bbe97e363e4248d022388e2603d/libigl-imgui-download-test.rule
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/libigl-imgui/CMakeFiles/f1585bbe97e363e4248d022388e2603d/libigl-imgui-download-update.rule
+D:/University/Animation/Project/snek-3d/external/.cache/libigl-imgui/CMakeFiles/libigl-imgui-download
+D:/University/Animation/Project/snek-3d/external/.cache/libigl-imgui/CMakeFiles/605394e0ad6dfbb601efff5bb7a4992e/libigl-imgui-download.rule
+D:/University/Animation/Project/snek-3d/external/.cache/libigl-imgui/CMakeFiles/9fd28f2490e160b7b49da09b0999a24a/libigl-imgui-download-complete.rule
+D:/University/Animation/Project/snek-3d/external/.cache/libigl-imgui/CMakeFiles/baf88b82c47ff3e1dc56634f8ea0b424/libigl-imgui-download-build.rule
+D:/University/Animation/Project/snek-3d/external/.cache/libigl-imgui/CMakeFiles/baf88b82c47ff3e1dc56634f8ea0b424/libigl-imgui-download-configure.rule
+D:/University/Animation/Project/snek-3d/external/.cache/libigl-imgui/CMakeFiles/baf88b82c47ff3e1dc56634f8ea0b424/libigl-imgui-download-download.rule
+D:/University/Animation/Project/snek-3d/external/.cache/libigl-imgui/CMakeFiles/baf88b82c47ff3e1dc56634f8ea0b424/libigl-imgui-download-install.rule
+D:/University/Animation/Project/snek-3d/external/.cache/libigl-imgui/CMakeFiles/baf88b82c47ff3e1dc56634f8ea0b424/libigl-imgui-download-mkdir.rule
+D:/University/Animation/Project/snek-3d/external/.cache/libigl-imgui/CMakeFiles/baf88b82c47ff3e1dc56634f8ea0b424/libigl-imgui-download-patch.rule
+D:/University/Animation/Project/snek-3d/external/.cache/libigl-imgui/CMakeFiles/baf88b82c47ff3e1dc56634f8ea0b424/libigl-imgui-download-test.rule
+D:/University/Animation/Project/snek-3d/external/.cache/libigl-imgui/CMakeFiles/baf88b82c47ff3e1dc56634f8ea0b424/libigl-imgui-download-update.rule

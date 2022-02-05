@@ -25,12 +25,12 @@ void SandBox::Init(const std::string &config)
 	else
 	{
 		
-		while (nameFileout >> item_name)
+		while (nameFileout >> item_name) //TODO: set up the head of the snake
 		{
 			std::cout << "openning " << item_name << std::endl;
+			parents.push_back(-1);
 			load_mesh_from_file(item_name);
 			
-			parents.push_back(-1);
 			data().add_points(Eigen::RowVector3d(0, 0, 0), Eigen::RowVector3d(0, 0, 1));
 			data().show_overlay_depth = false;
 			data().point_size = 10;
@@ -40,11 +40,12 @@ void SandBox::Init(const std::string &config)
 			
 		}
 		nameFileout.close();
+
+		arrange_links_and_set_parents();
 	}
 	MyTranslate(Eigen::Vector3d(0, 0, -1), true);
 	
 	data().set_colors(Eigen::RowVector3d(0.9, 0.1, 0.1));
-
 }
 
 SandBox::~SandBox()
@@ -54,8 +55,10 @@ SandBox::~SandBox()
 
 void SandBox::Animate()
 {
-	if (isActive)
+	AnimateFabrik();
+	if (isActive) // TODO: see about this thingy
 	{
+		
 		
 		
 		
