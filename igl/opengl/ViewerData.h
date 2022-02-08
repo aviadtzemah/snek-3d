@@ -152,6 +152,17 @@ public:
   Eigen::MatrixXd V; // Vertices of the current mesh (#V x 3)
   Eigen::MatrixXi F; // Faces of the mesh (#F x 3)
 
+  // our additions
+  typedef
+      std::vector<Eigen::Quaterniond, Eigen::aligned_allocator<Eigen::Quaterniond> >
+      RotationList;
+
+  Eigen::MatrixXd w, U, C;
+  Eigen::MatrixXi BE;
+  Eigen::VectorXi P;
+  RotationList rest_pose;
+  std::vector<RotationList > poses;
+
   // Per face attributes
   Eigen::MatrixXd F_normals; // One normal per face
 

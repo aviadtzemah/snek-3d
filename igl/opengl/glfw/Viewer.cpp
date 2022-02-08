@@ -42,6 +42,17 @@
 #include <igl/unproject.h>
 #include <igl/serialize.h>
 
+// our imports
+#include <igl/readTGF.h>
+#include <igl/directed_edge_orientations.h>
+#include <igl/directed_edge_parents.h>
+#include <igl/PI.h>
+
+// our addition
+typedef
+std::vector<Eigen::Quaterniond, Eigen::aligned_allocator<Eigen::Quaterniond> >
+RotationList;
+
 // Internal global variables used for glfw event handling
 //static igl::opengl::glfw::Viewer * __viewer;
 static double highdpi = 1;
@@ -188,7 +199,6 @@ namespace glfw
       {
           data().set_uv(UV_V, UV_F);
       }
-
     }
     else
     {
@@ -214,10 +224,31 @@ namespace glfw
     //    return true;
 
     
+    // currently assuming the snake is the only object
+    // scaling the snake object
+    data().MyScale(Eigen::Vector3d(1, 1, 1 / 1.6)); // normalizing the length to 1
+    data().MyScale(Eigen::Vector3d(1, 1, 16*linkLength));
+
+    // skinning additions
+    data().U = data().V;
+
+    igl::readTGF("D:/University/Animation/Project/snek-3d/tutorial/data/snake_temp.tgf", data().C, data().BE);
+    // retrieve parents for forward kinematics
+    igl::directed_edge_parents(data().BE, data().P);
+    igl::directed_edge_orientations(data().C, data().BE, data().rest_pose);
+
+    // TODO: write it properly 
+    /*data().poses.resize(4, RotationList(4, Eigen::Quaterniond::Identity()));
+    const Eigen::Quaterniond bend(Eigen::AngleAxisd(-igl::PI * 0.7, Eigen::Vector3d(0, 0, 1)));
+    data().poses[3][2] = data().rest_pose[2] * bend * data().rest_pose[2].conjugate();*/
+
+    // TODO: calculate skinning weights
+
+    data().set_edges(data().C, data().BE, Eigen::RowVector3d(70. / 255., 252. / 255., 167. / 255.));
 
     // fabrik addition
-    data().SetCenterOfRotation(Eigen::Vector3d(0, 0, 0.8));
-    linkNum++;
+    /*data().SetCenterOfRotation(Eigen::Vector3d(0, 0, 0.8));
+    linkNum++;*/
 
     return true;
   }

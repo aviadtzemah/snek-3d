@@ -41,7 +41,7 @@ void SandBox::Init(const std::string &config)
 		}
 		nameFileout.close();
 
-		arrange_links_and_set_parents();
+		//arrange_links_and_set_parents();
 	}
 	MyTranslate(Eigen::Vector3d(0, 0, -1), true);
 	
