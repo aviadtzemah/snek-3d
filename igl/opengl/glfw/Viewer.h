@@ -140,7 +140,7 @@ public:
 	bool isPicked;
 	bool isActive;
 
-    // fabrik additions
+    // additions
     
     // data vars
     Eigen::Vector3d tipPosition;
@@ -156,6 +156,7 @@ public:
     IGL_INLINE bool Viewer::arrange_links_and_set_parents();
     IGL_INLINE void Viewer::calculate_and_write_weights();
     IGL_INLINE int Viewer::smallest_index(Eigen::VectorXd vec);
+    IGL_INLINE bool Viewer::pre_draw();
     IGL_INLINE bool Viewer::AnimateFabrik();
 
     

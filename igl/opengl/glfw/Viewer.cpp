@@ -50,6 +50,9 @@
 #include <math.h>
 #include <igl/writeDMAT.h>
 #include <igl/readDMAT.h>
+#include <igl/forward_kinematics.h>
+#include <igl/dqs.h>
+#include <igl/deform_skeleton.h>
 
 // our addition
 typedef
@@ -124,7 +127,7 @@ namespace glfw
   {
   }
 
-  IGL_INLINE bool Viewer::arrange_links_and_set_parents() {
+  IGL_INLINE bool Viewer::arrange_links_and_set_parents() { // TODO: needed?
       // TODO: set up the camera so it would be around the head of the snake
     
       // scaling addition
@@ -189,6 +192,51 @@ namespace glfw
 
       writeDMAT("C:/Users/aviad/Desktop/snek_weights.dmat", W);
   }
+
+  IGL_INLINE bool Viewer::pre_draw()
+  {
+      using namespace Eigen;
+      using namespace std;
+
+      ViewerData snake = data_list[0]; // snake is always the first object 
+
+      // TODO: write this properly
+      //// Interpolate pose and identity
+      /RotationList anim_pose(snake.poses[begin].size());
+      //for (int e = 0;e < poses[begin].size();e++)
+      //{
+      //    anim_pose[e] = poses[begin][e].slerp(t, poses[end][e]);
+      //}
+
+      // Propagate relative rotations via FK to retrieve absolute transformations
+      RotationList vQ;
+      vector<Vector3d> vT;
+      igl::forward_kinematics(snake.C, snake.BE, snake.P, anim_pose, vQ, vT);
+
+      const int dim = snake.C.cols();
+      MatrixXd T(snake.BE.rows() * (dim + 1), dim);
+      for (int e = 0;e < snake.BE.rows();e++)
+      {
+          Affine3d a = Affine3d::Identity();
+          a.translate(vT[e]);
+          a.rotate(vQ[e]);
+          T.block(e * (dim + 1), 0, dim + 1, dim) =
+              a.matrix().transpose().block(0, 0, dim + 1, dim);
+      }   
+      
+      igl::dqs(snake.V, snake.W, vQ, vT, snake.U);
+          
+      // Also deform skeleton edges
+      MatrixXd CT;
+      MatrixXi BET;
+      igl::deform_skeleton(snake.C, snake.BE, T, CT, BET);
+
+      snake.set_vertices(snake.U);
+      snake.set_edges(CT, BET, Eigen::RowVector3d(70. / 255., 252. / 255., 167. / 255.));
+      snake.compute_normals();
+      
+       return false;
+      }
 
   IGL_INLINE bool Viewer::load_mesh_from_file(
       const std::string & mesh_file_name_string)
@@ -286,18 +334,10 @@ namespace glfw
     data().poses[3][2] = data().rest_pose[2] * bend * data().rest_pose[2].conjugate();*/
 
     // calculate skinning weights
-    //calculate_and_write_weights();
+    // calculate_and_write_weights();
     igl::readDMAT("D:/University/Animation/Project/snek-3d/tutorial/data/snake_weights.dmat", data().W);
 
     data().set_edges(data().C, data().BE, Eigen::RowVector3d(70. / 255., 252. / 255., 167. / 255.));
-
-    // fabrik addition
-    /*data().SetCenterOfRotation(Eigen::Vector3d(0, 0, 0.8));
-    linkNum++;*/
-
-    /*std::cout << data().C << std::endl;
-    std::cout << "--------------" << std::endl;
-    std::cout << data().V << std::endl;*/
 
     return true;
   }

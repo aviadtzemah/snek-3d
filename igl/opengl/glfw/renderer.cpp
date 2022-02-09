@@ -63,6 +63,7 @@ IGL_INLINE void Renderer::draw( GLFWwindow* window)
 	if (menu)
 	{
 		menu->pre_draw();
+		scn->pre_draw(); // i believe it need to be here
 		menu->callback_draw_viewer_menu();
 	}
 	for (auto& core : core_list)
