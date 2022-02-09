@@ -47,6 +47,9 @@
 #include <igl/directed_edge_orientations.h>
 #include <igl/directed_edge_parents.h>
 #include <igl/PI.h>
+#include <math.h>
+#include <igl/writeDMAT.h>
+#include <igl/readDMAT.h>
 
 // our addition
 typedef
@@ -147,6 +150,51 @@ namespace glfw
       return true;
   }
 
+  IGL_INLINE int Viewer::smallest_index(Eigen::VectorXd vec) {
+      int smallest = 0;
+      int index = -1;
+      for (int i = 0; i < vec.size(); i++) {
+          if ((vec(i) < smallest && vec(i) != 0) || (smallest == 0)) {
+              smallest = vec(i);
+              index = i;
+          }
+      }
+
+      return index;
+  }
+
+  IGL_INLINE void Viewer::calculate_and_write_weights() {
+      Eigen::MatrixXd W = Eigen::MatrixXd::Zero(data().V.rows(), data().C.rows());
+
+      //std::cout << data().C.rows() << std::endl;
+
+      for (int i = 0; i < data().V.rows(); i++) {
+          for (int j = 0; j < data().C.rows(); j++) {
+              W(i, j) = 1/sqrt(pow((data().V(i, 0) - data().C(j, 0)), 2) + pow((data().V(i, 1) - data().C(j, 1)), 2) + pow((data().V(i, 2) - data().C(j, 2)), 2));
+
+              if (j >= 4) {
+                  int small_index = smallest_index(W.row(i));
+                  W(i, j) = 0;
+              }
+          }
+      }
+
+      //W *= -1/10;
+
+      for (int i = 0; i < W.rows(); i++) {
+          double row_sum = W.row(i).sum();
+          for (int j = 0; j < W.cols(); j++) {
+              W(i, j) = W(i, j) / row_sum;
+          }
+      }
+
+      std::cout << W << std::endl;
+
+
+
+      //writeDMAT("C:/Users/aviad/Desktop/snek_weights.dmat", )
+  }
+
   IGL_INLINE bool Viewer::load_mesh_from_file(
       const std::string & mesh_file_name_string)
   {
@@ -227,12 +275,12 @@ namespace glfw
     // currently assuming the snake is the only object
     // scaling the snake object
     data().MyScale(Eigen::Vector3d(1, 1, 1 / 1.6)); // normalizing the length to 1
-    data().MyScale(Eigen::Vector3d(1, 1, 16*linkLength));
+    data().MyScale(Eigen::Vector3d(1, 1, 16 * linkLength));
 
     // skinning additions
     data().U = data().V;
 
-    igl::readTGF("D:/University/Animation/Project/snek-3d/tutorial/data/snake_temp.tgf", data().C, data().BE);
+    igl::readTGF("D:/University/Animation/Project/snek-3d/tutorial/data/snake.tgf", data().C, data().BE);
     // retrieve parents for forward kinematics
     igl::directed_edge_parents(data().BE, data().P);
     igl::directed_edge_orientations(data().C, data().BE, data().rest_pose);
@@ -242,13 +290,18 @@ namespace glfw
     const Eigen::Quaterniond bend(Eigen::AngleAxisd(-igl::PI * 0.7, Eigen::Vector3d(0, 0, 1)));
     data().poses[3][2] = data().rest_pose[2] * bend * data().rest_pose[2].conjugate();*/
 
-    // TODO: calculate skinning weights
+    // calculate skinning weights
+    calculate_and_write_weights();
 
     data().set_edges(data().C, data().BE, Eigen::RowVector3d(70. / 255., 252. / 255., 167. / 255.));
 
     // fabrik addition
     /*data().SetCenterOfRotation(Eigen::Vector3d(0, 0, 0.8));
     linkNum++;*/
+
+    /*std::cout << data().C << std::endl;
+    std::cout << "--------------" << std::endl;
+    std::cout << data().V << std::endl;*/
 
     return true;
   }

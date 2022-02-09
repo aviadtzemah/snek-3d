@@ -157,7 +157,7 @@ public:
       std::vector<Eigen::Quaterniond, Eigen::aligned_allocator<Eigen::Quaterniond> >
       RotationList;
 
-  Eigen::MatrixXd w, U, C;
+  Eigen::MatrixXd W, U, C;
   Eigen::MatrixXi BE;
   Eigen::VectorXi P;
   RotationList rest_pose;
