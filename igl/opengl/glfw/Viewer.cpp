@@ -151,15 +151,14 @@ namespace glfw
   }
 
   IGL_INLINE int Viewer::smallest_index(Eigen::VectorXd vec) {
-      int smallest = 0;
+      double smallest = std::numeric_limits<double>::max();
       int index = -1;
       for (int i = 0; i < vec.size(); i++) {
-          if ((vec(i) < smallest && vec(i) != 0) || (smallest == 0)) {
+          if ((vec(i) < smallest && vec(i) > 0)) {
               smallest = vec(i);
               index = i;
           }
       }
-
       return index;
   }
 
@@ -168,19 +167,19 @@ namespace glfw
 
       //std::cout << data().C.rows() << std::endl;
 
+      // calculating the top 4 closets joints for each vertex
       for (int i = 0; i < data().V.rows(); i++) {
           for (int j = 0; j < data().C.rows(); j++) {
               W(i, j) = 1/sqrt(pow((data().V(i, 0) - data().C(j, 0)), 2) + pow((data().V(i, 1) - data().C(j, 1)), 2) + pow((data().V(i, 2) - data().C(j, 2)), 2));
 
               if (j >= 4) {
                   int small_index = smallest_index(W.row(i));
-                  W(i, j) = 0;
+                  W(i, small_index) = 0;
               }
           }
       }
 
-      //W *= -1/10;
-
+      // nomalizing so the weights would add up to 1 for each vertex
       for (int i = 0; i < W.rows(); i++) {
           double row_sum = W.row(i).sum();
           for (int j = 0; j < W.cols(); j++) {
@@ -188,11 +187,7 @@ namespace glfw
           }
       }
 
-      std::cout << W << std::endl;
-
-
-
-      //writeDMAT("C:/Users/aviad/Desktop/snek_weights.dmat", )
+      writeDMAT("C:/Users/aviad/Desktop/snek_weights.dmat", W);
   }
 
   IGL_INLINE bool Viewer::load_mesh_from_file(
@@ -291,7 +286,8 @@ namespace glfw
     data().poses[3][2] = data().rest_pose[2] * bend * data().rest_pose[2].conjugate();*/
 
     // calculate skinning weights
-    calculate_and_write_weights();
+    //calculate_and_write_weights();
+    igl::readDMAT("D:/University/Animation/Project/snek-3d/tutorial/data/snake_weights.dmat", data().W);
 
     data().set_edges(data().C, data().BE, Eigen::RowVector3d(70. / 255., 252. / 255., 167. / 255.));
 
