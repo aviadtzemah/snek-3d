@@ -173,7 +173,7 @@ namespace glfw
       // calculating the top 4 closets joints for each vertex
       for (int i = 0; i < data().V.rows(); i++) {
           for (int j = 0; j < data().C.rows(); j++) {
-              W(i, j) = 1/sqrt(pow((data().V(i, 0) - data().C(j, 0)), 2) + pow((data().V(i, 1) - data().C(j, 1)), 2) + pow((data().V(i, 2) - data().C(j, 2)), 2));
+              W(i, j) = 1 / sqrt(pow((data().V(i, 0) - data().C(j, 0)), 2) + pow((data().V(i, 1) - data().C(j, 1)), 2) + pow((data().V(i, 2) - data().C(j, 2)), 2));
 
               if (j >= 4) {
                   int small_index = smallest_index(W.row(i));
@@ -190,53 +190,80 @@ namespace glfw
           }
       }
 
-      writeDMAT("C:/Users/aviad/Desktop/snek_weights.dmat", W);
-  }
+      Eigen::MatrixXd W_bones = Eigen::MatrixXd::Zero(data().V.rows(), data().BE.rows());
+      for (int i = 0; i < data().V.rows(); i++) {
+          for (int j = 0; j < data().C.rows()-1; j++) {
 
+              if (W(i, j) != 0 && W(i, j + 1) != 0) {
+                  W_bones(i, j) = W(i, j) + W(i, j + 1);
+              }
+          }
+      }
+
+      // nomalizing so the weights would add up to 1 for each vertex
+      for (int i = 0; i < W_bones.rows(); i++) {
+          double row_sum = W_bones.row(i).sum();
+          for (int j = 0; j < W_bones.cols(); j++) {
+              W_bones(i, j) = W_bones(i, j) / row_sum;
+          }
+      }
+
+      //std::cout << W_bones << std::endl;
+      writeDMAT("C:/Users/aviad/Desktop/snek_weights.dmat", W_bones);
+  }
+  bool once = true;
   IGL_INLINE bool Viewer::pre_draw()
   {
-      using namespace Eigen;
-      using namespace std;
+    using namespace Eigen;
+    using namespace std;
 
-      ViewerData snake = data_list[0]; // snake is always the first object 
+    if (once) {
+        ViewerData* snake = &data_list[0]; // snake is always the first object 
 
-      // TODO: write this properly
-      //// Interpolate pose and identity
-      /RotationList anim_pose(snake.poses[begin].size());
-      //for (int e = 0;e < poses[begin].size();e++)
-      //{
-      //    anim_pose[e] = poses[begin][e].slerp(t, poses[end][e]);
-      //}
+    // TODO: write this properly
+    // Interpolate pose and identity
+        RotationList anim_pose(snake->poses[0].size());
 
-      // Propagate relative rotations via FK to retrieve absolute transformations
-      RotationList vQ;
-      vector<Vector3d> vT;
-      igl::forward_kinematics(snake.C, snake.BE, snake.P, anim_pose, vQ, vT);
+        for (int e = 0;e < snake->poses[0].size();e++)
+        {
+            anim_pose[e] = snake->poses[0][e].slerp(0.5, snake->poses[1][e]);
+        }
 
-      const int dim = snake.C.cols();
-      MatrixXd T(snake.BE.rows() * (dim + 1), dim);
-      for (int e = 0;e < snake.BE.rows();e++)
-      {
-          Affine3d a = Affine3d::Identity();
-          a.translate(vT[e]);
-          a.rotate(vQ[e]);
-          T.block(e * (dim + 1), 0, dim + 1, dim) =
-              a.matrix().transpose().block(0, 0, dim + 1, dim);
-      }   
+        // Propagate relative rotations via FK to retrieve absolute transformations
+        RotationList vQ;
+        vector<Vector3d> vT;
+        std::vector<Eigen::Vector3d> dT(snake->BE.rows(), Eigen::Vector3d(0, 0, 0));
+        igl::forward_kinematics(snake->C, snake->BE, snake->P, snake->poses[0], dT, vQ, vT);
+
+        const int dim = snake->C.cols();
+        MatrixXd T(snake->BE.rows() * (dim + 1), dim);
+        for (int e = 0;e < snake->BE.rows();e++)
+        {
+            Affine3d a = Affine3d::Identity();
+            a.translate(vT[e]);
+            a.rotate(vQ[e]);
+            T.block(e * (dim + 1), 0, dim + 1, dim) =
+                a.matrix().transpose().block(0, 0, dim + 1, dim);
+        }
+
+        igl::dqs(snake->V, snake->W, vQ, vT, snake->U);
+
+        // Also deform skeleton edges
+        MatrixXd CT;
+        MatrixXi BET;
+        igl::deform_skeleton(snake->C, snake->BE, T, CT, BET);
+
+        snake->set_vertices(snake->U);
+        snake->set_edges(CT, BET, Eigen::RowVector3d(70. / 255., 252. / 255., 167. / 255.));
+        snake->compute_normals();
+
+        once = false;
+    }
+
+    
       
-      igl::dqs(snake.V, snake.W, vQ, vT, snake.U);
-          
-      // Also deform skeleton edges
-      MatrixXd CT;
-      MatrixXi BET;
-      igl::deform_skeleton(snake.C, snake.BE, T, CT, BET);
-
-      snake.set_vertices(snake.U);
-      snake.set_edges(CT, BET, Eigen::RowVector3d(70. / 255., 252. / 255., 167. / 255.));
-      snake.compute_normals();
-      
-       return false;
-      }
+    return false;
+  }
 
   IGL_INLINE bool Viewer::load_mesh_from_file(
       const std::string & mesh_file_name_string)
@@ -323,18 +350,34 @@ namespace glfw
     // skinning additions
     data().U = data().V;
 
+    // C holds the vertices
+    // BE holds the edges
     igl::readTGF("D:/University/Animation/Project/snek-3d/tutorial/data/snake.tgf", data().C, data().BE);
     // retrieve parents for forward kinematics
     igl::directed_edge_parents(data().BE, data().P);
+    
     igl::directed_edge_orientations(data().C, data().BE, data().rest_pose);
 
+    
+
     // TODO: write it properly 
-    /*data().poses.resize(4, RotationList(4, Eigen::Quaterniond::Identity()));
-    const Eigen::Quaterniond bend(Eigen::AngleAxisd(-igl::PI * 0.7, Eigen::Vector3d(0, 0, 1)));
-    data().poses[3][2] = data().rest_pose[2] * bend * data().rest_pose[2].conjugate();*/
+    data().poses.resize(data().BE.rows(), RotationList(data().BE.rows(), Eigen::Quaterniond::Identity()));
+    const Eigen::Quaterniond bend(Eigen::AngleAxisd(-igl::PI * 0.3, Eigen::Vector3d(0, 0, 1)));
+
+    data().poses[0][2] = data().rest_pose[2] * bend * data().rest_pose[2].conjugate();
+
+    /*for (int i = 0; i < data().BE.rows(); i++) {
+        data().poses[0][i] = data().rest_pose[i] * bend * data().rest_pose[i].conjugate();
+    }*/
+
+    /*const Eigen::Quaterniond twist(Eigen::AngleAxisd(igl::PI, Eigen::Vector3d(1, 0, 0)));
+    for (int i = 0; i < data().BE.rows(); i++) {
+        data().poses[1][i] = data().rest_pose[i] * twist * data().rest_pose[i].conjugate();
+    }*/
+    
 
     // calculate skinning weights
-    // calculate_and_write_weights();
+    //calculate_and_write_weights();
     igl::readDMAT("D:/University/Animation/Project/snek-3d/tutorial/data/snake_weights.dmat", data().W);
 
     data().set_edges(data().C, data().BE, Eigen::RowVector3d(70. / 255., 252. / 255., 167. / 255.));
