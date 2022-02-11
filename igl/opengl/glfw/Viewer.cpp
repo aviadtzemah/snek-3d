@@ -157,11 +157,15 @@ namespace glfw
       double smallest = std::numeric_limits<double>::max();
       int index = -1;
       for (int i = 0; i < vec.size(); i++) {
-          if ((vec(i) < smallest && vec(i) > 0)) {
+          if ((vec(i) < smallest && vec(i) != 0)) {
               smallest = vec(i);
               index = i;
           }
       }
+
+      /*std::cout << smallest << std::endl;
+      std::cout <<"VEC:" << std::endl;
+      std::cout << vec << std::endl;*/
       return index;
   }
 
@@ -173,10 +177,11 @@ namespace glfw
       // calculating the top 4 closets joints for each vertex
       for (int i = 0; i < data().V.rows(); i++) {
           for (int j = 0; j < data().C.rows(); j++) {
-              W(i, j) = 1 / sqrt(pow((data().V(i, 0) - data().C(j, 0)), 2) + pow((data().V(i, 1) - data().C(j, 1)), 2) + pow((data().V(i, 2) - data().C(j, 2)), 2));
+              W(i, j) = pow((1 / sqrt(pow((data().V(i, 0) - data().C(j, 0)), 2) + pow((data().V(i, 1) - data().C(j, 1)), 2) + pow((data().V(i, 2) - data().C(j, 2)), 2))), 4);
 
-              if (j >= 4) {
+              if (j >= 5) {
                   int small_index = smallest_index(W.row(i));
+                  //std::cout << small_index << std::endl;
                   W(i, small_index) = 0;
               }
           }
@@ -209,31 +214,39 @@ namespace glfw
       }
 
       //std::cout << W_bones << std::endl;
-      writeDMAT("C:/Users/aviad/Desktop/snek_weights.dmat", W_bones);
+      //writeDMAT("C:/Users/aviad/Desktop/snek_weights.dmat", W_bones);
   }
-  bool once = true;
+  int iter = 0;
+  double anim_t = 0.0;
+  double anim_t_dir = 0.015;
   IGL_INLINE bool Viewer::pre_draw()
   {
     using namespace Eigen;
     using namespace std;
 
-    if (once) {
+    if (iter < 500) {
         ViewerData* snake = &data_list[0]; // snake is always the first object 
 
-    // TODO: write this properly
-    // Interpolate pose and identity
-        RotationList anim_pose(snake->poses[0].size());
+        // TODO: write this properly
+   
+        // Find pose interval
+        const int begin = (int)floor(anim_t) % snake->poses.size();
+        const int end = (int)(floor(anim_t) + 1) % snake->poses.size();
+        const double t = anim_t - floor(anim_t);
 
-        for (int e = 0;e < snake->poses[0].size();e++)
+        // Interpolate pose and identity
+        RotationList anim_pose(snake->poses[begin].size());
+
+        for (int e = 0;e < snake->poses[begin].size();e++)
         {
-            anim_pose[e] = snake->poses[0][e].slerp(0.5, snake->poses[1][e]);
+            anim_pose[e] = snake->poses[begin][e].slerp(t, snake->poses[end][e]);
         }
 
         // Propagate relative rotations via FK to retrieve absolute transformations
         RotationList vQ;
         vector<Vector3d> vT;
         std::vector<Eigen::Vector3d> dT(snake->BE.rows(), Eigen::Vector3d(0, 0, 0));
-        igl::forward_kinematics(snake->C, snake->BE, snake->P, snake->poses[0], dT, vQ, vT);
+        igl::forward_kinematics(snake->C, snake->BE, snake->P, anim_pose, dT, vQ, vT);
 
         const int dim = snake->C.cols();
         MatrixXd T(snake->BE.rows() * (dim + 1), dim);
@@ -253,11 +266,15 @@ namespace glfw
         MatrixXi BET;
         igl::deform_skeleton(snake->C, snake->BE, T, CT, BET);
 
+        snake->C = CT;
+        snake->BE = BET;
+
         snake->set_vertices(snake->U);
         snake->set_edges(CT, BET, Eigen::RowVector3d(70. / 255., 252. / 255., 167. / 255.));
         snake->compute_normals();
 
-        once = false;
+        iter++;
+        anim_t += anim_t_dir;
     }
 
     
@@ -336,7 +353,6 @@ namespace glfw
       data().grid_texture();
     }
     
-
     //for (unsigned int i = 0; i<plugins.size(); ++i)
     //  if (plugins[i]->post_load())
     //    return true;
@@ -362,23 +378,21 @@ namespace glfw
 
     // TODO: write it properly 
     data().poses.resize(data().BE.rows(), RotationList(data().BE.rows(), Eigen::Quaterniond::Identity()));
-    const Eigen::Quaterniond bend(Eigen::AngleAxisd(-igl::PI * 0.3, Eigen::Vector3d(0, 0, 1)));
+    const Eigen::Quaterniond bend1(Eigen::AngleAxisd(igl::PI*0.01, Eigen::Vector3d(0, 0, 1)));
 
-    data().poses[0][2] = data().rest_pose[2] * bend * data().rest_pose[2].conjugate();
+    data().poses[1][13] = data().rest_pose[13] * bend1 * data().rest_pose[13].conjugate();
+
+    const Eigen::Quaterniond bend2(Eigen::AngleAxisd(igl::PI * 0.01, Eigen::Vector3d(0, 1, 0)));
+    data().poses[1][3] = data().rest_pose[3] * bend1 * data().rest_pose[3].conjugate();
 
     /*for (int i = 0; i < data().BE.rows(); i++) {
-        data().poses[0][i] = data().rest_pose[i] * bend * data().rest_pose[i].conjugate();
-    }*/
-
-    /*const Eigen::Quaterniond twist(Eigen::AngleAxisd(igl::PI, Eigen::Vector3d(1, 0, 0)));
-    for (int i = 0; i < data().BE.rows(); i++) {
-        data().poses[1][i] = data().rest_pose[i] * twist * data().rest_pose[i].conjugate();
+        data().poses[1][i] = data().rest_pose[i] * bend * data().rest_pose[i].conjugate();
     }*/
     
 
-    // calculate skinning weights
-    //calculate_and_write_weights();
-    igl::readDMAT("D:/University/Animation/Project/snek-3d/tutorial/data/snake_weights.dmat", data().W);
+    // calculate skinning weights (it doesn't matter if this happens after the scale or before)
+    calculate_and_write_weights();
+    igl::readDMAT("D:/University/Animation/Project/snek-3d/tutorial/data/snake_weights_quad.dmat", data().W);
 
     data().set_edges(data().C, data().BE, Eigen::RowVector3d(70. / 255., 252. / 255., 167. / 255.));
 

@@ -104,6 +104,8 @@ IGL_INLINE void Renderer::init(igl::opengl::glfw::Viewer* viewer,int coresNum, i
 	menu = _menu;
 	core().align_camera_center(scn->data().V, scn->data().F);
 
+	//core().camera_translation = Eigen::Vector3f(0, 0, -30);
+
 	if (coresNum > 1)
 	{	
 		int width = core().viewport[2];
