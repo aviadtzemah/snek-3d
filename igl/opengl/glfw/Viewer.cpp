@@ -127,6 +127,8 @@ namespace glfw
   {
   }
 
+  // our functions
+
   IGL_INLINE bool Viewer::arrange_links_and_set_parents() { // TODO: needed?
       // TODO: set up the camera so it would be around the head of the snake
     
@@ -150,6 +152,31 @@ namespace glfw
       tipPosition += -linkOffset * ((linkNum) / 2); // TODO: not sure about the calculation of this
       data_list[linkNum - 1].MyScale(Eigen::Vector3d(0.5, 0.5, 1)); // for some reason only scaling the base sacles the whole skeleton. so we'll take it.
 
+      return true;
+  }
+
+  
+  IGL_INLINE void Viewer::calculate_dis() {
+      ViewerData* snake = &data_list[0];
+
+      for (int i = 0; i < snake->dis.size(); i++) {
+          snake->dis[i] = sqrt(pow((snake->C(i, 0) - snake->C(i + 1, 0)), 2) + pow((snake->C(i, 1) - snake->C(i + 1, 1)), 2) + pow((snake->C(i, 2) - snake->C(i + 1, 2)), 2));
+      }
+  }
+
+  bool flag = 0;
+  IGL_INLINE bool Viewer::AnimateFabrik() {
+      calculate_dis();
+
+      ViewerData* snake = &data_list[0];
+
+      if (!flag) {
+          for (auto i : snake->dis)
+              std::cout << i << ' ';
+
+          flag = !flag;
+      }
+      
       return true;
   }
 
@@ -368,7 +395,8 @@ namespace glfw
 
     // C holds the vertices
     // BE holds the edges
-    igl::readTGF("D:/University/Animation/Project/snek-3d/tutorial/data/snake.tgf", data().C, data().BE);
+    igl::readTGF("D:/University/Animation/Project/snek-3d/tutorial/data/snake_temp.tgf", data().C, data().BE);
+    data().dis.resize(data().C.rows()-1, 0);
     // retrieve parents for forward kinematics
     igl::directed_edge_parents(data().BE, data().P);
     
@@ -378,12 +406,12 @@ namespace glfw
 
     // TODO: write it properly 
     data().poses.resize(data().BE.rows(), RotationList(data().BE.rows(), Eigen::Quaterniond::Identity()));
-    const Eigen::Quaterniond bend1(Eigen::AngleAxisd(igl::PI*0.01, Eigen::Vector3d(0, 0, 1)));
+    const Eigen::Quaterniond bend1(Eigen::AngleAxisd(igl::PI*0.01, Eigen::Vector3d(0, 1, 0)));
 
-    data().poses[1][13] = data().rest_pose[13] * bend1 * data().rest_pose[13].conjugate();
+    //data().poses[1][13] = data().rest_pose[13] * bend1 * data().rest_pose[13].conjugate();
 
     const Eigen::Quaterniond bend2(Eigen::AngleAxisd(igl::PI * 0.01, Eigen::Vector3d(0, 1, 0)));
-    data().poses[1][3] = data().rest_pose[3] * bend1 * data().rest_pose[3].conjugate();
+    data().poses[1][2] = data().rest_pose[2] * bend1 * data().rest_pose[2].conjugate();
 
     /*for (int i = 0; i < data().BE.rows(); i++) {
         data().poses[1][i] = data().rest_pose[i] * bend * data().rest_pose[i].conjugate();
@@ -578,11 +606,7 @@ namespace glfw
 	  return prevTrans;
   }
 
-  // our functions
 
-  IGL_INLINE bool Viewer::AnimateFabrik() {
-      return true;
-  }
 
 } // end namespace
 } // end namespace

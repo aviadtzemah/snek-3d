@@ -162,6 +162,7 @@ public:
   Eigen::VectorXi P;
   RotationList rest_pose;
   std::vector<RotationList > poses;
+  std::vector<double> dis;
 
   // Per face attributes
   Eigen::MatrixXd F_normals; // One normal per face

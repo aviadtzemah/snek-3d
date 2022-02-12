@@ -158,6 +158,7 @@ public:
     IGL_INLINE int Viewer::smallest_index(Eigen::VectorXd vec);
     IGL_INLINE bool Viewer::pre_draw();
     IGL_INLINE bool Viewer::AnimateFabrik();
+    IGL_INLINE void Viewer::calculate_dis();
 
     
 
