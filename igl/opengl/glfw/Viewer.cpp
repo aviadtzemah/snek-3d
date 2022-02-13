@@ -170,12 +170,11 @@ namespace glfw
 
       ViewerData* snake = &data_list[0];
 
-      if (!flag) {
-          for (auto i : snake->dis)
-              std::cout << i << ' ';
+      std::cout << "-----------------BEGINNING-----------------" << std::endl;
+      for (auto i : snake->dis)
+          std::cout << i << std::endl;
 
-          flag = !flag;
-      }
+      std::cout << "-----------------END-----------------" << std::endl;
       
       return true;
   }
@@ -196,38 +195,69 @@ namespace glfw
       return index;
   }
 
+  // https://www.geeksforgeeks.org/shortest-distance-between-a-line-and-a-point-in-a-3-d-plane/
+  IGL_INLINE float Viewer::point_to_line_distance(Eigen::Vector3d line_point1, Eigen::Vector3d line_point2, Eigen::Vector3d point) {
+      Eigen::Vector3d line = line_point2 - line_point1;
+      Eigen::Vector3d point_line = point - line_point1;
+      return line.cross(point_line).norm() / line.norm();
+  }
+
   IGL_INLINE void Viewer::calculate_and_write_weights() {
-      Eigen::MatrixXd W = Eigen::MatrixXd::Zero(data().V.rows(), data().C.rows());
+      Eigen::MatrixXd W_joints = Eigen::MatrixXd::Zero(data().V.rows(), data().C.rows());
+      Eigen::MatrixXd W_bones = Eigen::MatrixXd::Zero(data().V.rows(), data().BE.rows());
+      float joint_threshold = 0.6; // the threshold from which a vertex is a part of a joint
 
-      //std::cout << data().C.rows() << std::endl;
+      /*for (int i = 0; i < data().V.rows(); i++) {
+          for (int j = 0; j < data().C.rows()-1; j++) {
+              W_bones(i, j) = point_to_line_distance(data().C.row(j), data().C.row(j + 1), data().V.row(i));
+          }
+      }
 
-      // calculating the top 4 closets joints for each vertex
+      std::cout << W_bones << std::endl;*/
+
+
+
       for (int i = 0; i < data().V.rows(); i++) {
-          for (int j = 0; j < data().C.rows(); j++) {
-              W(i, j) = pow((1 / sqrt(pow((data().V(i, 0) - data().C(j, 0)), 2) + pow((data().V(i, 1) - data().C(j, 1)), 2) + pow((data().V(i, 2) - data().C(j, 2)), 2))), 4);
+          int smallest_index = -1;
+          double smallest = std::numeric_limits<double>::max();
 
-              if (j >= 5) {
-                  int small_index = smallest_index(W.row(i));
-                  //std::cout << small_index << std::endl;
-                  W(i, small_index) = 0;
+          for (int j = 0; j < data().C.rows(); j++) {
+              float dist = sqrt(pow((data().V(i, 0) - data().C(j, 0)), 2) + pow((data().V(i, 1) - data().C(j, 1)), 2) + pow((data().V(i, 2) - data().C(j, 2)), 2));
+
+              W_joints(i, j) = dist;
+
+              if (dist < smallest) {
+                  smallest_index = j;
+                  smallest = dist;
               }
           }
-      }
 
-      // nomalizing so the weights would add up to 1 for each vertex
-      for (int i = 0; i < W.rows(); i++) {
-          double row_sum = W.row(i).sum();
-          for (int j = 0; j < W.cols(); j++) {
-              W(i, j) = W(i, j) / row_sum;
+          if (smallest < joint_threshold) {
+              if (smallest_index == 0) {
+                  W_bones(i, smallest_index) = (pow((1 / point_to_line_distance(data().C.row(smallest_index), data().C.row(smallest_index + 1), data().V.row(i))), 4)) / (pow((1 / W_joints(i, smallest_index)), 4) + pow((1 / W_joints(i, smallest_index + 1)), 4));
+              }
+              else if (smallest_index == data().C.rows() - 1) {
+                  W_bones(i, smallest_index - 1) = (pow((1 / point_to_line_distance(data().C.row(smallest_index - 1), data().C.row(smallest_index), data().V.row(i))), 4)) / (pow((1 / W_joints(i, smallest_index - 1)), 4) + pow((1 / W_joints(i, smallest_index)), 4));
+              }
+              else {
+                  W_bones(i, smallest_index - 1) = (pow((1 / point_to_line_distance(data().C.row(smallest_index - 1), data().C.row(smallest_index), data().V.row(i))), 4)) / (pow((1 / W_joints(i, smallest_index - 1)), 4) + pow((1 / W_joints(i, smallest_index)), 4) + pow((1 / W_joints(i, smallest_index + 1)), 4));
+                  W_bones(i, smallest_index) = (pow((1 / point_to_line_distance(data().C.row(smallest_index), data().C.row(smallest_index + 1), data().V.row(i))), 4)) / (pow((1 / W_joints(i, smallest_index - 1)), 4) + pow((1 / W_joints(i, smallest_index)), 4) + pow((1 / W_joints(i, smallest_index + 1)), 4));
+              }
           }
-      }
-
-      Eigen::MatrixXd W_bones = Eigen::MatrixXd::Zero(data().V.rows(), data().BE.rows());
-      for (int i = 0; i < data().V.rows(); i++) {
-          for (int j = 0; j < data().C.rows()-1; j++) {
-
-              if (W(i, j) != 0 && W(i, j + 1) != 0) {
-                  W_bones(i, j) = W(i, j) + W(i, j + 1);
+          else {
+              if (smallest_index == 0) {
+                  W_bones(i, smallest_index) = (pow((1 / point_to_line_distance(data().C.row(smallest_index), data().C.row(smallest_index + 1), data().V.row(i))), 4)) / (pow((1 / W_joints(i, smallest_index)), 4) + pow((1 / W_joints(i, smallest_index + 1)), 4));
+              }
+              else if (smallest_index == data().C.rows() - 1) {
+                  W_bones(i, smallest_index - 1) = (pow((1 / point_to_line_distance(data().C.row(smallest_index - 1), data().C.row(smallest_index), data().V.row(i))), 4)) / (pow((1 / W_joints(i, smallest_index - 1)), 4) + pow((1 / W_joints(i, smallest_index)), 4));
+              }
+              else {
+                  if (W_joints(i, smallest - 1) < W_joints(i, smallest + 1)) {
+                      W_bones(i, smallest_index - 1) = (pow((1 / point_to_line_distance(data().C.row(smallest_index - 1), data().C.row(smallest_index), data().V.row(i))), 4)) / (pow((1 / W_joints(i, smallest_index - 1)), 4) + pow((1 / W_joints(i, smallest_index)), 4));
+                  }
+                  else {
+                      W_bones(i, smallest_index) = (pow((1 / point_to_line_distance(data().C.row(smallest_index), data().C.row(smallest_index + 1), data().V.row(i))), 4)) / (pow((1 / W_joints(i, smallest_index)), 4) + pow((1 / W_joints(i, smallest_index + 1)), 4));
+                  }
               }
           }
       }
@@ -240,7 +270,37 @@ namespace glfw
           }
       }
 
+      data().W = W_bones;
+
       //std::cout << W_bones << std::endl;
+
+      //// nomalizing so the weights would add up to 1 for each vertex
+      //for (int i = 0; i < W.rows(); i++) {
+      //    double row_sum = W.row(i).sum();
+      //    for (int j = 0; j < W.cols(); j++) {
+      //        W(i, j) = W(i, j) / row_sum;
+      //    }
+      //}
+
+      //Eigen::MatrixXd W_bones = Eigen::MatrixXd::Zero(data().V.rows(), data().BE.rows());
+      //for (int i = 0; i < data().V.rows(); i++) {
+      //    for (int j = 0; j < data().C.rows()-1; j++) {
+
+      //        if (W(i, j) != 0 && W(i, j + 1) != 0) {
+      //            W_bones(i, j) = W(i, j) + W(i, j + 1);
+      //        }
+      //    }
+      //}
+
+      //// nomalizing so the weights would add up to 1 for each vertex
+      //for (int i = 0; i < W_bones.rows(); i++) {
+      //    double row_sum = W_bones.row(i).sum();
+      //    for (int j = 0; j < W_bones.cols(); j++) {
+      //        W_bones(i, j) = W_bones(i, j) / row_sum;
+      //    }
+      //}
+
+      //std::cout << W << std::endl;
       //writeDMAT("C:/Users/aviad/Desktop/snek_weights.dmat", W_bones);
   }
   int iter = 0;
@@ -251,7 +311,7 @@ namespace glfw
     using namespace Eigen;
     using namespace std;
 
-    if (iter < 500) {
+    if (iter < 5) {
         ViewerData* snake = &data_list[0]; // snake is always the first object 
 
         // TODO: write this properly
@@ -387,8 +447,18 @@ namespace glfw
     
     // currently assuming the snake is the only object
     // scaling the snake object
-    data().MyScale(Eigen::Vector3d(1, 1, 1 / 1.6)); // normalizing the length to 1
-    data().MyScale(Eigen::Vector3d(1, 1, 16 * linkLength));
+    //data().MyScale(Eigen::Vector3d(1, 1, 1 / 1.6)); // normalizing the length to 1
+    //data().MyScale(Eigen::Vector3d(1, 1, 16 * linkLength));
+
+    /*for (int i = 0; i < data().V.rows(); i++) {
+        data().V(i, 2) *= (1 / 1.6);
+    }
+
+    for (int i = 0; i < data().V.rows(); i++) {
+        data().V(i, 2) *= (16 * linkLength);
+    }
+
+    save_mesh_to_file("D:/snake3scaled.obj");*/
 
     // skinning additions
     data().U = data().V;
@@ -406,21 +476,26 @@ namespace glfw
 
     // TODO: write it properly 
     data().poses.resize(data().BE.rows(), RotationList(data().BE.rows(), Eigen::Quaterniond::Identity()));
-    const Eigen::Quaterniond bend1(Eigen::AngleAxisd(igl::PI*0.01, Eigen::Vector3d(0, 1, 0)));
+    const Eigen::Quaterniond bend1(Eigen::AngleAxisd(igl::PI*0.005, Eigen::Vector3d(0, 1, 0)));
 
     //data().poses[1][13] = data().rest_pose[13] * bend1 * data().rest_pose[13].conjugate();
 
-    const Eigen::Quaterniond bend2(Eigen::AngleAxisd(igl::PI * 0.01, Eigen::Vector3d(0, 1, 0)));
-    data().poses[1][2] = data().rest_pose[2] * bend1 * data().rest_pose[2].conjugate();
+    const Eigen::Quaterniond bend2(Eigen::AngleAxisd(-igl::PI * 0.01, Eigen::Vector3d(0, 1, 0)));
+    //data().poses[1][13] = data().rest_pose[13] * bend2 * data().rest_pose[13].conjugate();
+
+    for (int i = 0; i < data().BE.rows(); i++) {
+        data().poses[0][i] = data().rest_pose[i] * bend1 * data().rest_pose[i].conjugate();
+    }
 
     /*for (int i = 0; i < data().BE.rows(); i++) {
-        data().poses[1][i] = data().rest_pose[i] * bend * data().rest_pose[i].conjugate();
+        data().poses[1][i] = data().rest_pose[i] * bend2 * data().rest_pose[i].conjugate();
     }*/
     
 
     // calculate skinning weights (it doesn't matter if this happens after the scale or before)
+    
+    //igl::readDMAT("D:/University/Animation/Project/snek-3d/tutorial/data/snake_weights_quad.dmat", data().W);
     calculate_and_write_weights();
-    igl::readDMAT("D:/University/Animation/Project/snek-3d/tutorial/data/snake_weights_quad.dmat", data().W);
 
     data().set_edges(data().C, data().BE, Eigen::RowVector3d(70. / 255., 252. / 255., 167. / 255.));
 

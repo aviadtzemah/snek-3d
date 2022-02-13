@@ -156,6 +156,7 @@ public:
     IGL_INLINE bool Viewer::arrange_links_and_set_parents();
     IGL_INLINE void Viewer::calculate_and_write_weights();
     IGL_INLINE int Viewer::smallest_index(Eigen::VectorXd vec);
+    IGL_INLINE float Viewer::point_to_line_distance(Eigen::Vector3d line_point1, Eigen::Vector3d line_point2, Eigen::Vector3d point);
     IGL_INLINE bool Viewer::pre_draw();
     IGL_INLINE bool Viewer::AnimateFabrik();
     IGL_INLINE void Viewer::calculate_dis();
