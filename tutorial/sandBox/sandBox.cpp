@@ -55,7 +55,7 @@ SandBox::~SandBox()
 
 void SandBox::Animate()
 {
-	//AnimateFabrik();
+	AnimateFabrik();
 	pre_draw();
 	
 	if (isActive) // TODO: see about this thingy

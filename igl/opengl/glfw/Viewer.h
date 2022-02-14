@@ -160,6 +160,7 @@ public:
     IGL_INLINE bool Viewer::pre_draw();
     IGL_INLINE bool Viewer::AnimateFabrik();
     IGL_INLINE void Viewer::calculate_dis();
+    IGL_INLINE Eigen::Vector3d Viewer::calculate_target();
 
     
 

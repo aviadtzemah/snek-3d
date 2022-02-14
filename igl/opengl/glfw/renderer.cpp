@@ -102,10 +102,10 @@ IGL_INLINE void Renderer::init(igl::opengl::glfw::Viewer* viewer,int coresNum, i
 	doubleVariable = 0;
 	core().init(); 
 	menu = _menu;
-	core().align_camera_center(scn->data().V, scn->data().F);
+	//core().align_camera_center(scn->data().V, scn->data().F);
 
-	core().camera_translation = Eigen::Vector3f(0, 0, -50);
-	core().camera_view_angle = 10;
+	core().camera_translation = Eigen::Vector3f(0, -1.5, -10);
+	//core().camera_view_angle = 10;
 
 	if (coresNum > 1)
 	{	

@@ -163,6 +163,8 @@ public:
   RotationList rest_pose;
   std::vector<RotationList > poses;
   std::vector<double> dis;
+  std::vector<Eigen::Vector3d> dT;
+  RotationList anim_pose;
 
   // Per face attributes
   Eigen::MatrixXd F_normals; // One normal per face
