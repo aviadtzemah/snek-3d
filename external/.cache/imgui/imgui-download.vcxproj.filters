@@ -1,44 +1,44 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\imgui\CMakeFiles\8d902485702750c7338b55497040475d\imgui-download-mkdir.rule">
+    <CustomBuild Include="C:\AnimationProject\snek-3d\external\.cache\imgui\CMakeFiles\8f0a2fcba17c5f63821eacf5cbf2610e\imgui-download-mkdir.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\imgui\CMakeFiles\8d902485702750c7338b55497040475d\imgui-download-download.rule">
+    <CustomBuild Include="C:\AnimationProject\snek-3d\external\.cache\imgui\CMakeFiles\8f0a2fcba17c5f63821eacf5cbf2610e\imgui-download-download.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\imgui\CMakeFiles\8d902485702750c7338b55497040475d\imgui-download-update.rule">
+    <CustomBuild Include="C:\AnimationProject\snek-3d\external\.cache\imgui\CMakeFiles\8f0a2fcba17c5f63821eacf5cbf2610e\imgui-download-update.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\imgui\CMakeFiles\8d902485702750c7338b55497040475d\imgui-download-patch.rule">
+    <CustomBuild Include="C:\AnimationProject\snek-3d\external\.cache\imgui\CMakeFiles\8f0a2fcba17c5f63821eacf5cbf2610e\imgui-download-patch.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\imgui\CMakeFiles\8d902485702750c7338b55497040475d\imgui-download-configure.rule">
+    <CustomBuild Include="C:\AnimationProject\snek-3d\external\.cache\imgui\CMakeFiles\8f0a2fcba17c5f63821eacf5cbf2610e\imgui-download-configure.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\imgui\CMakeFiles\8d902485702750c7338b55497040475d\imgui-download-build.rule">
+    <CustomBuild Include="C:\AnimationProject\snek-3d\external\.cache\imgui\CMakeFiles\8f0a2fcba17c5f63821eacf5cbf2610e\imgui-download-build.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\imgui\CMakeFiles\8d902485702750c7338b55497040475d\imgui-download-install.rule">
+    <CustomBuild Include="C:\AnimationProject\snek-3d\external\.cache\imgui\CMakeFiles\8f0a2fcba17c5f63821eacf5cbf2610e\imgui-download-install.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\imgui\CMakeFiles\8d902485702750c7338b55497040475d\imgui-download-test.rule">
+    <CustomBuild Include="C:\AnimationProject\snek-3d\external\.cache\imgui\CMakeFiles\8f0a2fcba17c5f63821eacf5cbf2610e\imgui-download-test.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\imgui\CMakeFiles\96a250b4ae544278ea347a361d85916c\imgui-download-complete.rule">
+    <CustomBuild Include="C:\AnimationProject\snek-3d\external\.cache\imgui\CMakeFiles\822bac0cddc9e280057d425991566315\imgui-download-complete.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\imgui\CMakeFiles\ae159cd605eb5ffce0cf333132b12149\imgui-download.rule">
+    <CustomBuild Include="C:\AnimationProject\snek-3d\external\.cache\imgui\CMakeFiles\3eb3fa30544ca7f5f030e5fa243badc5\imgui-download.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\imgui\CMakeLists.txt" />
+    <CustomBuild Include="C:\AnimationProject\snek-3d\external\.cache\imgui\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\imgui\CMakeFiles\imgui-download" />
+    <None Include="C:\AnimationProject\snek-3d\external\.cache\imgui\CMakeFiles\imgui-download" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CMake Rules">
-      <UniqueIdentifier>{E702B8C6-BD0B-316F-A662-D16D6C67E678}</UniqueIdentifier>
+      <UniqueIdentifier>{AB10E1BF-1D29-3FCE-ADD1-8E11E1B27100}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

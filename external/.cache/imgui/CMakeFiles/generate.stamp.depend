@@ -1,4 +1,7 @@
 # CMake generation dependency list for this directory.
+C:/AnimationProject/snek-3d/external/.cache/imgui/CMakeFiles/3.22.0-rc1/CMakeSystem.cmake
+C:/AnimationProject/snek-3d/external/.cache/imgui/CMakeLists.txt
+C:/AnimationProject/snek-3d/external/.cache/imgui/imgui-download-prefix/tmp/imgui-download-cfgcmd.txt.in
 C:/Program Files/CMake/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake
 C:/Program Files/CMake/share/cmake-3.22/Modules/CMakeGenericSystem.cmake
 C:/Program Files/CMake/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake
@@ -13,6 +16,3 @@ C:/Program Files/CMake/share/cmake-3.22/Modules/FindPackageMessage.cmake
 C:/Program Files/CMake/share/cmake-3.22/Modules/Platform/Windows.cmake
 C:/Program Files/CMake/share/cmake-3.22/Modules/Platform/WindowsPaths.cmake
 C:/Program Files/CMake/share/cmake-3.22/Modules/RepositoryInfo.txt.in
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/imgui/CMakeFiles/3.22.0-rc1/CMakeSystem.cmake
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/imgui/CMakeLists.txt
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/imgui/imgui-download-prefix/tmp/imgui-download-cfgcmd.txt.in

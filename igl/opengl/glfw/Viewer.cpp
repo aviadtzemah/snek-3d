@@ -67,7 +67,8 @@ namespace glfw
     selected_data_index(0),
     next_data_id(1),
 	isPicked(false),
-	isActive(false)
+	isActive(false),
+    score(0)
   {
     data_list.front().id = 0;
 

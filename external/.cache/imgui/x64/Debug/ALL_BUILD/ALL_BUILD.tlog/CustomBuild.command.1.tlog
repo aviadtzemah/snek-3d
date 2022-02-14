@@ -1,6 +1,6 @@
-^D:\UNIVERSITYASSIMENTS\ANIMATION\PROJECT\ENGINEFORANIMATIONCOURSE\EXTERNAL\.CACHE\IMGUI\CMAKELISTS.TXT
+^C:\ANIMATIONPROJECT\SNEK-3D\EXTERNAL\.CACHE\IMGUI\CMAKELISTS.TXT
 setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SD:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/imgui -BD:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/imgui --check-stamp-file D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/imgui/CMakeFiles/generate.stamp
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/AnimationProject/snek-3d/external/.cache/imgui -BC:/AnimationProject/snek-3d/external/.cache/imgui --check-stamp-file C:/AnimationProject/snek-3d/external/.cache/imgui/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone

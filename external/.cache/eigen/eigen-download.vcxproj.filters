@@ -1,44 +1,44 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\eigen\CMakeFiles\f670bff212039df3b50cd3e5f1b65785\eigen-download-mkdir.rule">
+    <CustomBuild Include="C:\AnimationProject\snek-3d\external\.cache\eigen\CMakeFiles\f6185ec9e04c75e515e72b9693c5009f\eigen-download-mkdir.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\eigen\CMakeFiles\f670bff212039df3b50cd3e5f1b65785\eigen-download-download.rule">
+    <CustomBuild Include="C:\AnimationProject\snek-3d\external\.cache\eigen\CMakeFiles\f6185ec9e04c75e515e72b9693c5009f\eigen-download-download.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\eigen\CMakeFiles\f670bff212039df3b50cd3e5f1b65785\eigen-download-update.rule">
+    <CustomBuild Include="C:\AnimationProject\snek-3d\external\.cache\eigen\CMakeFiles\f6185ec9e04c75e515e72b9693c5009f\eigen-download-update.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\eigen\CMakeFiles\f670bff212039df3b50cd3e5f1b65785\eigen-download-patch.rule">
+    <CustomBuild Include="C:\AnimationProject\snek-3d\external\.cache\eigen\CMakeFiles\f6185ec9e04c75e515e72b9693c5009f\eigen-download-patch.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\eigen\CMakeFiles\f670bff212039df3b50cd3e5f1b65785\eigen-download-configure.rule">
+    <CustomBuild Include="C:\AnimationProject\snek-3d\external\.cache\eigen\CMakeFiles\f6185ec9e04c75e515e72b9693c5009f\eigen-download-configure.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\eigen\CMakeFiles\f670bff212039df3b50cd3e5f1b65785\eigen-download-build.rule">
+    <CustomBuild Include="C:\AnimationProject\snek-3d\external\.cache\eigen\CMakeFiles\f6185ec9e04c75e515e72b9693c5009f\eigen-download-build.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\eigen\CMakeFiles\f670bff212039df3b50cd3e5f1b65785\eigen-download-install.rule">
+    <CustomBuild Include="C:\AnimationProject\snek-3d\external\.cache\eigen\CMakeFiles\f6185ec9e04c75e515e72b9693c5009f\eigen-download-install.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\eigen\CMakeFiles\f670bff212039df3b50cd3e5f1b65785\eigen-download-test.rule">
+    <CustomBuild Include="C:\AnimationProject\snek-3d\external\.cache\eigen\CMakeFiles\f6185ec9e04c75e515e72b9693c5009f\eigen-download-test.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\eigen\CMakeFiles\482238c507984b8aa069036ab3746ae2\eigen-download-complete.rule">
+    <CustomBuild Include="C:\AnimationProject\snek-3d\external\.cache\eigen\CMakeFiles\1ea9711b3a1b7bbfb48ca96cf9cf0e8d\eigen-download-complete.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\eigen\CMakeFiles\d78ab34fcf817304a839864b4ddb3ad6\eigen-download.rule">
+    <CustomBuild Include="C:\AnimationProject\snek-3d\external\.cache\eigen\CMakeFiles\a66ab561070384ecf6c4270d3684d322\eigen-download.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\eigen\CMakeLists.txt" />
+    <CustomBuild Include="C:\AnimationProject\snek-3d\external\.cache\eigen\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\eigen\CMakeFiles\eigen-download" />
+    <None Include="C:\AnimationProject\snek-3d\external\.cache\eigen\CMakeFiles\eigen-download" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CMake Rules">
-      <UniqueIdentifier>{37DFE271-FC21-3F1F-8A08-FAEB32F50A33}</UniqueIdentifier>
+      <UniqueIdentifier>{DBEB4126-06FF-3201-8239-2651B526E988}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

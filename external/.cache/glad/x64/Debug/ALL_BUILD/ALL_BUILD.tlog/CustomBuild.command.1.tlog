@@ -1,6 +1,6 @@
-^D:\UNIVERSITYASSIMENTS\ANIMATION\PROJECT\ENGINEFORANIMATIONCOURSE\EXTERNAL\.CACHE\GLAD\CMAKELISTS.TXT
+^C:\ANIMATIONPROJECT\SNEK-3D\EXTERNAL\.CACHE\GLAD\CMAKELISTS.TXT
 setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SD:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/glad -BD:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/glad --check-stamp-file D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/glad/CMakeFiles/generate.stamp
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/AnimationProject/snek-3d/external/.cache/glad -BC:/AnimationProject/snek-3d/external/.cache/glad --check-stamp-file C:/AnimationProject/snek-3d/external/.cache/glad/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone

@@ -1,14 +1,14 @@
 # Target labels
  glfw-download
 # Source files and their labels
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/glfw/CMakeFiles/glfw-download
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/glfw/CMakeFiles/6f8fabc0c88360f31403dd8aca9e252f/glfw-download.rule
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/glfw/CMakeFiles/efc6677225a3256f5b7e825ec143101f/glfw-download-complete.rule
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/glfw/CMakeFiles/f308226e528b0bc06176a8ef71021100/glfw-download-build.rule
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/glfw/CMakeFiles/f308226e528b0bc06176a8ef71021100/glfw-download-configure.rule
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/glfw/CMakeFiles/f308226e528b0bc06176a8ef71021100/glfw-download-download.rule
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/glfw/CMakeFiles/f308226e528b0bc06176a8ef71021100/glfw-download-install.rule
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/glfw/CMakeFiles/f308226e528b0bc06176a8ef71021100/glfw-download-mkdir.rule
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/glfw/CMakeFiles/f308226e528b0bc06176a8ef71021100/glfw-download-patch.rule
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/glfw/CMakeFiles/f308226e528b0bc06176a8ef71021100/glfw-download-test.rule
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/glfw/CMakeFiles/f308226e528b0bc06176a8ef71021100/glfw-download-update.rule
+C:/AnimationProject/snek-3d/external/.cache/glfw/CMakeFiles/glfw-download
+C:/AnimationProject/snek-3d/external/.cache/glfw/CMakeFiles/d5e007b7e46c21ae1751f5e61d8ec7bd/glfw-download.rule
+C:/AnimationProject/snek-3d/external/.cache/glfw/CMakeFiles/6bdc22e9edc15f0f008f2ac55a1d4fdc/glfw-download-complete.rule
+C:/AnimationProject/snek-3d/external/.cache/glfw/CMakeFiles/a1121710adc1fd0ca4feaf5f5986109f/glfw-download-build.rule
+C:/AnimationProject/snek-3d/external/.cache/glfw/CMakeFiles/a1121710adc1fd0ca4feaf5f5986109f/glfw-download-configure.rule
+C:/AnimationProject/snek-3d/external/.cache/glfw/CMakeFiles/a1121710adc1fd0ca4feaf5f5986109f/glfw-download-download.rule
+C:/AnimationProject/snek-3d/external/.cache/glfw/CMakeFiles/a1121710adc1fd0ca4feaf5f5986109f/glfw-download-install.rule
+C:/AnimationProject/snek-3d/external/.cache/glfw/CMakeFiles/a1121710adc1fd0ca4feaf5f5986109f/glfw-download-mkdir.rule
+C:/AnimationProject/snek-3d/external/.cache/glfw/CMakeFiles/a1121710adc1fd0ca4feaf5f5986109f/glfw-download-patch.rule
+C:/AnimationProject/snek-3d/external/.cache/glfw/CMakeFiles/a1121710adc1fd0ca4feaf5f5986109f/glfw-download-test.rule
+C:/AnimationProject/snek-3d/external/.cache/glfw/CMakeFiles/a1121710adc1fd0ca4feaf5f5986109f/glfw-download-update.rule

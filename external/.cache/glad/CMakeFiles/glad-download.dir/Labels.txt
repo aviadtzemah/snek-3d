@@ -1,14 +1,14 @@
 # Target labels
  glad-download
 # Source files and their labels
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/glad/CMakeFiles/glad-download
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/glad/CMakeFiles/96bfacf787d738b9484cf6124a1acf2a/glad-download.rule
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/glad/CMakeFiles/b3be367fc7ad76ba338a92e0b535c8c4/glad-download-complete.rule
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/glad/CMakeFiles/cc430beb5341076deb8c7e815975c4c7/glad-download-build.rule
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/glad/CMakeFiles/cc430beb5341076deb8c7e815975c4c7/glad-download-configure.rule
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/glad/CMakeFiles/cc430beb5341076deb8c7e815975c4c7/glad-download-download.rule
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/glad/CMakeFiles/cc430beb5341076deb8c7e815975c4c7/glad-download-install.rule
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/glad/CMakeFiles/cc430beb5341076deb8c7e815975c4c7/glad-download-mkdir.rule
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/glad/CMakeFiles/cc430beb5341076deb8c7e815975c4c7/glad-download-patch.rule
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/glad/CMakeFiles/cc430beb5341076deb8c7e815975c4c7/glad-download-test.rule
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/glad/CMakeFiles/cc430beb5341076deb8c7e815975c4c7/glad-download-update.rule
+C:/AnimationProject/snek-3d/external/.cache/glad/CMakeFiles/glad-download
+C:/AnimationProject/snek-3d/external/.cache/glad/CMakeFiles/5b62adbd9a0657ec52dfda589ca7af22/glad-download.rule
+C:/AnimationProject/snek-3d/external/.cache/glad/CMakeFiles/1f9e3ac374abb5acad77fe3c30af2861/glad-download-complete.rule
+C:/AnimationProject/snek-3d/external/.cache/glad/CMakeFiles/ec89ee2e2127fa0c02981fdb4269457b/glad-download-build.rule
+C:/AnimationProject/snek-3d/external/.cache/glad/CMakeFiles/ec89ee2e2127fa0c02981fdb4269457b/glad-download-configure.rule
+C:/AnimationProject/snek-3d/external/.cache/glad/CMakeFiles/ec89ee2e2127fa0c02981fdb4269457b/glad-download-download.rule
+C:/AnimationProject/snek-3d/external/.cache/glad/CMakeFiles/ec89ee2e2127fa0c02981fdb4269457b/glad-download-install.rule
+C:/AnimationProject/snek-3d/external/.cache/glad/CMakeFiles/ec89ee2e2127fa0c02981fdb4269457b/glad-download-mkdir.rule
+C:/AnimationProject/snek-3d/external/.cache/glad/CMakeFiles/ec89ee2e2127fa0c02981fdb4269457b/glad-download-patch.rule
+C:/AnimationProject/snek-3d/external/.cache/glad/CMakeFiles/ec89ee2e2127fa0c02981fdb4269457b/glad-download-test.rule
+C:/AnimationProject/snek-3d/external/.cache/glad/CMakeFiles/ec89ee2e2127fa0c02981fdb4269457b/glad-download-update.rule

@@ -1,6 +1,6 @@
-^D:\UNIVERSITYASSIMENTS\ANIMATION\PROJECT\ENGINEFORANIMATIONCOURSE\EXTERNAL\.CACHE\IMGUI\CMAKEFILES\AE159CD605EB5FFCE0CF333132B12149\GENERATE.STAMP.RULE
+^C:\ANIMATIONPROJECT\SNEK-3D\EXTERNAL\.CACHE\IMGUI\CMAKEFILES\3EB3FA30544CA7F5F030E5FA243BADC5\GENERATE.STAMP.RULE
 setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SD:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/imgui -BD:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/imgui --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/imgui/imgui-download.sln
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/AnimationProject/snek-3d/external/.cache/imgui -BC:/AnimationProject/snek-3d/external/.cache/imgui --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/AnimationProject/snek-3d/external/.cache/imgui/imgui-download.sln
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone

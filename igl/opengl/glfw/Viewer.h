@@ -140,6 +140,9 @@ public:
 	bool isPicked;
 	bool isActive;
 
+    //game additions
+    int score;
+
     
 
     // List of registered plugins

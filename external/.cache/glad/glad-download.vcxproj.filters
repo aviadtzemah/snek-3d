@@ -1,44 +1,44 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\glad\CMakeFiles\cc430beb5341076deb8c7e815975c4c7\glad-download-mkdir.rule">
+    <CustomBuild Include="C:\AnimationProject\snek-3d\external\.cache\glad\CMakeFiles\ec89ee2e2127fa0c02981fdb4269457b\glad-download-mkdir.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\glad\CMakeFiles\cc430beb5341076deb8c7e815975c4c7\glad-download-download.rule">
+    <CustomBuild Include="C:\AnimationProject\snek-3d\external\.cache\glad\CMakeFiles\ec89ee2e2127fa0c02981fdb4269457b\glad-download-download.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\glad\CMakeFiles\cc430beb5341076deb8c7e815975c4c7\glad-download-update.rule">
+    <CustomBuild Include="C:\AnimationProject\snek-3d\external\.cache\glad\CMakeFiles\ec89ee2e2127fa0c02981fdb4269457b\glad-download-update.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\glad\CMakeFiles\cc430beb5341076deb8c7e815975c4c7\glad-download-patch.rule">
+    <CustomBuild Include="C:\AnimationProject\snek-3d\external\.cache\glad\CMakeFiles\ec89ee2e2127fa0c02981fdb4269457b\glad-download-patch.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\glad\CMakeFiles\cc430beb5341076deb8c7e815975c4c7\glad-download-configure.rule">
+    <CustomBuild Include="C:\AnimationProject\snek-3d\external\.cache\glad\CMakeFiles\ec89ee2e2127fa0c02981fdb4269457b\glad-download-configure.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\glad\CMakeFiles\cc430beb5341076deb8c7e815975c4c7\glad-download-build.rule">
+    <CustomBuild Include="C:\AnimationProject\snek-3d\external\.cache\glad\CMakeFiles\ec89ee2e2127fa0c02981fdb4269457b\glad-download-build.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\glad\CMakeFiles\cc430beb5341076deb8c7e815975c4c7\glad-download-install.rule">
+    <CustomBuild Include="C:\AnimationProject\snek-3d\external\.cache\glad\CMakeFiles\ec89ee2e2127fa0c02981fdb4269457b\glad-download-install.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\glad\CMakeFiles\cc430beb5341076deb8c7e815975c4c7\glad-download-test.rule">
+    <CustomBuild Include="C:\AnimationProject\snek-3d\external\.cache\glad\CMakeFiles\ec89ee2e2127fa0c02981fdb4269457b\glad-download-test.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\glad\CMakeFiles\b3be367fc7ad76ba338a92e0b535c8c4\glad-download-complete.rule">
+    <CustomBuild Include="C:\AnimationProject\snek-3d\external\.cache\glad\CMakeFiles\1f9e3ac374abb5acad77fe3c30af2861\glad-download-complete.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\glad\CMakeFiles\96bfacf787d738b9484cf6124a1acf2a\glad-download.rule">
+    <CustomBuild Include="C:\AnimationProject\snek-3d\external\.cache\glad\CMakeFiles\5b62adbd9a0657ec52dfda589ca7af22\glad-download.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\glad\CMakeLists.txt" />
+    <CustomBuild Include="C:\AnimationProject\snek-3d\external\.cache\glad\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="D:\UniversityAssiments\Animation\Project\EngineForAnimationCourse\external\.cache\glad\CMakeFiles\glad-download" />
+    <None Include="C:\AnimationProject\snek-3d\external\.cache\glad\CMakeFiles\glad-download" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CMake Rules">
-      <UniqueIdentifier>{670B5B97-0D19-3CDE-A40C-F58A242E85D6}</UniqueIdentifier>
+      <UniqueIdentifier>{8AAC7073-C3C0-3BBC-B5FC-4A2787784540}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -1,14 +1,14 @@
 # Target labels
  imgui-download
 # Source files and their labels
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/imgui/CMakeFiles/imgui-download
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/imgui/CMakeFiles/ae159cd605eb5ffce0cf333132b12149/imgui-download.rule
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/imgui/CMakeFiles/96a250b4ae544278ea347a361d85916c/imgui-download-complete.rule
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/imgui/CMakeFiles/8d902485702750c7338b55497040475d/imgui-download-build.rule
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/imgui/CMakeFiles/8d902485702750c7338b55497040475d/imgui-download-configure.rule
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/imgui/CMakeFiles/8d902485702750c7338b55497040475d/imgui-download-download.rule
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/imgui/CMakeFiles/8d902485702750c7338b55497040475d/imgui-download-install.rule
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/imgui/CMakeFiles/8d902485702750c7338b55497040475d/imgui-download-mkdir.rule
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/imgui/CMakeFiles/8d902485702750c7338b55497040475d/imgui-download-patch.rule
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/imgui/CMakeFiles/8d902485702750c7338b55497040475d/imgui-download-test.rule
-D:/UniversityAssiments/Animation/Project/EngineForAnimationCourse/external/.cache/imgui/CMakeFiles/8d902485702750c7338b55497040475d/imgui-download-update.rule
+C:/AnimationProject/snek-3d/external/.cache/imgui/CMakeFiles/imgui-download
+C:/AnimationProject/snek-3d/external/.cache/imgui/CMakeFiles/3eb3fa30544ca7f5f030e5fa243badc5/imgui-download.rule
+C:/AnimationProject/snek-3d/external/.cache/imgui/CMakeFiles/822bac0cddc9e280057d425991566315/imgui-download-complete.rule
+C:/AnimationProject/snek-3d/external/.cache/imgui/CMakeFiles/8f0a2fcba17c5f63821eacf5cbf2610e/imgui-download-build.rule
+C:/AnimationProject/snek-3d/external/.cache/imgui/CMakeFiles/8f0a2fcba17c5f63821eacf5cbf2610e/imgui-download-configure.rule
+C:/AnimationProject/snek-3d/external/.cache/imgui/CMakeFiles/8f0a2fcba17c5f63821eacf5cbf2610e/imgui-download-download.rule
+C:/AnimationProject/snek-3d/external/.cache/imgui/CMakeFiles/8f0a2fcba17c5f63821eacf5cbf2610e/imgui-download-install.rule
+C:/AnimationProject/snek-3d/external/.cache/imgui/CMakeFiles/8f0a2fcba17c5f63821eacf5cbf2610e/imgui-download-mkdir.rule
+C:/AnimationProject/snek-3d/external/.cache/imgui/CMakeFiles/8f0a2fcba17c5f63821eacf5cbf2610e/imgui-download-patch.rule
+C:/AnimationProject/snek-3d/external/.cache/imgui/CMakeFiles/8f0a2fcba17c5f63821eacf5cbf2610e/imgui-download-test.rule
+C:/AnimationProject/snek-3d/external/.cache/imgui/CMakeFiles/8f0a2fcba17c5f63821eacf5cbf2610e/imgui-download-update.rule
