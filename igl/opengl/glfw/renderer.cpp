@@ -160,7 +160,8 @@ void Renderer::MouseProcessing(int button)
 		
 			scn->data().TranslateInSystem(scn->GetRotation(), Eigen::Vector3d(xToMove, 0, 0));
 			scn->data().TranslateInSystem(scn->GetRotation(), Eigen::Vector3d(0, yToMove, 0));
-
+			scn->data().center_dif = scn->data().center_dif + Eigen::Vector3d(xToMove, 0, 0);
+			scn->data().center_dif = scn->data().center_dif + Eigen::Vector3d(0, yToMove, 0);
 		}
 		else
 		{
@@ -186,7 +187,6 @@ void Renderer::MouseProcessing(int button)
 		else
 		{
 			scn->RotateInSystem(Eigen::Vector3d(1, 0, 0), yrel / 100.0);
-
 			scn->RotateInSystem(Eigen::Vector3d(0, 1, 0), xrel / 100.0);
 
 		}

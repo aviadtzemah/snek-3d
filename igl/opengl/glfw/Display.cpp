@@ -28,7 +28,7 @@
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 //void mouse_move(GLFWwindow* window, double x, double y);
-//void glfw_mouse_press(GLFWwindow* window, int button, int action, int modifier);
+void glfw_mouse_press(GLFWwindow* window, int button, int action, int modifier);
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow* window);
@@ -124,7 +124,7 @@ Display::Display(int windowWidth, int windowHeight, const std::string& title)
 		glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 		glfwSetCursorPosCallback(window, mouse_callback);
 		glfwSetScrollCallback(window, scroll_callback);
-		//glfwSetMouseButtonCallback(window, glfw_mouse_press);
+		glfwSetMouseButtonCallback(window, glfw_mouse_press);
 
 		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
@@ -262,12 +262,13 @@ bool Display::launch_rendering(bool loop)
 
 		// input
 		// -----
-		processInput(window);
+		//processInput(window);
 
 		// render
 		// ------
-		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		// these lines clear the screen completely
+		//glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// draw scene as normal
 		glm::mat4 model = glm::mat4(1.0f);
@@ -327,20 +328,20 @@ bool Display::launch_rendering(bool loop)
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 // ---------------------------------------------------------------------------------------------------------
-void processInput(GLFWwindow* window)
-{
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, true);
-
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		camera.ProcessKeyboard(FORWARD, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		camera.ProcessKeyboard(BACKWARD, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		camera.ProcessKeyboard(LEFT, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		camera.ProcessKeyboard(RIGHT, deltaTime);
-}
+//void processInput(GLFWwindow* window)
+//{
+//	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+//		glfwSetWindowShouldClose(window, true);
+//
+//	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+//		camera.ProcessKeyboard(FORWARD, deltaTime);
+//	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+//		camera.ProcessKeyboard(BACKWARD, deltaTime);
+//	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+//		camera.ProcessKeyboard(LEFT, deltaTime);
+//	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+//		camera.ProcessKeyboard(RIGHT, deltaTime);
+//}
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
 // ---------------------------------------------------------------------------------------------
@@ -394,46 +395,46 @@ static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 //	}
 //}
 
-//void glfw_mouse_press(GLFWwindow* window, int button, int action, int modifier)
-//{
-//
-//	Renderer* rndr = (Renderer*)glfwGetWindowUserPointer(window);
-//	igl::opengl::glfw::Viewer* scn = rndr->GetScene();
-//
-//	if (action == GLFW_PRESS)
-//	{
-//		double x2, y2;
-//		glfwGetCursorPos(window, &x2, &y2);
-//
-//
-//		double depth, closestZ = 1;
-//		int i = 0, savedIndx = scn->selected_data_index, lastIndx = scn->selected_data_index;
-//
-//		for (; i < scn->data_list.size(); i++)
-//		{
-//			scn->selected_data_index = i;
-//			depth = rndr->Picking(x2, y2);
-//			if (depth < 0 && (closestZ > 0 || closestZ < depth))
-//			{
-//				savedIndx = i;
-//				closestZ = depth;
-//				std::cout << "found " << depth << std::endl;
-//			}
-//		}
-//		scn->selected_data_index = savedIndx;
-//		scn->data().set_colors(Eigen::RowVector3d(0.9, 0.1, 0.1));
-//		if (lastIndx != savedIndx)
-//			scn->data_list[lastIndx].set_colors(Eigen::RowVector3d(255.0 / 255.0, 228.0 / 255.0, 58.0 / 255.0));
-//
-//		rndr->UpdatePosition(x2, y2);
-//
-//	}
-//	else
-//	{
-//		rndr->GetScene()->isPicked = false;
-//
-//	}
-//}
+void glfw_mouse_press(GLFWwindow* window, int button, int action, int modifier)
+{
+
+	Renderer* rndr = (Renderer*)glfwGetWindowUserPointer(window);
+	igl::opengl::glfw::Viewer* scn = rndr->GetScene();
+
+	if (action == GLFW_PRESS)
+	{
+		double x2, y2;
+		glfwGetCursorPos(window, &x2, &y2);
+
+
+		double depth, closestZ = 1;
+		int i = 0, savedIndx = scn->selected_data_index, lastIndx = scn->selected_data_index;
+
+		for (; i < scn->data_list.size(); i++)
+		{
+			scn->selected_data_index = i;
+			depth = rndr->Picking(x2, y2);
+			if (depth < 0 && (closestZ > 0 || closestZ < depth))
+			{
+				savedIndx = i;
+				closestZ = depth;
+				std::cout << "found " << depth << std::endl;
+			}
+		}
+		scn->selected_data_index = savedIndx;
+		scn->data().set_colors(Eigen::RowVector3d(0.9, 0.1, 0.1));
+		if (lastIndx != savedIndx)
+			scn->data_list[lastIndx].set_colors(Eigen::RowVector3d(255.0 / 255.0, 228.0 / 255.0, 58.0 / 255.0));
+
+		rndr->UpdatePosition(x2, y2);
+
+	}
+	else
+	{
+		rndr->GetScene()->isPicked = false;
+
+	}
+}
 // utility function for loading a 2D texture from file
 // ---------------------------------------------------
 unsigned int loadTexture(char const* path)

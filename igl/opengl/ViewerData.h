@@ -17,6 +17,9 @@
 #include <memory>
 #include <vector>
 
+#include <igl/AABB.h>
+
+
 
 // Alec: This is a mesh class containing a variety of data types (normals,
 // overlays, material colors, etc.)
@@ -151,6 +154,20 @@ public:
 
   Eigen::MatrixXd V; // Vertices of the current mesh (#V x 3)
   Eigen::MatrixXi F; // Faces of the mesh (#F x 3)
+
+  // OUR ADDITIONS
+  igl::AABB<Eigen::MatrixXd, 3>* tree;
+  Eigen::AlignedBox<double, 3> outer_box;
+  Eigen::MatrixXd reset_V;
+  Eigen::MatrixXi reset_F;
+  bool pause;
+  int direction;
+  IGL_INLINE bool igl::opengl::ViewerData::draw_all(igl::AABB<Eigen::MatrixXd, 3>* tree);
+  IGL_INLINE void init_mesh();
+  IGL_INLINE void SetDirection(int dir);
+  IGL_INLINE void Pause();
+  IGL_INLINE void draw_box(Eigen::AlignedBox<double, 3> box, Eigen::RowVector3d color);
+  Eigen::Vector3d center_dif;
 
   // Per face attributes
   Eigen::MatrixXd F_normals; // One normal per face

@@ -56,9 +56,8 @@ void SandBox::Animate()
 {
 	if (isActive)
 	{
-		
-		
-		
+		Move();
+		CheckCollision();
 	}
 }
 

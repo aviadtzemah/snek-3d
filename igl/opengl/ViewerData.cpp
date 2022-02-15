@@ -47,6 +47,136 @@ IGL_INLINE void igl::opengl::ViewerData::set_face_based(bool newvalue)
   }
 }
 
+IGL_INLINE void igl::opengl::ViewerData::init_mesh() {
+    if (id == 0) {
+        pause = false;;
+        direction = 4;
+    }
+    else {
+        pause = true;
+        direction = 0;
+    }
+    reset_V = V;
+    reset_F = F;
+    center_dif = Eigen::Vector3d(0, 0, 0);
+    MyTranslate(Eigen::Vector3d(id * 2, 0, 0), true);
+    center_dif += Eigen::Vector3d(id * 2, 0, 0);
+    tree = new igl::AABB<Eigen::MatrixXd, 3>();
+    tree->init(V, F);
+    outer_box = tree->m_box;
+
+    std::cout << "main center: " << tree->m_box.center() << std::endl;
+    std::cout << "left center:" << tree->m_left->m_box.center() << std::endl;
+
+    Eigen::MatrixXd V_box(8, 3);
+    V_box <<
+        (Eigen::RowVector3d)outer_box.corner(outer_box.BottomLeftFloor),
+        (Eigen::RowVector3d)outer_box.corner(outer_box.BottomRightFloor),
+        (Eigen::RowVector3d)outer_box.corner(outer_box.TopLeftFloor),
+        (Eigen::RowVector3d)outer_box.corner(outer_box.TopRightFloor),
+        (Eigen::RowVector3d)outer_box.corner(outer_box.BottomLeftCeil),
+        (Eigen::RowVector3d)outer_box.corner(outer_box.BottomRightCeil),
+        (Eigen::RowVector3d)outer_box.corner(outer_box.TopLeftCeil),
+        (Eigen::RowVector3d)outer_box.corner(outer_box.TopRightCeil);
+
+    Eigen::MatrixXi E_box(12, 2);
+    E_box <<
+        4, 5,
+        4, 0,
+        5, 1,
+        0, 1,
+        6, 7,
+        7, 3,
+        6, 2,
+        2, 3,
+        6, 4,
+        3, 1,
+        7, 5,
+        2, 0;
+
+    // Plot the corners of the bounding box as points
+    add_points(V_box, Eigen::RowVector3d(0, 1, 0));
+
+    // Plot the edges of the bounding box
+    for (unsigned i = 0; i < E_box.rows(); ++i)
+        add_edges
+        (
+            V_box.row(E_box(i, 0)),
+            V_box.row(E_box(i, 1)),
+            Eigen::RowVector3d(0, 1, 0)
+        );
+
+    //draw_all(tree);
+}
+
+IGL_INLINE bool igl::opengl::ViewerData::draw_all(igl::AABB<Eigen::MatrixXd, 3>* tree) {
+    bool stam = true;
+    if (tree->is_leaf()) {
+        draw_box(tree->m_box, Eigen::RowVector3d(1, 1, 1));
+        return true;
+    }
+    else {
+        stam = draw_all(tree->m_right);
+        stam = draw_all(tree->m_left);
+    }
+    return stam;
+}
+
+// 1 - up
+// 2 - down
+// 3 - left
+// 4 - right
+// 5 - inwards
+// 6- outwards
+IGL_INLINE void igl::opengl::ViewerData::SetDirection(int dir) {
+    direction = dir;
+    pause = false;
+}
+
+IGL_INLINE void igl::opengl::ViewerData::Pause() {
+    pause = !pause;
+}
+
+IGL_INLINE void igl::opengl::ViewerData::draw_box(Eigen::AlignedBox<double, 3> box, Eigen::RowVector3d color) {
+    Eigen::MatrixXd V_box(8, 3);
+    V_box <<
+        (Eigen::RowVector3d)box.corner(box.BottomLeftFloor),
+        (Eigen::RowVector3d)box.corner(box.BottomRightFloor),
+        (Eigen::RowVector3d)box.corner(box.TopLeftFloor),
+        (Eigen::RowVector3d)box.corner(box.TopRightFloor),
+        (Eigen::RowVector3d)box.corner(box.BottomLeftCeil),
+        (Eigen::RowVector3d)box.corner(box.BottomRightCeil),
+        (Eigen::RowVector3d)box.corner(box.TopLeftCeil),
+        (Eigen::RowVector3d)box.corner(box.TopRightCeil);
+
+    Eigen::MatrixXi E_box(12, 2);
+    E_box <<
+        4, 5,
+        4, 0,
+        5, 1,
+        0, 1,
+        6, 7,
+        7, 3,
+        6, 2,
+        2, 3,
+        6, 4,
+        3, 1,
+        7, 5,
+        2, 0;
+
+    // Plot the corners of the bounding box as points
+    add_points(V_box, color);
+
+    // Plot the edges of the bounding box
+    for (unsigned i = 0; i < E_box.rows(); ++i)
+        add_edges
+        (
+            V_box.row(E_box(i, 0)),
+            V_box.row(E_box(i, 1)),
+            color
+        );
+}
+
 // Helpers that draws the most common meshes
 IGL_INLINE void igl::opengl::ViewerData::set_mesh(
     const Eigen::MatrixXd& _V, const Eigen::MatrixXi& _F)
@@ -88,6 +218,8 @@ IGL_INLINE void igl::opengl::ViewerData::set_mesh(
       cerr << "ERROR (set_mesh): The new mesh has a different number of vertices/faces. Please clear the mesh before plotting."<<endl;
   }
   dirty |= MeshGL::DIRTY_FACE | MeshGL::DIRTY_POSITION;
+
+  init_mesh();
 }
 
 IGL_INLINE void igl::opengl::ViewerData::set_vertices(const Eigen::MatrixXd& _V)

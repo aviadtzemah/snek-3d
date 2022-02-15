@@ -67,7 +67,7 @@ namespace glfw
     selected_data_index(0),
     next_data_id(1),
 	isPicked(false),
-	isActive(false),
+	isActive(true),
     score(0)
   {
     data_list.front().id = 0;
@@ -362,6 +362,221 @@ namespace glfw
 	  }
 
 	  return prevTrans;
+  }
+
+  void Viewer::Move() {
+      double velocity = 0.01;
+      for (auto& data : data_list)
+      {
+          if (!data.pause) {
+              switch (data.direction)
+              {
+              case 1: // up
+                  data.MyTranslate(Eigen::Vector3d(0, velocity, 0), true);
+                  data.center_dif += Eigen::Vector3d(0, velocity, 0);
+                  break;
+              case 2: // down
+                  data.MyTranslate(Eigen::Vector3d(0, -velocity, 0), true);
+                  data.center_dif += Eigen::Vector3d(0, -velocity, 0);
+                  break;
+              case 3: // left
+                  data.MyTranslate(Eigen::Vector3d(-velocity, 0, 0), true);
+                  data.center_dif += Eigen::Vector3d(-velocity, 0, 0);
+                  break;
+              case 4: // right
+                  data.MyTranslate(Eigen::Vector3d(velocity, 0, 0), true);
+                  data.center_dif += Eigen::Vector3d(velocity, 0, 0);
+                  break;
+              case 5: //inward
+                  data.MyTranslate(Eigen::Vector3d(0, 0, velocity), true);
+                  data.center_dif += Eigen::Vector3d(0, 0, velocity);
+                  break;
+              case 6: //outward
+                  data.MyTranslate(Eigen::Vector3d(0, 0, -velocity), true);
+                  data.center_dif += Eigen::Vector3d(0, 0, -velocity);
+                  break;
+              default:
+                  break;
+              }
+          }
+      }
+  }
+
+  double Viewer::sign(int i, int j) {
+      if ((i == 0 && j == 1) || (i == 1 && j == 2) || (i == 2 && j == 0)) {
+          return 1.0;
+      }
+      else {
+          return -1.0;
+      }
+  }
+
+  double Viewer::c_j(Eigen::RowVector3d Ai0, Eigen::RowVector3d Ai1, Eigen::RowVector3d Bj, double sign) {
+      return sign * Ai0.dot(Ai1.cross(Bj));
+  }
+
+  double Viewer::c_i(Eigen::RowVector3d Bj0, Eigen::RowVector3d Ai, Eigen::RowVector3d Bj1, double sign) {
+      return sign * Bj0.dot(Ai.cross(Bj1));
+  }
+
+  bool Viewer::does_intersect(Eigen::AlignedBox<double, 3> box1, Eigen::AlignedBox<double, 3> box2, Eigen::Matrix3d rotation1, Eigen::Matrix3d rotation2,
+      Eigen::Vector3d center_dif1, Eigen::Vector3d center_dif2) {
+      //std::cout << "does_intersect " << std::endl;
+      Eigen::RowVector3d D = (box1.center() + center_dif1) - (box2.center() + center_dif2);
+
+      // box 1 axis
+      Eigen::RowVector3d A0 = rotation1.row(0);
+      Eigen::RowVector3d A1 = rotation1.row(1);
+      Eigen::RowVector3d A2 = rotation1.row(2);
+
+      // box 1 extents
+      Eigen::RowVector3d sizes = box1.sizes();
+      double a0 = sizes(0) / 2;
+      double a1 = sizes(1) / 2;
+      double a2 = sizes(2) / 2;
+
+      // box 2 axis
+      Eigen::RowVector3d B0 = rotation2.row(0);
+      Eigen::RowVector3d B1 = rotation2.row(1);
+      Eigen::RowVector3d B2 = rotation2.row(2);
+
+      // box 2 extents
+      sizes = box2.sizes();
+      double b0 = sizes(0) / 2;
+      double b1 = sizes(1) / 2;
+      double b2 = sizes(2) / 2;
+
+      // checking intersection
+      double c00 = A0.dot(B0);
+      double c01 = A0.dot(B1);
+      double c02 = A0.dot(B2);
+
+      // 1st check
+      if (std::abs(A0.dot(D)) > a0 + (b0 * std::abs(c00) + b1 * std::abs(c01) + b2 * std::abs(c02))) {
+          return false;
+      }
+
+      double c10 = A1.dot(B0);
+      double c11 = A1.dot(B1);
+      double c12 = A1.dot(B2);
+
+      // 2nd check
+      if (std::abs(A1.dot(D)) > a1 + (b0 * std::abs(c10) + b1 * std::abs(c11) + b2 * std::abs(c12))) {
+          return false;
+      }
+
+      double c20 = A2.dot(B0);
+      double c21 = A2.dot(B1);
+      double c22 = A2.dot(B2);
+
+      // 3rd check
+      if (std::abs(A2.dot(D)) > a2 + (b0 * std::abs(c20) + b1 * std::abs(c21) + b2 * std::abs(c22))) {
+          return false;
+      }
+
+      // 4th check
+      if (std::abs(B0.dot(D)) > b0 + (a0 * std::abs(c00) + a1 * std::abs(c10) + a2 * std::abs(c20))) {
+          return false;
+      }
+
+      // 5th check
+      if (std::abs(B1.dot(D)) > b1 + (a0 * std::abs(c01) + a1 * std::abs(c11) + a2 * std::abs(c21))) {
+          return false;
+      }
+
+      // 6th check
+      if (std::abs(B2.dot(D)) > b2 + (a0 * std::abs(c02) + a1 * std::abs(c12) + a2 * std::abs(c22))) {
+          return false;
+      }
+
+      // 7th check
+      if (std::abs(c10 * A2.dot(D) - c20 * A1.dot(D)) > a1 * std::abs(c20) + a2 * std::abs(c10) + b1 * std::abs(c02) + b2 * std::abs(c01)) {
+          return false;
+      }
+
+      // 8th check
+      if (std::abs(c11 * A2.dot(D) - c21 * A1.dot(D)) > a1 * std::abs(c21) + a2 * std::abs(c11) + b0 * std::abs(c02) + b2 * std::abs(c00)) {
+          return false;
+      }
+
+      // 9th eck
+      if (std::abs(c12 * A2.dot(D) - c22 * A1.dot(D)) > a1 * std::abs(c22) + a2 * std::abs(c12) + b0 * std::abs(c01) + b1 * std::abs(c00)) {
+          return false;
+      }
+
+      // 10th eck
+      if (std::abs(c20 * A0.dot(D) - c00 * A2.dot(D)) > a0 * std::abs(c20) + a2 * std::abs(c00) + b1 * std::abs(c12) + b2 * std::abs(c11)) {
+          return false;
+      }
+
+      // 11th eck
+      if (std::abs(c21 * A0.dot(D) - c01 * A2.dot(D)) > a0 * std::abs(c21) + a2 * std::abs(c01) + b0 * std::abs(c12) + b2 * std::abs(c10)) {
+          return false;
+      }
+
+      // 12th eck
+      if (std::abs(c22 * A0.dot(D) - c02 * A2.dot(D)) > a0 * std::abs(c22) + a2 * std::abs(c02) + b0 * std::abs(c11) + b1 * std::abs(c10)) {
+          return false;
+      }
+
+      // 13th eck
+      if (std::abs(c00 * A1.dot(D) - c10 * A0.dot(D)) > a0 * std::abs(c10) + a1 * std::abs(c00) + b1 * std::abs(c22) + b2 * std::abs(c21)) {
+          return false;
+      }
+
+      // 14th eck
+      if (std::abs(c01 * A1.dot(D) - c11 * A0.dot(D)) > a0 * std::abs(c11) + a1 * std::abs(c01) + b0 * std::abs(c22) + b2 * std::abs(c20)) {
+          return false;
+      }
+
+      // 15th eck
+      if (std::abs(c02 * A1.dot(D) - c12 * A0.dot(D)) > a0 * std::abs(c12) + a1 * std::abs(c02) + b0 * std::abs(c21) + b1 * std::abs(c20)) {
+          return false;
+      }
+
+      return true;
+  }
+
+
+  bool Viewer::CheckCollisionRec(igl::opengl::ViewerData* obj1, igl::opengl::ViewerData* obj2, igl::AABB<Eigen::MatrixXd, 3>* tree1, igl::AABB<Eigen::MatrixXd, 3>* tree2) {
+      if (tree1->is_leaf() && tree2->is_leaf()) {
+          if (does_intersect(tree1->m_box, tree2->m_box, obj1->GetRotation(), obj2->GetRotation(), obj1->center_dif, obj2->center_dif)) {
+              std::cout << "collision" << std::endl;
+              obj1->draw_box(tree1->m_box, Eigen::RowVector3d(1, 0, 0));
+              obj2->draw_box(tree2->m_box, Eigen::RowVector3d(1, 0, 0));
+
+              return true;
+          }
+
+          return false;
+      }
+
+      if (does_intersect(tree1->m_box, tree2->m_box, obj1->GetRotation(), obj2->GetRotation(), obj1->center_dif, obj2->center_dif)) {
+
+          return CheckCollisionRec(obj1, obj2, tree1->is_leaf() ? tree1 : tree1->m_right, tree2->is_leaf() ? tree2 : tree2->m_right)
+              || CheckCollisionRec(obj1, obj2, tree1->is_leaf() ? tree1 : tree1->m_right, tree2->is_leaf() ? tree2 : tree2->m_left)
+              || CheckCollisionRec(obj1, obj2, tree1->is_leaf() ? tree1 : tree1->m_left, tree2->is_leaf() ? tree2 : tree2->m_right)
+              || CheckCollisionRec(obj1, obj2, tree1->is_leaf() ? tree1 : tree1->m_left, tree2->is_leaf() ? tree2 : tree2->m_left);
+      }
+
+      return false;
+  }
+
+  bool Viewer::CheckCollision() {
+      for (int i = 0; i < data_list.size() - 1; i++)
+      {
+          for (int j = i + 1; j < data_list.size(); j++)
+          {
+              if (!data_list[i].pause || !data_list[j].pause) {
+                  if (CheckCollisionRec(&data_list[i], &data_list[j], data_list[i].tree, data_list[j].tree)) {
+                      data_list[i].pause = true;
+                      data_list[j].pause = true;
+                      return true;
+                  }
+              }
+          }
+      }
+      return false;
   }
 
 } // end namespace

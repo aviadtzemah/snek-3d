@@ -25,11 +25,6 @@ public:
 	void AddMouseCallBacks(void (*mousebuttonfun)(GLFWwindow*, int, int, int), void(*scrollfun)(GLFWwindow*, double, double), void (*cursorposfun)(GLFWwindow*, double, double));
 	void AddResizeCallBack(void (*windowsizefun) (GLFWwindow*, int, int));
 	//void processInput(GLFWwindow* window);
-	//void framebuffer_size_callback(GLFWwindow* window, int width, int height);//todo
-	//void mouse_callback(GLFWwindow* window, double xposIn, double yposIn);//todo
-	//void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);//todo
-	//unsigned int loadTexture(char const* path);
-	//unsigned int loadCubemap(std::vector<std::string> faces);
 
 	~Display();
 //private:

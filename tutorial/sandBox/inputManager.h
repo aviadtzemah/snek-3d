@@ -160,33 +160,50 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 			break;
 		case 'w':
 		case 'W':
-			rndr->TranslateCamera(Eigen::Vector3f(0, 0, 0.03f));
+			scn->data().SetDirection(5);
 			break;
 		case 's':
 		case 'S':
-			rndr->TranslateCamera(Eigen::Vector3f(0, 0, -0.03f));
+			scn->data().SetDirection(6);
 			break;
+		case GLFW_KEY_UP:
+			scn->data().SetDirection(1);
+			break;
+		case GLFW_KEY_DOWN:
+			scn->data().SetDirection(2);
+			std::cout << "oof" << std::endl;
+			break;
+		case GLFW_KEY_LEFT:
+			scn->data().SetDirection(3);
+			break;
+		case GLFW_KEY_RIGHT:
+			scn->data().SetDirection(4);
+			break;
+		case ' ':
+			break;
+		case 'P':
+		case 'p':
+		{
+			scn->data().Pause();
+			break;
+		}
 		case GLFW_KEY_C:
 			tmp = (scn->data().MakeTransScaled().inverse() * Eigen::Vector4d(0, 0, 0, 1)).head<3>();
 			scn->data().SetCenterOfRotation(tmp);
 			break;
-		case GLFW_KEY_UP:
-			rndr->TranslateCamera(Eigen::Vector3f(0, 0.01f,0));
-			break;
-		case GLFW_KEY_DOWN:
-			rndr->TranslateCamera(Eigen::Vector3f(0, -0.01f,0));
+		//case GLFW_KEY_UP:
+		//	rndr->TranslateCamera(Eigen::Vector3f(0, 0.01f,0));
+		//	break;
+		//case GLFW_KEY_DOWN:
+		//	rndr->TranslateCamera(Eigen::Vector3f(0, -0.01f,0));
 
-			break;
-		case GLFW_KEY_LEFT:
-				rndr->TranslateCamera(Eigen::Vector3f(-0.01f, 0,0));
-			break;
-		case GLFW_KEY_RIGHT:
-			rndr->TranslateCamera(Eigen::Vector3f(0.01f, 0, 0));
-			break;
-		case ' ':
-
-			break;
-		
+		//	break;
+		//case GLFW_KEY_LEFT:
+		//		rndr->TranslateCamera(Eigen::Vector3f(-0.01f, 0,0));
+		//	break;
+		//case GLFW_KEY_RIGHT:
+		//	rndr->TranslateCamera(Eigen::Vector3f(0.01f, 0, 0));
+		//	break;
 		default: 
 			Eigen::Vector3f shift;
 			float scale;

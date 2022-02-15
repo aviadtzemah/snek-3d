@@ -123,7 +123,16 @@ namespace glfw
 
 	Eigen::Matrix4d CalcParentsTrans(int indx);
 	inline bool SetAnimation() { return isActive = !isActive; }
-public:
+
+    IGL_INLINE void Move();
+    IGL_INLINE bool CheckCollision();
+    IGL_INLINE bool CheckCollisionRec(igl::opengl::ViewerData* obj1, igl::opengl::ViewerData* obj2, igl::AABB<Eigen::MatrixXd, 3>* tree1, igl::AABB<Eigen::MatrixXd, 3>* tree2);
+    IGL_INLINE bool does_intersect(Eigen::AlignedBox<double, 3> box1, Eigen::AlignedBox<double, 3> box2, Eigen::Matrix3d rotation1, Eigen::Matrix3d rotation2, Eigen::Vector3d center_dif1, Eigen::Vector3d center_dif2);
+    IGL_INLINE double sign(int i, int j);
+    IGL_INLINE double c_j(Eigen::RowVector3d Ai0, Eigen::RowVector3d Ai1, Eigen::RowVector3d Bj, double sign);
+    IGL_INLINE double c_i(Eigen::RowVector3d Bj0, Eigen::RowVector3d Ai, Eigen::RowVector3d Bj1, double sign);
+
+  public:
     //////////////////////
     // Member variables //
     //////////////////////
