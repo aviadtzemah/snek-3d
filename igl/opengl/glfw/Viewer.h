@@ -153,7 +153,6 @@ public:
     int direction; // 0 - not moving, 1 - forward, 2 - forward-right, 3 - forward-left. default 0 until started moving then default is 1
 
     // functions
-    IGL_INLINE bool Viewer::arrange_links_and_set_parents();
     IGL_INLINE void Viewer::calculate_and_write_weights();
     IGL_INLINE int Viewer::smallest_index(Eigen::VectorXd vec);
     IGL_INLINE float Viewer::point_to_line_distance(Eigen::Vector3d line_point1, Eigen::Vector3d line_point2, Eigen::Vector3d point);
