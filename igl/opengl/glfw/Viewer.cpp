@@ -148,19 +148,30 @@ namespace glfw
       ViewerData* snake = &data_list[0];
       float velocity = 0.1;
 
-      Eigen::Vector3d target_vec = (snake->C.row(snake->C.rows() - 1) - snake->C.row(snake->C.rows() - 2)).normalized() * velocity; // curently holds the direction of the new point
-      target_vec += snake->C.row(snake->C.rows() - 1); // holds the new point
+      if (direction == 1) {
+          Eigen::Vector3d target_vec = (snake->C.row(snake->C.rows() - 1) - snake->C.row(snake->C.rows() - 2)).normalized() * velocity; // curently holds the direction of the new point
+          target_vec += snake->C.row(snake->C.rows() - 1); // holds the new point
 
-      if (direction == 2) {
-          Eigen::Quaterniond rot(Eigen::AngleAxisd(igl::PI * 0.05, Eigen::Vector3d(0, 1, 0)));
+          return target_vec;
+      }
+      else if (direction == 2) {
+          Eigen::Vector3d target_vec = (snake->C.row(snake->C.rows() - 1) - snake->C.row(snake->C.rows() - 2));
+          target_vec += snake->C.row(snake->C.rows() - 2); // holds the new point
+          Eigen::Quaterniond rot(Eigen::AngleAxisd(-igl::PI * 0.01, Eigen::Vector3d(0, 1, 0)));
           target_vec = rot * target_vec;
+
+          return target_vec;
       }
       else if (direction == 3) {
-          Eigen::Quaterniond rot(Eigen::AngleAxisd(-igl::PI * 0.05, Eigen::Vector3d(0, 1, 0)));
+          Eigen::Vector3d target_vec = (snake->C.row(snake->C.rows() - 1) - snake->C.row(snake->C.rows() - 2));
+          target_vec += snake->C.row(snake->C.rows() - 2); // holds the new point
+          Eigen::Quaterniond rot(Eigen::AngleAxisd(igl::PI * 0.01, Eigen::Vector3d(0, 1, 0)));
           target_vec = rot * target_vec;
+
+          return target_vec;
       }
 
-      return target_vec;
+      return Eigen::Vector3d(0, 10, 0);
   }
 
 
@@ -172,7 +183,7 @@ namespace glfw
       Eigen::Vector3d t = calculate_target();
 
       Eigen::MatrixXd C_prime = Eigen::MatrixXd::Zero(snake->C.rows(), snake->C.cols());
-      if (t(1) == 0) {
+      if (t(1) == 0 && flag > 0) {
           C_prime.row(C_prime.rows() - 1) = t;
 
           // forward reaching
@@ -180,6 +191,15 @@ namespace glfw
               float r_i = (C_prime.row(i + 1) - snake->C.row(i)).norm();
               float lambda_i = 1.6 / r_i;
               C_prime.row(i) = (1 - lambda_i) * C_prime.row(i + 1) + lambda_i * snake->C.row(i);
+          }
+
+
+          //C_prime.row(0) = snake->C.row(0);
+          // backward reaching
+          for (int i = 0; i < C_prime.rows() - 1; i++) {
+              float r_i = (C_prime.row(i + 1) - C_prime.row(i)).norm();
+              float lambda_i = 1.6 / r_i;
+              C_prime.row(i+1) = (1 - lambda_i) * C_prime.row(i) + lambda_i * C_prime.row(i + 1);
           }
 
          
@@ -196,44 +216,47 @@ namespace glfw
 
 
           //snake->dT[0] = C_prime.row(0) - snake->C.row(0);
-          Eigen::Vector3d distance = C_prime.row(0) - snake->C.row(0);
-          for (int i = 0; i < snake->BE.rows(); i++) {
-              snake->dT[i] = C_prime.row(i) - snake->C.row(i);
-          }
+          //Eigen::Vector3d distance = C_prime.row(0) - snake->C.row(0);
+          //for (int i = 0; i < snake->BE.rows(); i++) {
+          //    snake->dT[i] = C_prime.row(i) - snake->C.row(i);
+          //    //snake->dT[i] = distance;
+          //}
           
+          Eigen::Quaterniond bend(Eigen::AngleAxisd(30 * igl::PI / 180, Eigen::Vector3d(0, 1, 0))); // the angle is correct (it needs to be in radians)
+          snake->dQ[0] = data().rest_pose[0] * bend * data().rest_pose[0].conjugate();
+          //for (int i = 0; i < C_prime.rows() - 1; i++) {
+          //    Eigen::Vector3d RD = snake->C.row(i + 1) - C_prime.row(i);
+          //    Eigen::Vector3d RE = C_prime.row(i + 1) - C_prime.row(i);
 
-          for (int i = 0; i < C_prime.rows() - 1; i++) {
-              Eigen::Vector3d RD = snake->C.row(i + 1) - C_prime.row(i);
-              Eigen::Vector3d RE = C_prime.row(i + 1) - C_prime.row(i);
+          //    double angle = RD.dot(RE) / (RE.norm() * RD.norm()); // currently holds cos(angle)
 
-              double angle = RD.dot(RE) / (RE.norm() * RD.norm()); // currently holds cos(angle)
+          //    if (angle <= 1 && angle >= -1) {
+          //        angle = acos(angle);
+          //    }
+          //    else {
+          //        angle = angle > 1 ? acos(1) : acos(-1);
+          //    }
 
-              if (angle <= 1 && angle >= -1) {
-                  angle = acos(angle);
-              }
-              else {
-                  angle = angle > 1 ? acos(1) : acos(-1);
-              }
+          //    Eigen::Vector3d plane = RE.cross(RD).normalized();
 
-              Eigen::Vector3d plane = RE.cross(RD).normalized();
+          //    Eigen::Quaterniond bend;
+          //    if (angle == 0) {
+          //        bend = Eigen::Quaterniond::Identity();
+          //    }
+          //    else {
+          //        bend = Eigen::AngleAxisd(-angle * igl::PI / 180, plane);
+          //    }
+          //    //Eigen::Quaterniond bend(Eigen::AngleAxisd(angle * igl::PI / 180, plane)); // the angle is correct (it needs to be in radians)
 
-              Eigen::Quaterniond bend;
-              if (angle == 0) {
-                  bend = Eigen::Quaterniond::Identity();
-              }
-              else {
-                  bend = Eigen::AngleAxisd(angle * igl::PI / 180, plane);
-              }
-              //Eigen::Quaterniond bend(Eigen::AngleAxisd(angle * igl::PI / 180, plane)); // the angle is correct (it needs to be in radians)
-
-              if (i > 0) {
-                  snake->dQ[i] = snake->dQ[i-1] * data().rest_pose[i] * bend * data().rest_pose[i].conjugate();
-              }
-              else {
-                snake->dQ[i] = data().rest_pose[i] * bend * data().rest_pose[i].conjugate();
-              }
-          }
-          snake->C = C_prime;
+          //    if (i > 0) {
+          //        snake->dQ[i] = data().rest_pose[i] * bend * data().rest_pose[i].conjugate();
+          //    }
+          //    else {
+          //      snake->dQ[i] = data().rest_pose[i] * bend * data().rest_pose[i].conjugate();
+          //    }
+          //}
+          //snake->C = C_prime;
+          flag--;
       }
       return true;
   }
@@ -331,7 +354,7 @@ namespace glfw
     vector<Vector3d> vT = snake->dT;
     //igl::forward_kinematics(snake->C, snake->BE, snake->P, snake->dQ, snake->dT, vQ, vT);
 
-    /*const int dim = snake->C.cols();
+    const int dim = snake->C.cols();
     MatrixXd T(snake->BE.rows() * (dim + 1), dim);
     for (int e = 0;e < snake->BE.rows();e++)
     {
@@ -340,18 +363,18 @@ namespace glfw
         a.rotate(vQ[e]);
         T.block(e * (dim + 1), 0, dim + 1, dim) =
             a.matrix().transpose().block(0, 0, dim + 1, dim);
-    }*/
+    }
 
     igl::dqs(snake->V, snake->W, vQ, vT, snake->U);
 
     // Also deform skeleton edges
-    /*MatrixXd CT;
+    MatrixXd CT;
     MatrixXi BET;
     igl::deform_skeleton(snake->C, snake->BE, T, CT, BET);
     for (int i = 0; i < snake->C.rows()-1; i++) {
         snake->C.row(i) = CT.row(i * 2);    
     }
-    snake->C.row(snake->C.rows() - 1) = CT.row(CT.rows() - 1);*/
+    snake->C.row(snake->C.rows() - 1) = CT.row(CT.rows() - 1);
 
     snake->set_vertices(snake->U);
     snake->set_edges(snake->C, snake->BE, Eigen::RowVector3d(70. / 255., 252. / 255., 167. / 255.));
@@ -457,8 +480,8 @@ namespace glfw
     
     igl::directed_edge_orientations(data().C, data().BE, data().rest_pose);
 
-    data().dT.resize(data().BE.rows(), Eigen::Vector3d(0, 0, 0));
-    data().dQ = RotationList(data().BE.rows(), Eigen::Quaterniond::Identity());
+    data().dT.resize(data().C.rows(), Eigen::Vector3d(0, 0, 0));
+    data().dQ = RotationList(data().C.rows(), Eigen::Quaterniond::Identity());
   
     data().poses.resize(data().BE.rows(), RotationList(data().BE.rows(), Eigen::Quaterniond::Identity()));
     const Eigen::Quaterniond bend1(Eigen::AngleAxisd(igl::PI*0.005, Eigen::Vector3d(0, 0, 1)));
