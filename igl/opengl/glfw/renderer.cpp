@@ -4,6 +4,7 @@
 #include <igl/unproject_onto_mesh.h>
 #include "igl/look_at.h"
 //#include <Eigen/Dense>
+#include <igl/PI.h>
 
 Renderer::Renderer() : selected_core_index(0),
 next_core_id(2)
@@ -88,6 +89,13 @@ IGL_INLINE void Renderer::draw( GLFWwindow* window)
 		
 	}
 
+	// camera is "attached to the 14th joint
+	TranslateCamera(scn->camera_movement);
+	RotateCamera(0, scn->camera_angle); // rotate camera only works around the y axis and it's in radians
+
+	// resetting movement
+	scn->camera_movement = Eigen::Vector3f(0, 0, 0);
+	scn->camera_angle = 0;
 }
 
 void Renderer::SetScene(igl::opengl::glfw::Viewer* viewer)
@@ -104,7 +112,7 @@ IGL_INLINE void Renderer::init(igl::opengl::glfw::Viewer* viewer,int coresNum, i
 	menu = _menu;
 	//core().align_camera_center(scn->data().V, scn->data().F);
 
-	core().camera_translation = Eigen::Vector3f(0, -1.5, -10);
+	core().camera_translation = Eigen::Vector3f(0, -1.5, 8);
 	//core().camera_view_angle = 10;
 
 	if (coresNum > 1)

@@ -81,18 +81,20 @@ namespace glfw
 
   }
 
-  IGL_INLINE Viewer::Viewer():
-    data_list(1),
-    selected_data_index(0),
-    next_data_id(1),
-	isPicked(false),
-	isActive(false),
-    tipPosition(Eigen::Vector3d(0, 0, -0.8)), //TODO: see about tip position if there's problems with the collision
-    linkOffset(Eigen::Vector3d(0, 0, -1.6)),
-    linkLength(1.6),
-    prevParent(-1),
-    linkNum(0),
-    direction(0)
+  IGL_INLINE Viewer::Viewer() :
+      data_list(1),
+      selected_data_index(0),
+      next_data_id(1),
+      isPicked(false),
+      isActive(false),
+      tipPosition(Eigen::Vector3d(0, 0, -0.8)), //TODO: see about tip position if there's problems with the collision
+      linkOffset(Eigen::Vector3d(0, 0, -1.6)),
+      linkLength(1.6),
+      prevParent(-1),
+      linkNum(0),
+      direction(0),
+      camera_movement(Eigen::Vector3f(0, 0, 0)),
+      camera_angle(0)
   {
     data_list.front().id = 0;
 
@@ -178,6 +180,7 @@ namespace glfw
 
 
   int flag = 100;
+  // TODO: SOMETHING IS NOT RIGHT WITH THE DIRECTIN THE SNAKE MOVES TO
   IGL_INLINE bool Viewer::AnimateFabrik() {
       calculate_dis();
 
@@ -198,7 +201,7 @@ namespace glfw
 
           //C_prime.row(0) = snake->C.row(0);
           // backward reaching
-          /*for (int i = 0; i < C_prime.rows() - 1; i++) {
+         /* for (int i = 0; i < C_prime.rows() - 1; i++) {
               float r_i = (C_prime.row(i + 1) - C_prime.row(i)).norm();
               float lambda_i = 1.6 / r_i;
               C_prime.row(i+1) = (1 - lambda_i) * C_prime.row(i) + lambda_i * C_prime.row(i + 1);
@@ -209,6 +212,7 @@ namespace glfw
           for (int i = 0; i < snake->dT.size(); i++) {
               snake->dT[i] = C_prime.row(i) - snake->C.row(i);
           }
+          camera_movement = -snake->dT[snake->dT.size() - 1].cast <float>(); // why do i need to put the minus?
           
          /* Eigen::Quaterniond bend(Eigen::AngleAxisd(-igl::PI * 0.005, Eigen::Vector3d(0, 1, 0)));
           for (int i = 0; i < C_prime.rows() - 1; i++) {
@@ -469,12 +473,12 @@ namespace glfw
 
     // C holds the vertices
     // BE holds the edges
-    igl::readTGF("D:/University/Animation/Project/snek-3d/tutorial/data/snake_temp.tgf", data().C, data().BE);
+    igl::readTGF("D:/University/Animation/Project/snek-3d/tutorial/data/snake.tgf", data().C, data().BE);
     data().dis.resize(data().C.rows()-1, 0);
+    print(data().C);
 
     // retrieve parents for forward kinematics
     igl::directed_edge_parents(data().BE, data().P);
-    print(data().BE);
     
     igl::directed_edge_orientations(data().C, data().BE, data().rest_pose);
 

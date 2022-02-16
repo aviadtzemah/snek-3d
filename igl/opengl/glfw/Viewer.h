@@ -151,6 +151,8 @@ public:
 
     // movements vars
     int direction; // 0 - not moving, 1 - forward, 2 - forward-right, 3 - forward-left. default 0 until started moving then default is 1
+    Eigen::Vector3f camera_movement;
+    float camera_angle;
 
     // functions
     IGL_INLINE void Viewer::calculate_and_write_weights();
