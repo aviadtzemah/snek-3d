@@ -5,6 +5,7 @@
 //#include <igl/opengl/glfw/imgui/ImGuiMenu.h>
 //#include <igl/opengl/glfw/imgui/ImGuiHelpers.h>
 //#include <../imgui/imgui.h>
+#include <igl/PI.h>
 
 
 
@@ -187,10 +188,25 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 			//rndr->TranslateCamera(Eigen::Vector3f(0.01f, 0, 0));
 			break;
 		case '1':
-			scn->camera_setting = 0; // head view
+			if (scn->camera_setting == 1) {
+				//rndr->RotateCameraZ(180 * igl::PI / 180);
+				rndr->RotateCamera(0, scn->camera_angle_sum);
+				rndr->core().camera_translation = scn->camera_movement;
+				scn->camera_angle_sum = 0;
+				scn->camera_setting = 0; // head view
+			}
+			
 			break;
 		case '2':
-			scn->camera_setting = 1; // global view
+			if (scn->camera_setting == 0) {
+				rndr->RotateCamera(0, -scn->camera_angle_sum);
+				//rndr->core().camera_translation = Eigen::Vector3f(0, -5, 0);
+				scn->RotateInSystem(Eigen::Vector3d(0, 0, 1), 180 * igl::PI / 180);
+				rndr->core().camera_translation = Eigen::Vector3f(0, -15, -50);
+				//rndr->RotateCameraZ(180 * igl::PI / 180);
+				scn->camera_angle_sum = 0;
+				scn->camera_setting = 1; // global view
+			}
 			break;
 		case ' ':
 

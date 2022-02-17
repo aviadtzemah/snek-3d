@@ -93,9 +93,11 @@ namespace glfw
       prevParent(-1),
       linkNum(0),
       direction(0),
-      camera_movement(Eigen::Vector3f(0, 0, 0)),
+      camera_movement(Eigen::Vector3f(0, -1.5, 8)),
       camera_angle(0),
-      camera_setting(0)
+      camera_setting(0),
+      moving(0),
+      camera_angle_sum(0)
   {
     data_list.front().id = 0;
 
@@ -145,6 +147,7 @@ namespace glfw
   IGL_INLINE Eigen::Vector3d Viewer::calculate_target() {
 
       if (direction == 0) {
+          moving = 0;
           return Eigen::Vector3d(0, 10, 0);
       }
 
@@ -154,6 +157,8 @@ namespace glfw
       if (direction == 1) {
           Eigen::Vector3d target_vec = (snake->C.row(snake->C.rows() - 1) - snake->C.row(snake->C.rows() - 2)).normalized() * velocity; // curently holds the direction of the new point
           target_vec += snake->C.row(snake->C.rows() - 1); // holds the new point
+          camera_angle = 0;
+          moving = 1;
 
           return target_vec;
       }
@@ -162,8 +167,10 @@ namespace glfw
           Eigen::Vector3d target_vec = (snake->C.row(snake->C.rows() - 1) - snake->C.row(snake->C.rows() - 2)) * velocity;
           target_vec += snake->C.row(snake->C.rows() - 1); // holds the new point
           Eigen::Quaterniond rot(Eigen::AngleAxisd(-igl::PI * 0.0001, Eigen::Vector3d(0, 1, 0)));
-          camera_angle = -0.4 * igl::PI / 180;
+          camera_angle = -0.5 * igl::PI / 180;
+          camera_angle_sum += camera_angle;
           target_vec = rot * target_vec;
+          moving = 1;
 
           return target_vec;
       }
@@ -172,12 +179,15 @@ namespace glfw
           Eigen::Vector3d target_vec = (snake->C.row(snake->C.rows() - 1) - snake->C.row(snake->C.rows() - 2)) * velocity;
           target_vec += snake->C.row(snake->C.rows() - 1); // holds the new point
           Eigen::Quaterniond rot(Eigen::AngleAxisd(igl::PI * 0.0001, Eigen::Vector3d(0, 1, 0)));
-          camera_angle = 0.4 * igl::PI / 180;
+          camera_angle = 0.5 * igl::PI / 180;
+          camera_angle_sum += camera_angle;
           target_vec = rot * target_vec;
+          moving = 1;
 
           return target_vec;
       }
 
+      
       return Eigen::Vector3d(0, 10, 0);
   }
 
@@ -217,8 +227,11 @@ namespace glfw
           }
           //camera_movement = -snake->dT[13].cast <float>(); // why do i need to put the minus?
           
-          camera_movement = C_prime.row(C_prime.rows() - 1).cast <float>();
-          camera_movement += Eigen::Vector3f(0, 1.5, 0);
+          camera_movement = -C_prime.row(C_prime.rows() - 1).cast <float>();
+          camera_movement += Eigen::Vector3f(0, -1.5, 0);
+          //camera_movement = C_prime.row(C_prime.rows() - 3)
+         
+          
           
           
           /*print("---------------")

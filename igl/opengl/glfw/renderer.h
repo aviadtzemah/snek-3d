@@ -103,6 +103,7 @@ public:
 	}
 	void TranslateCamera(Eigen::Vector3f amt);
 	void RotateCamera(float amtX, float amtY);
+	void RotateCameraZ(float amtX);
 	inline bool IsPicked() { return scn->isPicked; }
 	
 private:

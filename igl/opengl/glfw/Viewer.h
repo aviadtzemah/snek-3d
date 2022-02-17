@@ -154,6 +154,8 @@ public:
     int camera_setting;
     Eigen::Vector3f camera_movement;
     float camera_angle;
+    float camera_angle_sum;
+    int moving;
 
     // functions
     IGL_INLINE void Viewer::calculate_and_write_weights();

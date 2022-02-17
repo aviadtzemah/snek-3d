@@ -92,13 +92,11 @@ IGL_INLINE void Renderer::draw( GLFWwindow* window)
 	// camera is "attached to the 14th joint
 	//TranslateCamera(scn->camera_movement);
 
-	if (scn->moving) {
+
+	if (scn->moving == 1) {
 		if (scn->camera_setting == 0) {
-			core().camera_translation = -scn->camera_movement;
-		}
-		else {
-			// TODO: rotate the camera downward
-			core().camera_translation = Eigen::Vector3f(0, 20, 0);
+			core().camera_translation = scn->camera_movement;
+			RotateCamera(0, scn->camera_angle);
 		}
 	}
 	
@@ -106,8 +104,7 @@ IGL_INLINE void Renderer::draw( GLFWwindow* window)
 	//RotateCamera(0, scn->camera_angle); // rotate camera only works around the y axis and it's in radians
 
 	// resetting movement
-	scn->camera_movement = Eigen::Vector3f(0, 0, 0);
-	scn->camera_angle = 0;
+	//scn->camera_angle = 0;
 }
 
 void Renderer::SetScene(igl::opengl::glfw::Viewer* viewer)
@@ -124,7 +121,7 @@ IGL_INLINE void Renderer::init(igl::opengl::glfw::Viewer* viewer,int coresNum, i
 	menu = _menu;
 	//core().align_camera_center(scn->data().V, scn->data().F);
 
-	core().camera_translation = Eigen::Vector3f(0, -1.5, 12.8);
+	core().camera_translation = Eigen::Vector3f(0, -1.5, 8);
 	//core().camera_view_angle = 10;
 
 	if (coresNum > 1)
@@ -229,6 +226,15 @@ void Renderer::RotateCamera(float amtX, float amtY)
 		Mat << cos(amtY),0,sin(amtY),  0, 1, 0 ,  -sin(amtY), 0, cos(amtY) ;
 	core().camera_eye = Mat* core().camera_eye;
 	
+}
+
+void Renderer::RotateCameraZ(float amtZ)
+{
+	core().camera_eye = core().camera_eye + Eigen::Vector3f(0, 0, amtZ);
+	Eigen::Matrix3f Mat;
+	Mat << cos(amtZ), -sin(amtZ), 0, sin(amtZ), cos(amtZ), 0, 0, 0, 1;
+	//Mat << 1, 0, 0, 0, cos(amtX), -sin(amtX), 0, sin(amtX), cos(amtX);
+	core().camera_eye = Mat * core().camera_eye;
 }
 
 Renderer::~Renderer()
