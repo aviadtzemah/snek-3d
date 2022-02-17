@@ -90,8 +90,20 @@ IGL_INLINE void Renderer::draw( GLFWwindow* window)
 	}
 
 	// camera is "attached to the 14th joint
-	TranslateCamera(scn->camera_movement);
-	RotateCamera(0, scn->camera_angle); // rotate camera only works around the y axis and it's in radians
+	//TranslateCamera(scn->camera_movement);
+
+	if (scn->moving) {
+		if (scn->camera_setting == 0) {
+			core().camera_translation = -scn->camera_movement;
+		}
+		else {
+			// TODO: rotate the camera downward
+			core().camera_translation = Eigen::Vector3f(0, 20, 0);
+		}
+	}
+	
+	
+	//RotateCamera(0, scn->camera_angle); // rotate camera only works around the y axis and it's in radians
 
 	// resetting movement
 	scn->camera_movement = Eigen::Vector3f(0, 0, 0);
@@ -112,7 +124,7 @@ IGL_INLINE void Renderer::init(igl::opengl::glfw::Viewer* viewer,int coresNum, i
 	menu = _menu;
 	//core().align_camera_center(scn->data().V, scn->data().F);
 
-	core().camera_translation = Eigen::Vector3f(0, -1.5, 8);
+	core().camera_translation = Eigen::Vector3f(0, -1.5, 12.8);
 	//core().camera_view_angle = 10;
 
 	if (coresNum > 1)

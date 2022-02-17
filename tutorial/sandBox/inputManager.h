@@ -186,6 +186,12 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 			scn->direction = 2;
 			//rndr->TranslateCamera(Eigen::Vector3f(0.01f, 0, 0));
 			break;
+		case '1':
+			scn->camera_setting = 0; // head view
+			break;
+		case '2':
+			scn->camera_setting = 1; // global view
+			break;
 		case ' ':
 
 			break;

@@ -151,6 +151,7 @@ public:
 
     // movements vars
     int direction; // 0 - not moving, 1 - forward, 2 - forward-right, 3 - forward-left. default 0 until started moving then default is 1
+    int camera_setting;
     Eigen::Vector3f camera_movement;
     float camera_angle;
 

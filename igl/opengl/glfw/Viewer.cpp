@@ -94,7 +94,8 @@ namespace glfw
       linkNum(0),
       direction(0),
       camera_movement(Eigen::Vector3f(0, 0, 0)),
-      camera_angle(0)
+      camera_angle(0),
+      camera_setting(0)
   {
     data_list.front().id = 0;
 
@@ -161,15 +162,17 @@ namespace glfw
           Eigen::Vector3d target_vec = (snake->C.row(snake->C.rows() - 1) - snake->C.row(snake->C.rows() - 2)) * velocity;
           target_vec += snake->C.row(snake->C.rows() - 1); // holds the new point
           Eigen::Quaterniond rot(Eigen::AngleAxisd(-igl::PI * 0.0001, Eigen::Vector3d(0, 1, 0)));
+          camera_angle = -0.4 * igl::PI / 180;
           target_vec = rot * target_vec;
 
           return target_vec;
       }
       else if (direction == 3) {
-          float velocity = 0.1;
+          float velocity = 0.5;
           Eigen::Vector3d target_vec = (snake->C.row(snake->C.rows() - 1) - snake->C.row(snake->C.rows() - 2)) * velocity;
           target_vec += snake->C.row(snake->C.rows() - 1); // holds the new point
           Eigen::Quaterniond rot(Eigen::AngleAxisd(igl::PI * 0.0001, Eigen::Vector3d(0, 1, 0)));
+          camera_angle = 0.4 * igl::PI / 180;
           target_vec = rot * target_vec;
 
           return target_vec;
@@ -201,18 +204,26 @@ namespace glfw
 
           //C_prime.row(0) = snake->C.row(0);
           // backward reaching
-         /* for (int i = 0; i < C_prime.rows() - 1; i++) {
+          for (int i = 0; i < C_prime.rows() - 1; i++) {
               float r_i = (C_prime.row(i + 1) - C_prime.row(i)).norm();
               float lambda_i = 1.6 / r_i;
               C_prime.row(i+1) = (1 - lambda_i) * C_prime.row(i) + lambda_i * C_prime.row(i + 1);
-          }*/
+          }
 
           //snake->dT[0] = C_prime.row(0) - snake->C.row(0);
           //Eigen::Vector3d distance = C_prime.row(0) - snake->C.row(0);
           for (int i = 0; i < snake->dT.size(); i++) {
               snake->dT[i] = C_prime.row(i) - snake->C.row(i);
           }
-          camera_movement = -snake->dT[snake->dT.size() - 1].cast <float>(); // why do i need to put the minus?
+          //camera_movement = -snake->dT[13].cast <float>(); // why do i need to put the minus?
+          
+          camera_movement = C_prime.row(C_prime.rows() - 1).cast <float>();
+          camera_movement += Eigen::Vector3f(0, 1.5, 0);
+          
+          
+          /*print("---------------")
+          print(camera_movement);
+          print("---------------")*/
           
          /* Eigen::Quaterniond bend(Eigen::AngleAxisd(-igl::PI * 0.005, Eigen::Vector3d(0, 1, 0)));
           for (int i = 0; i < C_prime.rows() - 1; i++) {
@@ -475,7 +486,6 @@ namespace glfw
     // BE holds the edges
     igl::readTGF("D:/University/Animation/Project/snek-3d/tutorial/data/snake.tgf", data().C, data().BE);
     data().dis.resize(data().C.rows()-1, 0);
-    print(data().C);
 
     // retrieve parents for forward kinematics
     igl::directed_edge_parents(data().BE, data().P);
