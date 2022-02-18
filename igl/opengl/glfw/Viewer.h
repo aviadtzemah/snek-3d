@@ -124,6 +124,13 @@ namespace glfw
 	Eigen::Matrix4d CalcParentsTrans(int indx);
 	inline bool SetAnimation() { return isActive = !isActive; }
 
+    IGL_INLINE void Viewer::calculate_and_write_weights();
+    IGL_INLINE int Viewer::smallest_index(Eigen::VectorXd vec);
+    IGL_INLINE bool Viewer::pre_draw();
+    IGL_INLINE bool Viewer::AnimateFabrik();
+    IGL_INLINE void Viewer::calculate_dis();
+    IGL_INLINE Eigen::Vector3d Viewer::calculate_target();
+
     IGL_INLINE void Move();
     IGL_INLINE bool CheckCollision();
     IGL_INLINE bool CheckCollisionRec(igl::opengl::ViewerData* obj1, igl::opengl::ViewerData* obj2, igl::AABB<Eigen::MatrixXd, 3>* tree1, igl::AABB<Eigen::MatrixXd, 3>* tree2);
@@ -151,7 +158,14 @@ namespace glfw
 
     //game additions
     int score;
-
+    
+// movements vars
+    int direction; // 0 - not moving, 1 - forward, 2 - forward-right, 3 - forward-left. default 0 until started moving then default is 1
+    int camera_setting;
+    Eigen::Vector3f camera_movement;
+    float camera_angle;
+    float camera_angle_sum;
+    int moving;
     
 
     // List of registered plugins

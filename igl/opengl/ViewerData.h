@@ -169,6 +169,21 @@ public:
   IGL_INLINE void draw_box(Eigen::AlignedBox<double, 3> box, Eigen::RowVector3d color);
   Eigen::Vector3d center_dif;
 
+  // our additions
+  typedef
+      std::vector<Eigen::Quaterniond, Eigen::aligned_allocator<Eigen::Quaterniond> >
+      RotationList;
+
+  Eigen::MatrixXd W, U, C;
+  Eigen::MatrixXi BE;
+  Eigen::VectorXi P;
+  RotationList rest_pose;
+  std::vector<RotationList > poses;
+  std::vector<double> dis;
+  std::vector<Eigen::Vector3d> dT;
+  RotationList dQ;
+
+
   // Per face attributes
   Eigen::MatrixXd F_normals; // One normal per face
 

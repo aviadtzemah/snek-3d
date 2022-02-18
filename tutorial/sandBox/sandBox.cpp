@@ -36,15 +36,11 @@ void SandBox::Init(const std::string &config)
 			data().point_size = 10;
 			data().line_width = 2;
 			data().set_visible(false, 1);
-			//data().SetCenterOfRotation(Eigen::Vector3d(10,0, 0));
-			
 		}
 		nameFileout.close();
 	}
 	MyTranslate(Eigen::Vector3d(0, 0, -1), true);
-	
 	data().set_colors(Eigen::RowVector3d(0.9, 0.1, 0.1));
-
 }
 
 SandBox::~SandBox()
@@ -56,8 +52,10 @@ void SandBox::Animate()
 {
 	if (isActive)
 	{
-		Move();
-		CheckCollision();
+		AnimateFabrik();
+		pre_draw();
+		//Move();
+		//CheckCollision();
 	}
 }
 

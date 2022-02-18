@@ -42,6 +42,25 @@
 #include <igl/unproject.h>
 #include <igl/serialize.h>
 
+// our imports
+#include <igl/readTGF.h>
+#include <igl/directed_edge_orientations.h>
+#include <igl/directed_edge_parents.h>
+#include <igl/PI.h>
+#include <math.h>
+#include <igl/writeDMAT.h>
+#include <igl/readDMAT.h>
+#include <igl/forward_kinematics.h>
+#include <igl/dqs.h>
+#include <igl/deform_skeleton.h>
+
+// our addition
+typedef
+std::vector<Eigen::Quaterniond, Eigen::aligned_allocator<Eigen::Quaterniond> >
+RotationList;
+
+# define print(x) std::cout << x << std::endl;
+
 // Internal global variables used for glfw event handling
 //static igl::opengl::glfw::Viewer * __viewer;
 static double highdpi = 1;
@@ -68,7 +87,13 @@ namespace glfw
     next_data_id(1),
 	isPicked(false),
 	isActive(true),
-    score(0)
+    score(0),
+    direction(0),
+      camera_movement(Eigen::Vector3f(0, -1.5, 8)),
+      camera_angle(0),
+      camera_setting(1),
+      moving(0),
+      camera_angle_sum(0)
   {
     data_list.front().id = 0;
 
@@ -103,6 +128,286 @@ namespace glfw
 
   IGL_INLINE Viewer::~Viewer()
   {
+  }
+
+  IGL_INLINE void Viewer::calculate_dis() {
+      ViewerData* snake = &data_list[0];
+
+      for (int i = 0; i < snake->dis.size(); i++) {
+          snake->dis[i] = sqrt(pow((snake->C(i, 0) - snake->C(i + 1, 0)), 2) + pow((snake->C(i, 1) - snake->C(i + 1, 1)), 2) + pow((snake->C(i, 2) - snake->C(i + 1, 2)), 2));
+      }
+  }
+
+  IGL_INLINE Eigen::Vector3d Viewer::calculate_target() {
+
+      if (direction == 0) {
+          moving = 0;
+          return Eigen::Vector3d(0, 10, 0);
+      }
+
+      ViewerData* snake = &data_list[0];
+      float velocity = 1.5;
+      int angle = 25;
+
+      if (direction == 1) {
+          Eigen::Vector3d target_vec = (snake->C.row(snake->C.rows() - 1) - snake->C.row(snake->C.rows() - 2)).normalized() * velocity; // curently holds the direction of the new point
+          target_vec += snake->C.row(snake->C.rows() - 1); // holds the new point
+          camera_angle = 0;
+          moving = 1;
+
+          return target_vec;
+      }
+      else if (direction == 2) {
+          Eigen::Vector3d target_vec = (snake->C.row(snake->C.rows() - 1) - snake->C.row(snake->C.rows() - 2)).normalized() * velocity;
+          //Eigen::Quaterniond rot(Eigen::AngleAxisd(igl::PI * 0.1, Eigen::Vector3d(0, 1, 0)));
+          float amtY = angle * igl::PI / 180;
+          Eigen::Matrix3d Mat;
+		       Mat << cos(amtY),0,sin(amtY),  0, 1, 0 ,  -sin(amtY), 0, cos(amtY) ;
+           target_vec = Mat * target_vec;
+          target_vec += snake->C.row(snake->C.rows() - 1); // holds the new point
+
+          camera_angle = -0.5 * igl::PI / 180;
+          camera_angle_sum += camera_angle;
+          moving = 1;
+          direction = 1;
+
+          return target_vec;
+      }
+      else if (direction == 3) {
+          Eigen::Vector3d target_vec = (snake->C.row(snake->C.rows() - 1) - snake->C.row(snake->C.rows() - 2)).normalized() * velocity;
+          //Eigen::Quaterniond rot(Eigen::AngleAxisd(-igl::PI * 0.1, Eigen::Vector3d(0, 1, 0)));
+          float amtY = -angle * igl::PI / 180;
+           Eigen::Matrix3d Mat;
+		       Mat << cos(amtY),0,sin(amtY),  0, 1, 0 ,  -sin(amtY), 0, cos(amtY) ;
+           target_vec = Mat * target_vec;
+          target_vec += snake->C.row(snake->C.rows() - 1); // holds the new point
+          
+          
+          moving = 1;
+          direction = 1;
+          camera_angle = 0.5 * igl::PI / 180;
+          camera_angle_sum += camera_angle;
+
+          return target_vec;
+      }
+
+      
+      return Eigen::Vector3d(0, 10, 0);
+  }
+
+
+  int flag = 100;
+  // TODO: SOMETHING IS NOT RIGHT WITH THE DIRECTIN THE SNAKE MOVES TO
+  IGL_INLINE bool Viewer::AnimateFabrik() {
+      calculate_dis();
+
+      ViewerData* snake = &data_list[0];
+      Eigen::Vector3d t = calculate_target();
+
+      Eigen::MatrixXd C_prime = Eigen::MatrixXd::Zero(snake->C.rows(), snake->C.cols());
+      if (t(1) == 0 && flag > 0) {
+          C_prime.row(C_prime.rows() - 1) = t;
+
+          // forward reaching
+          for (int i = snake->C.rows() - 2; i >= 0; i--) {
+              float r_i = (C_prime.row(i + 1) - snake->C.row(i)).norm();
+              float lambda_i = 1.6 / r_i;
+              C_prime.row(i) = (1 - lambda_i) * C_prime.row(i + 1) + lambda_i * snake->C.row(i);
+          }
+
+          // for (int i = snake->C.rows() - 2; i >= 0; i--){
+          //   C_prime.row(i) = snake->C.row(i+1);
+          // }
+
+
+          //C_prime.row(0) = snake->C.row(0);
+          // backward reaching
+          // for (int i = 0; i < C_prime.rows() - 1; i++) {
+          //     float r_i = (C_prime.row(i + 1) - C_prime.row(i)).norm();
+          //     float lambda_i = 1.6 / r_i;
+          //     C_prime.row(i+1) = (1 - lambda_i) * C_prime.row(i) + lambda_i * C_prime.row(i + 1);
+          // }
+
+          //snake->dT[0] = C_prime.row(0) - snake->C.row(0);
+          //Eigen::Vector3d distance = C_prime.row(0) - snake->C.row(0);
+          for (int i = 0; i < snake->dT.size(); i++) {
+              snake->dT[i] = C_prime.row(i) - snake->C.row(i);
+          }
+          Eigen::Vector3d diff2 = (C_prime.row(C_prime.size() - 2) + ((C_prime.row(C_prime.size() - 1) - C_prime.row(C_prime.size() - 2)) * 0.8)) - data_list[1].center_dif;
+          //Eigen::Vector3d diff = ((C_prime.row(C_prime.size() - 2) + ((C_prime.row(C_prime.size() - 1) - C_prime.row(C_prime.size() - 2)) * 0.8)) - data_list[1].center_dif);
+          //data_list[1].center_dif += diff;
+          //data_list[1].MyTranslate(diff, true);
+          // //camera_movement = -snake->dT[13].cast <float>(); // why do i need to put the minus?
+          
+          camera_movement = -C_prime.row(C_prime.rows() - 1).cast <float>();
+          // camera_movement += Eigen::Vector3f(0, -1.5, 0);
+          //camera_movement = C_prime.row(C_prime.rows() - 3)
+         
+          
+          
+          
+          /*print("---------------")
+          print(camera_movement);
+          print("---------------")*/
+          
+         /* Eigen::Quaterniond bend(Eigen::AngleAxisd(-igl::PI * 0.005, Eigen::Vector3d(0, 1, 0)));
+          for (int i = 0; i < C_prime.rows() - 1; i++) {
+              if (i > 0) {
+                  snake->dQ[i] = snake->rest_pose[i] * bend * snake->rest_pose[i].conjugate();
+              }
+              else {
+                snake->dQ[i] = snake->rest_pose[i] * bend * snake->rest_pose[i].conjugate();
+              }
+
+          }*/
+          // snake->dT[0] = C_prime.row(0) - snake->C.row(0);
+          // for (int i = 0; i < C_prime.rows() - 1; i++) {
+          //    Eigen::Vector3d RD = snake->C.row(i + 1) - C_prime.row(i);
+          //    Eigen::Vector3d RE = C_prime.row(i + 1) - C_prime.row(i);
+
+          //    double angle = RD.dot(RE) / (RE.norm() * RD.norm()); // currently holds cos(angle)
+
+          //    if (angle <= 1 && angle >= -1) {
+          //        angle = acos(angle);
+          //    }
+          //    else {
+          //        angle = angle > 1 ? acos(1) : acos(-1);
+          //    }
+
+          //    Eigen::Vector3d plane = RE.cross(RD).normalized();
+
+          //    Eigen::Quaterniond bend;
+          //    if (angle == 0) {
+          //        bend = Eigen::Quaterniond::Identity();
+          //    }
+          //    else {
+          //        bend = Eigen::AngleAxisd(-angle * igl::PI / 180, plane);
+          //    }
+          //    //Eigen::Quaterniond bend(Eigen::AngleAxisd(angle * igl::PI / 180, plane)); // the angle is correct (it needs to be in radians)
+
+          //    if (i > 0) {
+          //       snake->dQ[i] = data().rest_pose[i] * bend * data().rest_pose[i].conjugate();
+          //    }
+          //    else {
+          //      snake->dQ[i] = data().rest_pose[i] * bend * data().rest_pose[i].conjugate();
+          //    }
+          // }
+          snake->C = C_prime;
+          //flag--;
+      }
+      return true;
+  }
+
+  IGL_INLINE int Viewer::smallest_index(Eigen::VectorXd vec) {
+    double smallest = std::numeric_limits<double>::max();
+    int index = -1;
+    for (int i = 0; i < vec.size(); i++) {
+        if ((vec(i) < smallest && vec(i) != 0)) {
+            smallest = vec(i);
+            index = i;
+        }
+    }
+
+    return index;
+  }
+
+  IGL_INLINE void Viewer::calculate_and_write_weights() {
+      Eigen::MatrixXd W_joints = Eigen::MatrixXd::Zero(data().V.rows(), data().C.rows());
+      Eigen::MatrixXd W_bones = Eigen::MatrixXd::Zero(data().V.rows(), data().BE.rows());
+      float joint_threshold = 0.6; // the threshold from which a vertex is a part of a joint
+
+      for (int i = 0; i < data().V.rows(); i++) {
+
+          for (int j = 0; j < data().C.rows(); j++) {
+              float dist = sqrt(pow((data().V(i, 0) - data().C(j, 0)), 2) + pow((data().V(i, 1) - data().C(j, 1)), 2) + pow((data().V(i, 2) - data().C(j, 2)), 2));
+
+              W_joints(i, j) = pow(1 / dist, 4);
+
+              if (j > 4) {
+                  int small_index = smallest_index(W_joints.row(i));
+                  W_joints(i, small_index) = 0;
+              }
+          }
+      }
+
+      //Eigen::MatrixXd W_bones = Eigen::MatrixXd::Zero(data().V.rows(), data().BE.rows());
+      for (int i = 0; i < data().V.rows(); i++) {
+          for (int j = 0; j < data().C.rows()-1; j++) {
+
+              if (W_joints(i, j) != 0 && W_joints(i, j + 1) != 0) {
+                  W_bones(i, j) = W_joints(i, j) + W_joints(i, j + 1);
+              }
+          }
+      }
+
+      // nomalizing so the weights would add up to 1 for each vertex
+      for (int i = 0; i < W_bones.rows(); i++) {
+          double row_sum = W_bones.row(i).sum();
+          for (int j = 0; j < W_bones.cols(); j++) {
+              W_bones(i, j) = W_bones(i, j) / row_sum;
+          }
+      }
+
+      data().W = W_joints;
+
+      //std::cout << W << std::endl;
+      //writeDMAT("C:/Users/aviad/Desktop/snek_weights.dmat", W_bones);
+  }
+
+  IGL_INLINE bool Viewer::pre_draw()
+  {
+    using namespace Eigen;
+    using namespace std;
+
+    
+    ViewerData* snake = &data_list[0]; // snake is always the first object 
+
+    // Interpolate pose and identity
+    // RotationList anim_pose(snake->poses[begin].size());
+
+    // for (int e = 0;e < snake->poses[begin].size();e++)
+    // {
+    //     anim_pose[e] = snake->poses[begin][e].slerp(t, snake->poses[end][e]);
+    // }
+
+    // Propagate relative rotations via FK to retrieve absolute transformations
+    RotationList vQ = snake->dQ;
+    vector<Vector3d> vT = snake->dT;
+    //igl::forward_kinematics(snake->C, snake->BE, snake->P, snake->dQ, snake->dT, vQ, vT);
+
+    const int dim = snake->C.cols();
+    MatrixXd T(snake->BE.rows() * (dim + 1), dim);
+    for (int e = 0;e < snake->BE.rows();e++)
+    {
+        Affine3d a = Affine3d::Identity();
+        a.translate(vT[e]);
+        a.rotate(vQ[e]);
+        T.block(e * (dim + 1), 0, dim + 1, dim) =
+            a.matrix().transpose().block(0, 0, dim + 1, dim);
+    }
+
+    igl::dqs(snake->V, snake->W, vQ, vT, snake->U);
+
+    // Also deform skeleton edges
+    // MatrixXd CT;
+    // MatrixXi BET;
+    // igl::deform_skeleton(snake->C, snake->BE, T, CT, BET);
+    // for (int i = 0; i < snake->C.rows()-1; i++) {
+    //     snake->C.row(i) = CT.row(i * 2);    
+    // }
+    // snake->C.row(snake->C.rows() - 1) = CT.row(CT.rows() - 1);
+
+    snake->set_vertices(snake->U);
+    snake->set_edges(snake->C, snake->BE, Eigen::RowVector3d(70. / 255., 252. / 255., 167. / 255.));
+    snake->compute_normals();
+
+    // resetting movement after skinning
+    for (int i = 0; i < data().dT.size(); i++) {
+        data().dT[i] = Eigen::Vector3d(0, 0, 0);
+    }
+    data().dQ = RotationList(data().C.rows(), Eigen::Quaterniond::Identity());
+
+    return false;
   }
 
   IGL_INLINE bool Viewer::load_mesh_from_file(
@@ -182,8 +487,44 @@ namespace glfw
     //  if (plugins[i]->post_load())
     //    return true;
 
+    if (data().id == 0){
+        // skinning additions
+      data().U = data().V;
+
+      // C holds the vertices
+      // BE holds the edges
+      igl::readTGF("C:/AnimationProject/snek-3d/tutorial/data/snake.tgf", data().C, data().BE);
+      data().dis.resize(data().C.rows()-1, 0);
+
+      // retrieve parents for forward kinematics
+      igl::directed_edge_parents(data().BE, data().P);
+      
+      igl::directed_edge_orientations(data().C, data().BE, data().rest_pose);
+
+      data().dT.resize(data().C.rows(), Eigen::Vector3d(0, 0, 0));
+      data().dQ = RotationList(data().C.rows(), Eigen::Quaterniond::Identity());
+    
+      data().poses.resize(data().BE.rows(), RotationList(data().BE.rows(), Eigen::Quaterniond::Identity()));
+      const Eigen::Quaterniond bend1(Eigen::AngleAxisd(igl::PI*0.005, Eigen::Vector3d(0, 0, 1)));
+
+      const Eigen::Quaterniond bend2(Eigen::AngleAxisd(-igl::PI * 0.005, Eigen::Vector3d(0, 1, 0)));
+
+      /*for (int i = 0; i < data().BE.rows(); i++) {
+          data().poses[0][i] = data().rest_pose[i] * bend1 * data().rest_pose[i].conjugate();
+      }*/
+      
+      // calculate skinning weights
+      //igl::readDMAT("D:/University/Animation/Project/snek-3d/tutorial/data/snake_weights_quad.dmat", data().W);
+      calculate_and_write_weights(); //TODO: see if we can manage better weights. also, save it to a file?
+
+      data().set_edges(data().C, data().BE, Eigen::RowVector3d(70. / 255., 252. / 255., 167. / 255.));
+    }
+   
+
     return true;
   }
+
+  
 
   IGL_INLINE bool Viewer::save_mesh_to_file(
       const std::string & mesh_file_name_string)
@@ -226,6 +567,7 @@ namespace glfw
       printf("Error: %s is not a recognized file type.\n",extension.c_str());
       return false;
     }
+
     return true;
   }
  

@@ -5,6 +5,8 @@
 #include "igl/look_at.h"
 //#include <Eigen/Dense>
 
+#include <igl/PI.h>
+
 Renderer::Renderer() : selected_core_index(0),
 next_core_id(2)
 {
@@ -87,6 +89,13 @@ IGL_INLINE void Renderer::draw( GLFWwindow* window)
 		
 	}
 
+	if (scn->moving == 1) {
+		if (scn->camera_setting == 0) {
+			core().camera_translation = scn->camera_movement;
+			RotateCamera(0, scn->camera_angle);
+		}
+	}
+
 }
 
 void Renderer::SetScene(igl::opengl::glfw::Viewer* viewer)
@@ -101,7 +110,9 @@ IGL_INLINE void Renderer::init(igl::opengl::glfw::Viewer* viewer,int coresNum, i
 	doubleVariable = 0;
 	core().init(); 
 	menu = _menu;
-	core().align_camera_center(scn->data().V, scn->data().F);
+	core().align_camera_center(scn->data_list[0].V, scn->data_list[0].F);
+	RotateCameraX(90 * igl::PI / 180);
+	core().camera_translation = Eigen::Vector3f(0, 20, 0);
 
 	if (coresNum > 1)
 	{	
@@ -134,6 +145,8 @@ IGL_INLINE void Renderer::init(igl::opengl::glfw::Viewer* viewer,int coresNum, i
 
 		};
 	}
+
+	core().toggle(scn->data_list[1].show_faces);
 }
 
 void Renderer::UpdatePosition(double xpos, double ypos)
@@ -205,6 +218,23 @@ void Renderer::RotateCamera(float amtX, float amtY)
 		Mat << cos(amtY),0,sin(amtY),  0, 1, 0 ,  -sin(amtY), 0, cos(amtY) ;
 	core().camera_eye = Mat* core().camera_eye;
 	
+}
+
+void Renderer::RotateCameraX(float amtX)
+{
+	core().camera_eye = core().camera_eye + Eigen::Vector3f(0, 0, amtX);
+	Eigen::Matrix3f Mat;
+	Mat << 1, 0, 0, 0, cos(amtX), -sin(amtX), 0, sin(amtX), cos(amtX);
+	core().camera_eye = Mat * core().camera_eye;
+}
+
+void Renderer::RotateCameraZ(float amtZ)
+{
+	core().camera_eye = core().camera_eye + Eigen::Vector3f(0, 0, amtZ);
+	Eigen::Matrix3f Mat;
+	Mat << cos(amtZ), -sin(amtZ), 0, sin(amtZ), cos(amtZ), 0, 0, 0, 1;
+	//Mat << 1, 0, 0, 0, cos(amtX), -sin(amtX), 0, sin(amtX), cos(amtX);
+	core().camera_eye = Mat * core().camera_eye;
 }
 
 Renderer::~Renderer()

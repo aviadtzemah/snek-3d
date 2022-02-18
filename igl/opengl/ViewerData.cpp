@@ -48,9 +48,12 @@ IGL_INLINE void igl::opengl::ViewerData::set_face_based(bool newvalue)
 }
 
 IGL_INLINE void igl::opengl::ViewerData::init_mesh() {
-    if (id == 0) {
+    if (id == 1) {
         pause = false;;
         direction = 4;
+        V = V * 0.57;
+        MyTranslate(Eigen::Vector3d(0, 0, -12.4), true);
+        center_dif += Eigen::Vector3d(0, 0, -12.4);
     }
     else {
         pause = true;
@@ -59,14 +62,12 @@ IGL_INLINE void igl::opengl::ViewerData::init_mesh() {
     reset_V = V;
     reset_F = F;
     center_dif = Eigen::Vector3d(0, 0, 0);
-    MyTranslate(Eigen::Vector3d(id * 2, 0, 0), true);
-    center_dif += Eigen::Vector3d(id * 2, 0, 0);
+    //MyTranslate(Eigen::Vector3d(id * 2, 0, 0), true);
+    //center_dif += Eigen::Vector3d(id * 2, 0, 0);
     tree = new igl::AABB<Eigen::MatrixXd, 3>();
     tree->init(V, F);
     outer_box = tree->m_box;
 
-    std::cout << "main center: " << tree->m_box.center() << std::endl;
-    std::cout << "left center:" << tree->m_left->m_box.center() << std::endl;
 
     Eigen::MatrixXd V_box(8, 3);
     V_box <<
@@ -218,8 +219,9 @@ IGL_INLINE void igl::opengl::ViewerData::set_mesh(
       cerr << "ERROR (set_mesh): The new mesh has a different number of vertices/faces. Please clear the mesh before plotting."<<endl;
   }
   dirty |= MeshGL::DIRTY_FACE | MeshGL::DIRTY_POSITION;
-
-  init_mesh();
+  if (id != 0) {
+      init_mesh();
+  }
 }
 
 IGL_INLINE void igl::opengl::ViewerData::set_vertices(const Eigen::MatrixXd& _V)

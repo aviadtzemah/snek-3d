@@ -206,21 +206,32 @@ IGL_INLINE void ImGuiMenu::draw_viewer_menu(igl::opengl::glfw::Viewer *viewer, s
     if (no_background)      window_flags |= ImGuiWindowFlags_NoBackground;
     if (no_bring_to_front)  window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
 
+    // ImGui::Begin(
+    //     "Score", p_open,
+    //     window_flags
+    // );
+    // ImGui::SetWindowPos(ImVec2(50, 50), ImGuiCond_Always);
+    // ImGui::SetWindowSize(ImVec2(100, 100), ImGuiCond_Always);
+    // ImGui::End();
+
     ImGui::Begin(
-        "Viewer", p_open,
+        "Snek-3D", p_open,
         window_flags
     );
     ImGui::SetWindowPos(ImVec2(core[0].viewport[0], core[0].viewport[1]), ImGuiCond_Always);
     ImGui::SetWindowSize(ImVec2(core[0].viewport[2], core[0].viewport[3]), ImGuiCond_Always);
     ImGui::End();
+
+    
+
     no_move = true;
     no_resize = true;
+
     ImGui::Begin(
         "Viewer", p_open,
         window_flags
     );
-
-  // Mesh
+  //Mesh
   if (ImGui::CollapsingHeader("Mesh", ImGuiTreeNodeFlags_DefaultOpen))
   {
     float w = ImGui::GetContentRegionAvailWidth();
