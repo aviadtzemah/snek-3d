@@ -206,13 +206,33 @@ IGL_INLINE void ImGuiMenu::draw_viewer_menu(igl::opengl::glfw::Viewer *viewer, s
     if (no_background)      window_flags |= ImGuiWindowFlags_NoBackground;
     if (no_bring_to_front)  window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
 
-    // ImGui::Begin(
-    //     "Score", p_open,
-    //     window_flags
-    // );
-    // ImGui::SetWindowPos(ImVec2(50, 50), ImGuiCond_Always);
-    // ImGui::SetWindowSize(ImVec2(100, 100), ImGuiCond_Always);
-    // ImGui::End();
+    ImGui::Begin(
+        "Score", p_open,
+        window_flags
+    );
+    ImGui::SetWindowPos(ImVec2(1000, 0), ImGuiCond_Always);
+    ImGui::SetWindowSize(ImVec2(200, 50), ImGuiCond_Always);
+
+    ImGui::Text("Your current score is: %d", viewer->score);
+
+    ImGui::End();
+
+    if (!viewer->playing){
+      ImGui::Begin(
+          "Welcome!", p_open,
+          window_flags
+      );
+      ImGui::SetWindowPos(ImVec2(450, 250), ImGuiCond_Always);
+      ImGui::SetWindowSize(ImVec2(450, 75), ImGuiCond_Always);
+
+      ImGui::Text("Welcome to Snek-3D! The most awesome game of the decade!");
+
+      if (ImGui::Button("Play")){
+        viewer->playing = true;
+      }
+
+      ImGui::End();
+    }
 
     ImGui::Begin(
         "Snek-3D", p_open,

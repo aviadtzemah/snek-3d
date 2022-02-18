@@ -49,21 +49,21 @@ IGL_INLINE void igl::opengl::ViewerData::set_face_based(bool newvalue)
 
 IGL_INLINE void igl::opengl::ViewerData::init_mesh() {
     if (id == 1) {
-        pause = false;;
-        direction = 4;
         V = V * 0.57;
-        MyTranslate(Eigen::Vector3d(0, 0, -12.4), true);
-        center_dif += Eigen::Vector3d(0, 0, -12.4);
     }
     else {
-        pause = true;
         direction = 0;
     }
     reset_V = V;
     reset_F = F;
     center_dif = Eigen::Vector3d(0, 0, 0);
-    //MyTranslate(Eigen::Vector3d(id * 2, 0, 0), true);
-    //center_dif += Eigen::Vector3d(id * 2, 0, 0);
+    if (id > 1) {
+        MyTranslate(Eigen::Vector3d(id * 2, 0, 0), true);
+        center_dif += Eigen::Vector3d(id * 2, 0, 0);
+        score = 2;
+        pause = false;
+    }
+
     tree = new igl::AABB<Eigen::MatrixXd, 3>();
     tree->init(V, F);
     outer_box = tree->m_box;

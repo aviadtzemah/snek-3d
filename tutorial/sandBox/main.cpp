@@ -5,7 +5,7 @@
 
 int main(int argc, char *argv[])
 {
-  Display *disp = new Display(1200, 800, "Wellcome");
+  Display *disp = new Display(1200, 800, "Snek-3D");
   Renderer renderer;
 
   SandBox viewer;

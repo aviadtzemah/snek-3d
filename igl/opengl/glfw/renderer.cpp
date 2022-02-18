@@ -146,7 +146,7 @@ IGL_INLINE void Renderer::init(igl::opengl::glfw::Viewer* viewer,int coresNum, i
 		};
 	}
 
-	core().toggle(scn->data_list[1].show_faces);
+	//core().toggle(scn->data_list[1].show_faces);
 }
 
 void Renderer::UpdatePosition(double xpos, double ypos)

@@ -158,6 +158,7 @@ namespace glfw
 
     //game additions
     int score;
+    bool playing;
     
 // movements vars
     int direction; // 0 - not moving, 1 - forward, 2 - forward-right, 3 - forward-left. default 0 until started moving then default is 1

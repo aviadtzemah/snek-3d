@@ -168,6 +168,7 @@ public:
   IGL_INLINE void Pause();
   IGL_INLINE void draw_box(Eigen::AlignedBox<double, 3> box, Eigen::RowVector3d color);
   Eigen::Vector3d center_dif;
+  int score;
 
   // our additions
   typedef

@@ -55,7 +55,7 @@ void SandBox::Animate()
 		AnimateFabrik();
 		pre_draw();
 		//Move();
-		//CheckCollision();
+		CheckCollision();
 	}
 }
 

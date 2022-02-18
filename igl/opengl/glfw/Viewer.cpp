@@ -88,6 +88,7 @@ namespace glfw
 	isPicked(false),
 	isActive(true),
     score(0),
+    playing(false),
     direction(0),
       camera_movement(Eigen::Vector3f(0, -1.5, 8)),
       camera_angle(0),
@@ -233,11 +234,11 @@ namespace glfw
           for (int i = 0; i < snake->dT.size(); i++) {
               snake->dT[i] = C_prime.row(i) - snake->C.row(i);
           }
-          Eigen::Vector3d diff2 = (C_prime.row(C_prime.size() - 2) + ((C_prime.row(C_prime.size() - 1) - C_prime.row(C_prime.size() - 2)) * 0.8)) - data_list[1].center_dif;
-          //Eigen::Vector3d diff = ((C_prime.row(C_prime.size() - 2) + ((C_prime.row(C_prime.size() - 1) - C_prime.row(C_prime.size() - 2)) * 0.8)) - data_list[1].center_dif);
-          //data_list[1].center_dif += diff;
-          //data_list[1].MyTranslate(diff, true);
-          // //camera_movement = -snake->dT[13].cast <float>(); // why do i need to put the minus?
+          
+          Eigen::Vector3d diff = (C_prime.row(C_prime.rows() - 2) + ((C_prime.row(C_prime.rows() - 1) - C_prime.row(C_prime.rows() - 2)) * 0.9)).transpose() - data_list[1].center_dif;
+          data_list[1].center_dif += diff;
+          data_list[1].MyTranslate(diff, true);
+          //// //camera_movement = -snake->dT[13].cast <float>(); // why do i need to put the minus?
           
           camera_movement = -C_prime.row(C_prime.rows() - 1).cast <float>();
           // camera_movement += Eigen::Vector3f(0, -1.5, 0);
@@ -881,6 +882,9 @@ namespace glfw
 
 
   bool Viewer::CheckCollisionRec(igl::opengl::ViewerData* obj1, igl::opengl::ViewerData* obj2, igl::AABB<Eigen::MatrixXd, 3>* tree1, igl::AABB<Eigen::MatrixXd, 3>* tree2) {
+      //if (tree1 == NULL || tree2 == NULL) {
+      //    std::cout << "here" << std::endl;
+      //}
       if (tree1->is_leaf() && tree2->is_leaf()) {
           if (does_intersect(tree1->m_box, tree2->m_box, obj1->GetRotation(), obj2->GetRotation(), obj1->center_dif, obj2->center_dif)) {
               std::cout << "collision" << std::endl;
@@ -905,19 +909,17 @@ namespace glfw
   }
 
   bool Viewer::CheckCollision() {
-      for (int i = 0; i < data_list.size() - 1; i++)
-      {
-          for (int j = i + 1; j < data_list.size(); j++)
-          {
-              if (!data_list[i].pause || !data_list[j].pause) {
-                  if (CheckCollisionRec(&data_list[i], &data_list[j], data_list[i].tree, data_list[j].tree)) {
-                      data_list[i].pause = true;
-                      data_list[j].pause = true;
-                      return true;
-                  }
-              }
-          }
-      }
+      int i = 1;
+        for (int j = i + 1; j < data_list.size(); j++)
+        {
+            if (!data_list[j].pause) {
+                if (CheckCollisionRec(&data_list[i], &data_list[j], data_list[i].tree, data_list[j].tree)) {
+                    data_list[j].pause = true;
+                    score += data_list[j].score;
+                    return true;
+                }
+            }
+        }
       return false;
   }
 
