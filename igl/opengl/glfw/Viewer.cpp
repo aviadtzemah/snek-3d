@@ -54,6 +54,10 @@
 #include <igl/dqs.h>
 #include <igl/deform_skeleton.h>
 
+#include <Windows.h>
+#include <mmsystem.h>
+#pragma comment(lib, "winmm.lib")
+
 // our addition
 typedef
 std::vector<Eigen::Quaterniond, Eigen::aligned_allocator<Eigen::Quaterniond> >
@@ -77,7 +81,6 @@ namespace glfw
 
   void Viewer::Init(const std::string config)
   {
-	  
 
   }
 
@@ -86,15 +89,20 @@ namespace glfw
     selected_data_index(0),
     next_data_id(1),
 	isPicked(false),
-	isActive(true),
+	isActive(false),
     score(0),
     playing(false),
     direction(0),
-      camera_movement(Eigen::Vector3f(0, -1.5, 8)),
-      camera_angle(0),
-      camera_setting(1),
-      moving(0),
-      camera_angle_sum(0)
+    camera_movement(Eigen::Vector3f(0, 0, 0)),
+    camera_angle(0),
+    camera_setting(1),
+    moving(0),
+    camera_angle_sum(0),
+    start_game_time(0),
+    game_ended(false),
+    level(1),
+    req_score(10),
+    velocity(1.5)
   {
     data_list.front().id = 0;
 
@@ -131,6 +139,120 @@ namespace glfw
   {
   }
 
+  IGL_INLINE void Viewer::MoveObjects(){
+    for (int i = 2; i < data_list.size(); i++){
+      if (!data_list[i].to_remove){
+        data_list[i].bezier_movement();
+      }
+    }
+  }
+  // 1 0 0 12.8
+  //  2 0 0 11.2
+  //  3 0 0 9.6
+  //  4 0 0 8
+  //  5 0 0 6.4
+  //  6 0 0 4.8
+  //  7 0 0 3.2
+  //  8 0 0 1.6
+  //  9 0 0 0
+  //  10 0 0 -1.6
+  //  11 0 0 -3.2
+  //  12 0 0 -4.8
+  //  13 0 0 -6.4
+  //  14 0 0 -8
+  //  15 0 0 -9.6
+  //  16 0 0 -11.2
+  //  17 0 0 -12.8
+  IGL_INLINE void Viewer::play_sound(int song_num){
+    if (song_num == 1){
+      PlaySound(TEXT("C:/AnimationProject/snek-3d/tutorial/data/menu.wav"), NULL,  SND_NODEFAULT | SND_ASYNC);
+    }
+    if (song_num == 2){
+      PlaySound(TEXT("C:/AnimationProject/snek-3d/tutorial/data/between.wav"), NULL,  SND_NODEFAULT | SND_ASYNC);
+    }
+    if (song_num == 3){
+      PlaySound(TEXT("C:/AnimationProject/snek-3d/tutorial/data/win.wav"), NULL,  SND_NODEFAULT | SND_ASYNC);
+    }
+  }
+
+
+  IGL_INLINE void Viewer::SetLevel(int level){
+
+    if (level == 1) {
+      req_score = 10;
+      PlaySound(TEXT("C:/AnimationProject/snek-3d/tutorial/data/level1.wav"), NULL,  SND_NODEFAULT | SND_ASYNC);
+    }
+    else if (level == 2) {
+      req_score = 25;
+      PlaySound(TEXT("C:/AnimationProject/snek-3d/tutorial/data/level2.wav"), NULL,  SND_NODEFAULT | SND_ASYNC);
+    }
+    else if (level == 3) {
+      req_score = 50;
+      PlaySound(TEXT("C:/AnimationProject/snek-3d/tutorial/data/megalovania.wav"), NULL,  SND_NODEFAULT | SND_ASYNC);
+    }
+
+    velocity = 1.5;
+    
+    ViewerData* snake = &data_list[0];
+
+    snake->dT[0] = Eigen::Vector3d(0, 0, 12.8).transpose() - snake->C.row(0);
+    snake->dT[1] = Eigen::Vector3d(0, 0, 11.2).transpose() - snake->C.row(1);
+    snake->dT[2] = Eigen::Vector3d(0, 0, 9.6).transpose() - snake->C.row(2);
+    snake->dT[3] = Eigen::Vector3d(0, 0, 8).transpose() - snake->C.row(3);
+    snake->dT[4] = Eigen::Vector3d(0, 0, 6.4).transpose() - snake->C.row(4);
+    snake->dT[5] = Eigen::Vector3d(0, 0, 4.8).transpose() - snake->C.row(5);
+    snake->dT[6] = Eigen::Vector3d(0, 0, 3.2).transpose() - snake->C.row(6);
+    snake->dT[7] = Eigen::Vector3d(0, 0, 1.6).transpose() - snake->C.row(7);
+    snake->dT[8] = Eigen::Vector3d(0, 0, 0).transpose() - snake->C.row(8);
+    snake->dT[9] = Eigen::Vector3d(0, 0, -1.6).transpose() - snake->C.row(9);
+    snake->dT[10] = Eigen::Vector3d(0, 0, -3.2).transpose() - snake->C.row(10);
+    snake->dT[11] = Eigen::Vector3d(0, 0, -4.8).transpose() - snake->C.row(11);
+    snake->dT[12] = Eigen::Vector3d(0, 0, -6.4).transpose() - snake->C.row(12);
+    snake->dT[13] = Eigen::Vector3d(0, 0, -8).transpose() - snake->C.row(13);
+    snake->dT[14] = Eigen::Vector3d(0, 0, -9.6).transpose() - snake->C.row(14);
+    snake->dT[15] = Eigen::Vector3d(0, 0, -11.2).transpose() - snake->C.row(15);
+    snake->dT[16] = Eigen::Vector3d(0, 0, -12.8).transpose() - snake->C.row(16);
+
+    snake->C.row(0) =  Eigen::Vector3d(0, 0, 12.8);
+    snake->C.row(1) =  Eigen::Vector3d(0, 0, 11.2);
+    snake->C.row(2) =  Eigen::Vector3d(0, 0, 9.6);
+    snake->C.row(3) =  Eigen::Vector3d(0, 0, 8);
+    snake->C.row(4) =  Eigen::Vector3d(0, 0, 6.4);
+    snake->C.row(5) =  Eigen::Vector3d(0, 0, 4.8);
+    snake->C.row(6) =  Eigen::Vector3d(0, 0, 3.2);
+    snake->C.row(7) =  Eigen::Vector3d(0, 0, 1.6);
+    snake->C.row(8) =  Eigen::Vector3d(0, 0, 0);
+    snake->C.row(9) =  Eigen::Vector3d(0, 0, -1.6);
+    snake->C.row(10) =  Eigen::Vector3d(0, 0, -3.2);
+    snake->C.row(11) =  Eigen::Vector3d(0, 0, -4.8);
+    snake->C.row(12) =  Eigen::Vector3d(0, 0, -6.4);
+    snake->C.row(13) =  Eigen::Vector3d(0, 0, -8);
+    snake->C.row(14) =  Eigen::Vector3d(0, 0, -9.6);
+    snake->C.row(15) =  Eigen::Vector3d(0, 0, -11.2);
+    snake->C.row(16) =  Eigen::Vector3d(0, 0, -12.8);
+
+    pre_draw();
+    
+    // float LO = -40;
+    // float HI = 40;
+    // for (int i = 2; i < data_list.size(); i++){
+      
+    //   for (int j = 0; j < data_list[i].p_bezier.size(); j++){
+        
+    //     // random number generation https://stackoverflow.com/questions/686353/random-float-number-generation
+    //     float x = LO + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/(HI-LO)));
+    //     float y = 0;
+    //     float z = LO + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/(HI-LO)));
+
+    //     data_list[i].p_bezier[j] = Eigen::Vector3d(x, y, z);
+    //   }
+    //   data_list[i].current_position = data_list[i].p_bezier[0];
+    //   data_list[i].t = 0;
+    //   MyTranslate(data_list[i].p_bezier[0] - data_list[i].center_dif, true);
+    //   data_list[i].center_dif = data_list[i].p_bezier[0];
+    // }
+  }
+
   IGL_INLINE void Viewer::calculate_dis() {
       ViewerData* snake = &data_list[0];
 
@@ -147,7 +269,7 @@ namespace glfw
       }
 
       ViewerData* snake = &data_list[0];
-      float velocity = 1.5;
+      //float velocity = 1.5;
       int angle = 25;
 
       if (direction == 1) {
@@ -241,7 +363,7 @@ namespace glfw
           //// //camera_movement = -snake->dT[13].cast <float>(); // why do i need to put the minus?
           
           camera_movement = -C_prime.row(C_prime.rows() - 1).cast <float>();
-          // camera_movement += Eigen::Vector3f(0, -1.5, 0);
+          camera_movement += Eigen::Vector3f(0, -1.5, 0);
           //camera_movement = C_prime.row(C_prime.rows() - 3)
          
           
@@ -414,7 +536,9 @@ namespace glfw
   IGL_INLINE bool Viewer::load_mesh_from_file(
       const std::string & mesh_file_name_string)
   {
+    PlaySound(TEXT("C:/AnimationProject/snek-3d/tutorial/data/menu.wav"), NULL,  SND_NODEFAULT | SND_ASYNC);
 
+    
     // Create new data slot and set to selected
     if(!(data().F.rows() == 0  && data().V.rows() == 0))
     {
@@ -513,6 +637,7 @@ namespace glfw
       /*for (int i = 0; i < data().BE.rows(); i++) {
           data().poses[0][i] = data().rest_pose[i] * bend1 * data().rest_pose[i].conjugate();
       }*/
+	    
       
       // calculate skinning weights
       //igl::readDMAT("D:/University/Animation/Project/snek-3d/tutorial/data/snake_weights_quad.dmat", data().W);
@@ -711,7 +836,7 @@ namespace glfw
       double velocity = 0.01;
       for (auto& data : data_list)
       {
-          if (!data.pause) {
+          if (!data.to_remove) {
               switch (data.direction)
               {
               case 1: // up
@@ -882,12 +1007,9 @@ namespace glfw
 
 
   bool Viewer::CheckCollisionRec(igl::opengl::ViewerData* obj1, igl::opengl::ViewerData* obj2, igl::AABB<Eigen::MatrixXd, 3>* tree1, igl::AABB<Eigen::MatrixXd, 3>* tree2) {
-      //if (tree1 == NULL || tree2 == NULL) {
-      //    std::cout << "here" << std::endl;
-      //}
       if (tree1->is_leaf() && tree2->is_leaf()) {
           if (does_intersect(tree1->m_box, tree2->m_box, obj1->GetRotation(), obj2->GetRotation(), obj1->center_dif, obj2->center_dif)) {
-              std::cout << "collision" << std::endl;
+              //std::cout << "collision" << std::endl;
               obj1->draw_box(tree1->m_box, Eigen::RowVector3d(1, 0, 0));
               obj2->draw_box(tree2->m_box, Eigen::RowVector3d(1, 0, 0));
 
@@ -912,10 +1034,11 @@ namespace glfw
       int i = 1;
         for (int j = i + 1; j < data_list.size(); j++)
         {
-            if (!data_list[j].pause) {
+            if (!data_list[j].to_remove) {
                 if (CheckCollisionRec(&data_list[i], &data_list[j], data_list[i].tree, data_list[j].tree)) {
-                    data_list[j].pause = true;
+                    data_list[j].to_remove = true;
                     score += data_list[j].score;
+                    velocity *= data_list[j].movement_effect;
                     return true;
                 }
             }

@@ -130,14 +130,18 @@ namespace glfw
     IGL_INLINE bool Viewer::AnimateFabrik();
     IGL_INLINE void Viewer::calculate_dis();
     IGL_INLINE Eigen::Vector3d Viewer::calculate_target();
+    IGL_INLINE void Viewer::play_sound(int song_num);
 
     IGL_INLINE void Move();
     IGL_INLINE bool CheckCollision();
+    IGL_INLINE void MoveObjects();
     IGL_INLINE bool CheckCollisionRec(igl::opengl::ViewerData* obj1, igl::opengl::ViewerData* obj2, igl::AABB<Eigen::MatrixXd, 3>* tree1, igl::AABB<Eigen::MatrixXd, 3>* tree2);
     IGL_INLINE bool does_intersect(Eigen::AlignedBox<double, 3> box1, Eigen::AlignedBox<double, 3> box2, Eigen::Matrix3d rotation1, Eigen::Matrix3d rotation2, Eigen::Vector3d center_dif1, Eigen::Vector3d center_dif2);
     IGL_INLINE double sign(int i, int j);
     IGL_INLINE double c_j(Eigen::RowVector3d Ai0, Eigen::RowVector3d Ai1, Eigen::RowVector3d Bj, double sign);
     IGL_INLINE double c_i(Eigen::RowVector3d Bj0, Eigen::RowVector3d Ai, Eigen::RowVector3d Bj1, double sign);
+
+    IGL_INLINE void SetLevel(int level);
 
   public:
     //////////////////////
@@ -155,10 +159,14 @@ namespace glfw
     int next_data_id;
 	bool isPicked;
 	bool isActive;
+    bool game_ended;
 
     //game additions
     int score;
     bool playing;
+    double start_game_time;
+    int level;
+    float velocity;
     
 // movements vars
     int direction; // 0 - not moving, 1 - forward, 2 - forward-right, 3 - forward-left. default 0 until started moving then default is 1
@@ -167,6 +175,7 @@ namespace glfw
     float camera_angle;
     float camera_angle_sum;
     int moving;
+    int req_score;
     
 
     // List of registered plugins

@@ -9,6 +9,7 @@
 //#include "ImGuiMenu.h"
 //#include "ImGuiHelpers.h"
 #include <igl/project.h>
+
 #include "ImGuiHelpers.h"
 
 #include "ImGuiMenu.h"
@@ -19,6 +20,11 @@
 //#include <imgui_fonts_droid_sans.h>
 //#include <GLFW/glfw3.h>
 #include <iostream>
+#include <igl/get_seconds.h>
+
+#include <Windows.h>
+#include <mmsystem.h>
+#pragma comment(lib, "winmm.lib")
 ////////////////////////////////////////////////////////////////////////////////
 
 namespace igl
@@ -160,7 +166,8 @@ IGL_INLINE void ImGuiMenu::draw_menu(igl::opengl::glfw::Viewer* viewer, std::vec
   draw_labels_window(viewer,&core[1]);
 
   // Viewer settings
-  if (callback_draw_viewer_window) { callback_draw_viewer_window(); }
+  if (callback_draw_viewer_window) {
+     callback_draw_viewer_window(); }
   else { draw_viewer_window(viewer,core); }
 
   // Other windows
@@ -170,16 +177,13 @@ IGL_INLINE void ImGuiMenu::draw_menu(igl::opengl::glfw::Viewer* viewer, std::vec
 
 IGL_INLINE void ImGuiMenu::draw_viewer_window(igl::opengl::glfw::Viewer* viewer, std::vector<igl::opengl::ViewerCore>& core)
 {
-  float menu_width = 180.f * menu_scaling();
+  
+  float menu_width = 0.f * menu_scaling();
   ImGui::SetNextWindowPos(ImVec2(0.0f, 0.0f), ImGuiSetCond_FirstUseEver);
   ImGui::SetNextWindowSize(ImVec2(0.0f, 0.0f), ImGuiSetCond_FirstUseEver);
   ImGui::SetNextWindowSizeConstraints(ImVec2(menu_width, -1.0f), ImVec2(menu_width, -1.0f));
   bool _viewer_menu_visible = true;
-
-
-  
 }
-
 
 IGL_INLINE void ImGuiMenu::draw_viewer_menu(igl::opengl::glfw::Viewer *viewer, std::vector<igl::opengl::ViewerCore>& core)
 {
@@ -217,7 +221,7 @@ IGL_INLINE void ImGuiMenu::draw_viewer_menu(igl::opengl::glfw::Viewer *viewer, s
 
     ImGui::End();
 
-    if (!viewer->playing){
+    if (!viewer->isActive && !viewer->game_ended){
       ImGui::Begin(
           "Welcome!", p_open,
           window_flags
@@ -228,122 +232,191 @@ IGL_INLINE void ImGuiMenu::draw_viewer_menu(igl::opengl::glfw::Viewer *viewer, s
       ImGui::Text("Welcome to Snek-3D! The most awesome game of the decade!");
 
       if (ImGui::Button("Play")){
-        viewer->playing = true;
+        viewer->SetLevel(viewer->level);
+        for (int i = 2; i < viewer->level * 3 + 2; i++) {
+            viewer->data_list[i].to_remove = false;
+            core[1].set(viewer->data_list[i].show_faces);
+        }
+        viewer->isActive = true;
+        viewer->start_game_time = igl::get_seconds();
       }
 
       ImGui::End();
     }
 
-    ImGui::Begin(
-        "Snek-3D", p_open,
-        window_flags
-    );
-    ImGui::SetWindowPos(ImVec2(core[0].viewport[0], core[0].viewport[1]), ImGuiCond_Always);
-    ImGui::SetWindowSize(ImVec2(core[0].viewport[2], core[0].viewport[3]), ImGuiCond_Always);
-    ImGui::End();
+    if (viewer->game_ended && viewer->level < 3){
+      viewer->play_sound(2);
+      ImGui::Begin(
+          "Level Ended!", p_open,
+          window_flags
+      );
+      ImGui::SetWindowPos(ImVec2(450, 250), ImGuiCond_Always);
+      ImGui::SetWindowSize(ImVec2(450, 150), ImGuiCond_Always);
 
-    
+      ImGui::Text("The level has ended. You got a score of %d", viewer->score);
 
-    no_move = true;
-    no_resize = true;
-
-    ImGui::Begin(
-        "Viewer", p_open,
-        window_flags
-    );
-  //Mesh
-  if (ImGui::CollapsingHeader("Mesh", ImGuiTreeNodeFlags_DefaultOpen))
-  {
-    float w = ImGui::GetContentRegionAvailWidth();
-    float p = ImGui::GetStyle().FramePadding.x;
-    if (ImGui::Button("Load##Mesh", ImVec2((w-p)/2.f, 0)))
-    {
-        int savedIndx = viewer->selected_data_index;
-      viewer->open_dialog_load_mesh();
-      if (viewer->data_list.size() > viewer->parents.size())
-      {
-          viewer->parents.push_back(-1);
-          viewer->data_list.back().set_visible(false, 1);
-          viewer->data_list.back().set_visible(true, 2);
-          viewer->data_list.back().show_faces = 3;
-          viewer->selected_data_index = savedIndx;
+      if (ImGui::Button("Play again")){
+        viewer->SetLevel(viewer->level);
+        for (int i = 2; i < viewer->level * 3 + 2; i++) {
+            core[1].set(viewer->data_list[i].show_faces);
+            viewer->data_list[i].to_remove = false;
+        }
+        viewer->isActive = true;
+        viewer->game_ended = false;
+        viewer->score = 0;
+        viewer->start_game_time = igl::get_seconds();
       }
+
+      if (ImGui::Button("Next level")){
+        viewer->level++;
+        viewer->SetLevel(viewer->level);
+        for (int i = 2; i < viewer->level * 3 + 2; i++) {
+            core[1].set(viewer->data_list[i].show_faces);
+            viewer->data_list[i].to_remove = false;
+        }
+        viewer->isActive = true;
+        viewer->game_ended = false;
+        viewer->score = 0;
+        viewer->start_game_time = igl::get_seconds();
+      }
+      ImGui::End();
     }
-    ImGui::SameLine(0, p);
-    if (ImGui::Button("Save##Mesh", ImVec2((w-p)/2.f, 0)))
-    {
-      viewer->open_dialog_save_mesh();
+
+    if (viewer->game_ended && viewer->level == 3){
+      viewer->play_sound(3);
+      ImGui::Begin(
+          "Finished the game!", p_open,
+          window_flags
+      );
+
+      ImGui::SetWindowPos(ImVec2(450, 250), ImGuiCond_Always);
+      ImGui::SetWindowSize(ImVec2(450, 150), ImGuiCond_Always);
+
+      ImGui::Text("You have finshed the game and got a score of %d in the last level!", viewer->score);
+
+      if (ImGui::Button("Play last level again")){
+        viewer->SetLevel(viewer->level);
+        viewer->isActive = true;
+        viewer->game_ended = false;
+        viewer->score = 0;
+        viewer->start_game_time = igl::get_seconds();
+      }
+
+      ImGui::End();
     }
-  }
-
-  // Viewing options
-  if (ImGui::CollapsingHeader("Viewing Options", ImGuiTreeNodeFlags_DefaultOpen))
-  {
-    if (ImGui::Button("Center object", ImVec2(-1, 0)))
-    {
-      core[1].align_camera_center(viewer->data().V, viewer->data().F);
-    }
-    //if (ImGui::Button("Snap canonical view", ImVec2(-1, 0)))
-    //{
-    //  core[1].snap_to_canonical_quaternion();
-    //}
-
-    // Zoom
-    ImGui::PushItemWidth(80 * menu_scaling());
-    ImGui::DragFloat("Zoom", &(core[1].camera_zoom), 0.05f, 0.1f, 20.0f);
-
-    // Select rotation type
-    int rotation_type = static_cast<int>(core[1].rotation_type);
-    static Eigen::Quaternionf trackball_angle = Eigen::Quaternionf::Identity();
-    static bool orthographic = true;
-
-    // Orthographic view
-    ImGui::Checkbox("Orthographic view", &(core[1].orthographic));
-    ImGui::PopItemWidth();
-  }
-
-  // Helper for setting viewport specific mesh options
-  auto make_checkbox = [&](const char *label, unsigned int &option)
-  {
-    return ImGui::Checkbox(label,
-      [&]() { return core[1].is_set(option); },
-      [&](bool value) { return core[1].set(option, value); }
-    );
-  };
-     /* ImGui::ColorEdit4("Background", core[1].background_color.data(),
-      ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_PickerHueWheel);*/
 
 
-  // Draw options
-  if (ImGui::CollapsingHeader("Draw Options", ImGuiTreeNodeFlags_DefaultOpen))
-  {
-    if (ImGui::Checkbox("Face-based", &(viewer->data().face_based)))
-    {
-      viewer->data().dirty = MeshGL::DIRTY_ALL;
-    }
-    make_checkbox("Show texture", viewer->data().show_texture);
-    if (ImGui::Checkbox("Invert normals", &(viewer->data().invert_normals)))
-    {
-      viewer->data().dirty |= igl::opengl::MeshGL::DIRTY_NORMAL;
-    }
-    make_checkbox("Show overlay", viewer->data().show_overlay);
-    make_checkbox("Show overlay depth", viewer->data().show_overlay_depth);
+
+  //   ImGui::Begin(
+  //       "Snek-3D", p_open,
+  //       window_flags
+  //   );
+  //   ImGui::SetWindowPos(ImVec2(core[0].viewport[0], core[0].viewport[1]), ImGuiCond_Always);
+  //   ImGui::SetWindowSize(ImVec2(core[0].viewport[2], core[0].viewport[3]), ImGuiCond_Always);
+  //   ImGui::End();
+
     
-    ImGui::ColorEdit4("Line color", viewer->data().line_color.data(),
-        ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_PickerHueWheel);
-    ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.3f);
-    ImGui::DragFloat("Shininess", &(viewer->data().shininess), 0.05f, 0.0f, 100.0f);
-    ImGui::PopItemWidth();
-  }
 
-  // Overlays
-  if (ImGui::CollapsingHeader("Overlays", ImGuiTreeNodeFlags_DefaultOpen))
-  {
-    make_checkbox("Wireframe", viewer->data().show_lines);
-    make_checkbox("Fill", viewer->data().show_faces);
+  //   no_move = true;
+  //   no_resize = true;
 
-  }
-  ImGui::End();
+  //   ImGui::Begin(
+  //       "Viewer", p_open,
+  //       window_flags
+  //   );
+  // //Mesh
+  // if (ImGui::CollapsingHeader("Mesh", ImGuiTreeNodeFlags_DefaultOpen))
+  // {
+  //   float w = ImGui::GetContentRegionAvailWidth();
+  //   float p = ImGui::GetStyle().FramePadding.x;
+  //   if (ImGui::Button("Load##Mesh", ImVec2((w-p)/2.f, 0)))
+  //   {
+  //       int savedIndx = viewer->selected_data_index;
+  //     viewer->open_dialog_load_mesh();
+  //     if (viewer->data_list.size() > viewer->parents.size())
+  //     {
+  //         viewer->parents.push_back(-1);
+  //         viewer->data_list.back().set_visible(false, 1);
+  //         viewer->data_list.back().set_visible(true, 2);
+  //         viewer->data_list.back().show_faces = 3;
+  //         viewer->selected_data_index = savedIndx;
+  //     }
+  //   }
+  //   ImGui::SameLine(0, p);
+  //   if (ImGui::Button("Save##Mesh", ImVec2((w-p)/2.f, 0)))
+  //   {
+  //     viewer->open_dialog_save_mesh();
+  //   }
+  // }
+
+  // // Viewing options
+  // if (ImGui::CollapsingHeader("Viewing Options", ImGuiTreeNodeFlags_DefaultOpen))
+  // {
+  //   if (ImGui::Button("Center object", ImVec2(-1, 0)))
+  //   {
+  //     core[1].align_camera_center(viewer->data().V, viewer->data().F);
+  //   }
+  //   //if (ImGui::Button("Snap canonical view", ImVec2(-1, 0)))
+  //   //{
+  //   //  core[1].snap_to_canonical_quaternion();
+  //   //}
+
+  //   // Zoom
+  //   ImGui::PushItemWidth(80 * menu_scaling());
+  //   ImGui::DragFloat("Zoom", &(core[1].camera_zoom), 0.05f, 0.1f, 20.0f);
+
+  //   // Select rotation type
+  //   int rotation_type = static_cast<int>(core[1].rotation_type);
+  //   static Eigen::Quaternionf trackball_angle = Eigen::Quaternionf::Identity();
+  //   static bool orthographic = true;
+
+  //   // Orthographic view
+  //   ImGui::Checkbox("Orthographic view", &(core[1].orthographic));
+  //   ImGui::PopItemWidth();
+  // }
+
+  // // Helper for setting viewport specific mesh options
+  // auto make_checkbox = [&](const char *label, unsigned int &option)
+  // {
+  //   return ImGui::Checkbox(label,
+  //     [&]() { return core[1].is_set(option); },
+  //     [&](bool value) { return core[1].set(option, value); }
+  //   );
+  // };
+  //    /* ImGui::ColorEdit4("Background", core[1].background_color.data(),
+  //     ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_PickerHueWheel);*/
+
+
+  // // Draw options
+  // if (ImGui::CollapsingHeader("Draw Options", ImGuiTreeNodeFlags_DefaultOpen))
+  // {
+  //   if (ImGui::Checkbox("Face-based", &(viewer->data().face_based)))
+  //   {
+  //     viewer->data().dirty = MeshGL::DIRTY_ALL;
+  //   }
+  //   make_checkbox("Show texture", viewer->data().show_texture);
+  //   if (ImGui::Checkbox("Invert normals", &(viewer->data().invert_normals)))
+  //   {
+  //     viewer->data().dirty |= igl::opengl::MeshGL::DIRTY_NORMAL;
+  //   }
+  //   make_checkbox("Show overlay", viewer->data().show_overlay);
+  //   make_checkbox("Show overlay depth", viewer->data().show_overlay_depth);
+    
+  //   ImGui::ColorEdit4("Line color", viewer->data().line_color.data(),
+  //       ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_PickerHueWheel);
+  //   ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.3f);
+  //   ImGui::DragFloat("Shininess", &(viewer->data().shininess), 0.05f, 0.0f, 100.0f);
+  //   ImGui::PopItemWidth();
+  // }
+
+  // // Overlays
+  // if (ImGui::CollapsingHeader("Overlays", ImGuiTreeNodeFlags_DefaultOpen))
+  // {
+  //   make_checkbox("Wireframe", viewer->data().show_lines);
+  //   make_checkbox("Fill", viewer->data().show_faces);
+
+  // }
+  // ImGui::End();
 }
 
 IGL_INLINE void ImGuiMenu::draw_labels_window(igl::opengl::glfw::Viewer* viewer,  const igl::opengl::ViewerCore* core)

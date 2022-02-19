@@ -31,25 +31,25 @@
 //void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 ////void mouse_move(GLFWwindow* window, double x, double y);
 //void glfw_mouse_press(GLFWwindow* window, int button, int action, int modifier);
-//
+
 //void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 //void processInput(GLFWwindow* window, int key, int scancode, int action, int modifier);
 //unsigned int loadTexture(const char* path);
 //unsigned int loadCubemap(vector<std::string> faces);
 
-//// settings
-//const unsigned int SCR_WIDTH = 800;
-//const unsigned int SCR_HEIGHT = 600;
+// settings
+/*const unsigned int SCR_WIDTH = 1200;
+const unsigned int SCR_HEIGHT = 800;
 
 // camera
-//Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
-//float lastX = (float)SCR_WIDTH / 2.0;
-//float lastY = (float)SCR_HEIGHT / 2.0;
-//bool firstMouse = true;
+Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+float lastX = (float)SCR_WIDTH / 2.0;
+float lastY = (float)SCR_HEIGHT / 2.0;
+bool firstMouse = true;
 
-//// timing
-//float deltaTime = 0.0f;
-//float lastFrame = 0.0f;
+// timing
+float deltaTime = 0.0f;
+float lastFrame = 0.0f;*/
 
 static void glfw_error_callback(int error, const char* description)
 {
@@ -161,84 +161,84 @@ Display::Display(int windowWidth, int windowHeight, const std::string& title)
 
 bool Display::launch_rendering(bool loop)
 {
-	//glEnable(GL_DEPTH_TEST);
+	/*glEnable(GL_DEPTH_TEST);
 
-	//// build and compile shaders
-	//// -------------------------
-	//Shader skyboxShader("C:/AnimationProject/snek-3d/6.1.skybox.vs", "C:/AnimationProject/snek-3d/6.1.skybox.fs");
-	//float skyboxVertices[] = {
-	//	// positions          
-	//	-1.0f,  1.0f, -1.0f,
-	//	-1.0f, -1.0f, -1.0f,
-	//	 1.0f, -1.0f, -1.0f,
-	//	 1.0f, -1.0f, -1.0f,
-	//	 1.0f,  1.0f, -1.0f,
-	//	-1.0f,  1.0f, -1.0f,
+	// build and compile shaders
+	// -------------------------
+	Shader skyboxShader("C:/AnimationProject/snek-3d/6.1.skybox.vs", "C:/AnimationProject/snek-3d/6.1.skybox.fs");
+	float skyboxVertices[] = {
+		// positions          
+		-1.0f,  1.0f, -1.0f,
+		-1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+		 1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
 
-	//	-1.0f, -1.0f,  1.0f,
-	//	-1.0f, -1.0f, -1.0f,
-	//	-1.0f,  1.0f, -1.0f,
-	//	-1.0f,  1.0f, -1.0f,
-	//	-1.0f,  1.0f,  1.0f,
-	//	-1.0f, -1.0f,  1.0f,
+		-1.0f, -1.0f,  1.0f,
+		-1.0f, -1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f,  1.0f,
+		-1.0f, -1.0f,  1.0f,
 
-	//	 1.0f, -1.0f, -1.0f,
-	//	 1.0f, -1.0f,  1.0f,
-	//	 1.0f,  1.0f,  1.0f,
-	//	 1.0f,  1.0f,  1.0f,
-	//	 1.0f,  1.0f, -1.0f,
-	//	 1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
 
-	//	-1.0f, -1.0f,  1.0f,
-	//	-1.0f,  1.0f,  1.0f,
-	//	 1.0f,  1.0f,  1.0f,
-	//	 1.0f,  1.0f,  1.0f,
-	//	 1.0f, -1.0f,  1.0f,
-	//	-1.0f, -1.0f,  1.0f,
+		-1.0f, -1.0f,  1.0f,
+		-1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f, -1.0f,  1.0f,
+		-1.0f, -1.0f,  1.0f,
 
-	//	-1.0f,  1.0f, -1.0f,
-	//	 1.0f,  1.0f, -1.0f,
-	//	 1.0f,  1.0f,  1.0f,
-	//	 1.0f,  1.0f,  1.0f,
-	//	-1.0f,  1.0f,  1.0f,
-	//	-1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
+		 1.0f,  1.0f, -1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		-1.0f,  1.0f,  1.0f,
+		-1.0f,  1.0f, -1.0f,
 
-	//	-1.0f, -1.0f, -1.0f,
-	//	-1.0f, -1.0f,  1.0f,
-	//	 1.0f, -1.0f, -1.0f,
-	//	 1.0f, -1.0f, -1.0f,
-	//	-1.0f, -1.0f,  1.0f,
-	//	 1.0f, -1.0f,  1.0f
-	//};
+		-1.0f, -1.0f, -1.0f,
+		-1.0f, -1.0f,  1.0f,
+		 1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+		-1.0f, -1.0f,  1.0f,
+		 1.0f, -1.0f,  1.0f
+	};
 
-	//// skybox VAO
-	//unsigned int skyboxVAO, skyboxVBO;
-	//glGenVertexArrays(1, &skyboxVAO);
-	//glGenBuffers(1, &skyboxVBO);
-	//glBindVertexArray(skyboxVAO);
-	//glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices, GL_STATIC_DRAW);
-	//glEnableVertexAttribArray(0);
-	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	// skybox VAO
+	unsigned int skyboxVAO, skyboxVBO;
+	glGenVertexArrays(1, &skyboxVAO);
+	glGenBuffers(1, &skyboxVBO);
+	glBindVertexArray(skyboxVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 
-	//// load textures
-	//// -------------
-	//vector<std::string> faces
-	//{
-	//	FileSystem::getPath("tutorial/textures/Daylight_Box_Right.bmp"),
-	//	FileSystem::getPath("tutorial/textures/Daylight_Box_Left.bmp"),
-	//	FileSystem::getPath("tutorial/textures/Daylight_Box_Top.bmp"),
-	//	FileSystem::getPath("tutorial/textures/Daylight_Box_Bottom.bmp"),
-	//	FileSystem::getPath("tutorial/textures/Daylight_Box_Front.bmp"),
-	//	FileSystem::getPath("tutorial/textures/Daylight_Box_Back.bmp")
-	//};
-	//unsigned int cubemapTexture = loadCubemap(faces);
+	// load textures
+	// -------------
+	vector<std::string> faces
+	{
+		FileSystem::getPath("tutorial/textures/Daylight_Box_Right.bmp"),
+		FileSystem::getPath("tutorial/textures/Daylight_Box_Left.bmp"),
+		FileSystem::getPath("tutorial/textures/Daylight_Box_Top.bmp"),
+		FileSystem::getPath("tutorial/textures/Daylight_Box_Bottom.bmp"),
+		FileSystem::getPath("tutorial/textures/Daylight_Box_Front.bmp"),
+		FileSystem::getPath("tutorial/textures/Daylight_Box_Back.bmp")
+	};
+	unsigned int cubemapTexture = loadCubemap(faces);
 
 	//// shader configuration
 	//// --------------------
 
-	//skyboxShader.use();
-	//skyboxShader.setInt("skybox", 0);
+	skyboxShader.use();
+	skyboxShader.setInt("skybox", 0);*/
 
 	// glfwMakeContextCurrent(window);
 	// Rendering loop
@@ -257,6 +257,13 @@ bool Display::launch_rendering(bool loop)
 		double tic = igl::get_seconds();
 		renderer->Animate();
 		renderer->draw(window);
+		if(renderer->GetScene()->start_game_time > 0 && (tic - renderer->GetScene()->start_game_time > 45
+			|| renderer->GetScene()->score >= renderer->GetScene()->req_score)){
+			renderer->GetScene()->isActive = false;
+			renderer->GetScene()->start_game_time = 0;
+			renderer->GetScene()->game_ended = true;;
+		}
+
 
 		//start
 		//float currentFrame = static_cast<float>(glfwGetTime());
@@ -270,27 +277,27 @@ bool Display::launch_rendering(bool loop)
 		//// render
 		//// ------
 		//// these lines clear the screen completely
-		////glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-		////glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		//glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		//// draw scene as normal
-		//glm::mat4 model = glm::mat4(1.0f);
-		//glm::mat4 view = camera.GetViewMatrix();
-		//glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		// draw scene as normal
+		/*glm::mat4 model = glm::mat4(1.0f);
+		glm::mat4 view = camera.GetViewMatrix();
+		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
-		//// draw skybox as last
-		//glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
-		//skyboxShader.use();
-		//view = glm::mat4(glm::mat3(camera.GetViewMatrix())); // remove translation from the view matrix
-		//skyboxShader.setMat4("view", view);
-		//skyboxShader.setMat4("projection", projection);
-		//// skybox cube
-		//glBindVertexArray(skyboxVAO);
-		//glActiveTexture(GL_TEXTURE0);
-		//glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
-		//glDrawArrays(GL_TRIANGLES, 0, 36);
-		//glBindVertexArray(0);
-		//glDepthFunc(GL_LESS); // set depth function back to default
+		// draw skybox as last
+		glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
+		skyboxShader.use();
+		view = glm::mat4(glm::mat3(camera.GetViewMatrix())); // remove translation from the view matrix
+		skyboxShader.setMat4("view", view);
+		skyboxShader.setMat4("projection", projection);
+		// skybox cube
+		glBindVertexArray(skyboxVAO);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glBindVertexArray(0);
+		glDepthFunc(GL_LESS); // set depth function back to default*/
 		//end
 
 		glfwSwapBuffers(window);

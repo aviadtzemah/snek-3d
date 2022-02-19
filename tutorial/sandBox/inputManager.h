@@ -188,28 +188,29 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 		case '1':
 			
 			if (scn->camera_setting == 1) {
+				// rndr->core().camera_base_zoom = 1;
+				// rndr->core().camera_base_translation = Eigen::Vector3f(0, 0, 0);
 				rndr->RotateCameraX(-90 * igl::PI / 180);
-				rndr->RotateCamera(0, scn->camera_angle_sum);
+				//rndr->RotateCamera(0, scn->camera_angle_sum);
 				//rndr->core().align_camera_center(reset_camera);
 				rndr->core().camera_translation = scn->camera_movement;
 				//rndr->RotateCameraZ(180 * igl::PI / 180);
 				
 				
-				scn->camera_angle_sum = 0;
+				//scn->camera_angle_sum = 0;
 				scn->camera_setting = 0; // head view
 			}
 			
 			break;
 		case '2':
 			if (scn->camera_setting == 0) {
-				rndr->RotateCamera(0, -scn->camera_angle_sum);
+				//rndr->RotateCamera(0, -scn->camera_angle_sum);
 				//rndr->core().camera_translation = Eigen::Vector3f(0, -5, 0);
 				//scn->RotateInSystem(Eigen::Vector3d(0, 0, 1), 180 * igl::PI / 180);
-				
 				//rndr->core().align_camera_center(scn->data_list[0].V, scn->data_list[0].F);
 				rndr->RotateCameraX(90 * igl::PI / 180);
-				rndr->core().camera_translation = Eigen::Vector3f(0, 100, 0);
-				scn->camera_angle_sum = 0;
+				rndr->core().camera_translation = Eigen::Vector3f(0, 20, 0);
+				//scn->camera_angle_sum = 0;
 				scn->camera_setting = 1; // global view
 			}
 			break;
@@ -218,7 +219,7 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 		case 'P':
 		case 'p':
 		{
-			scn->data().Pause();
+			scn->data().to_remove_toggle();
 			break;
 		}
 		case GLFW_KEY_C:

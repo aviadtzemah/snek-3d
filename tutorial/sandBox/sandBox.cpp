@@ -4,7 +4,12 @@
 #include "Eigen/dense"
 #include <functional>
 
+#include <Windows.h>
+#include <mmsystem.h>
+#pragma comment(lib, "winmm.lib")
 
+#include <cstdlib>
+#include <ctime>
 
 SandBox::SandBox()
 {
@@ -14,6 +19,7 @@ SandBox::SandBox()
 
 void SandBox::Init(const std::string &config)
 {
+	play_sound(1);
 	std::string item_name;
 	std::ifstream nameFileout;
 	doubleVariable = 0;
@@ -24,7 +30,6 @@ void SandBox::Init(const std::string &config)
 	}
 	else
 	{
-		
 		while (nameFileout >> item_name)
 		{
 			std::cout << "openning " << item_name << std::endl;
@@ -41,6 +46,7 @@ void SandBox::Init(const std::string &config)
 	}
 	MyTranslate(Eigen::Vector3d(0, 0, -1), true);
 	data().set_colors(Eigen::RowVector3d(0.9, 0.1, 0.1));
+
 }
 
 SandBox::~SandBox()
@@ -54,7 +60,7 @@ void SandBox::Animate()
 	{
 		AnimateFabrik();
 		pre_draw();
-		//Move();
+		MoveObjects();
 		CheckCollision();
 	}
 }

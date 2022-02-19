@@ -15,6 +15,10 @@
 #include "../per_vertex_normals.h"
 #include "igl/png/texture_from_png.h"
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include <math.h>
+
 //#include "external/stb/igl_stb_image.h"
 
 IGL_INLINE igl::opengl::ViewerData::ViewerData()
@@ -33,7 +37,11 @@ IGL_INLINE igl::opengl::ViewerData::ViewerData()
   label_color(0,0,0.04,1),
   shininess(35.0f),
   id(-1),
-  is_visible(1)
+  is_visible(1),
+  t(0),
+  bezier_direction(-1),
+  score(0),
+  movement_effect(1)
 {
   clear();
 };
@@ -52,16 +60,67 @@ IGL_INLINE void igl::opengl::ViewerData::init_mesh() {
         V = V * 0.57;
     }
     else {
-        direction = 0;
+       direction = 0;
     }
     reset_V = V;
     reset_F = F;
     center_dif = Eigen::Vector3d(0, 0, 0);
     if (id > 1) {
-        MyTranslate(Eigen::Vector3d(id * 2, 0, 0), true);
-        center_dif += Eigen::Vector3d(id * 2, 0, 0);
-        score = 2;
-        pause = false;
+        V = V * 3;
+
+        float LO = -40;
+        float HI = 40;
+        p_bezier.resize(4, Eigen::Vector3d(0, 0, 0));
+
+        for (int i = 0; i < p_bezier.size(); i++) {
+
+            // random number generation https://stackoverflow.com/questions/686353/random-float-number-generation
+            float x = LO + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (HI - LO)));
+            float y = 0;
+            float z = LO + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (HI - LO)));
+
+            p_bezier[i] = Eigen::Vector3d(x, y, z);
+        }
+        current_position = p_bezier[0];
+        MyTranslate(p_bezier[0], true);
+        center_dif += p_bezier[0];
+        if (id > 1 && id < 5) {
+            score = 5;
+        }
+        if(id == 5){
+          movement_effect = 1.4;
+          V = V * 10;
+        }
+        if (id > 5 && id < 8) {
+            score = 10;
+        }
+        if (id == 8){
+          movement_effect = 0.8;
+        }
+        if (id == 9) {
+            score = 50;
+        }
+        if (id == 10){
+          score = -100;
+        }
+        to_remove = true;
+
+        // drawing the curve
+      //   Eigen::MatrixXd stam(1, 3);
+      //   stam.row(0) << p_bezier[0];
+      //   //Eigen::Vector3d curr_pos =;
+
+      //   for (float i = 0.1; i < 1; i += 0.1){
+      //       Eigen::Vector3d new_position = pow((1 - i), 3) * p_bezier[0] + 3 * pow((1 - i), 2) * i * p_bezier[1] + 3 * (1 - i) * pow(i, 2) * p_bezier[2] + pow(i, 3) * p_bezier[3];
+      //       add_edges(stam, Eigen::RowVector3d(1, 0, 0), Eigen::RowVector3d(1, 0, 0));
+      //       //curr_pos = new_position;
+      //  }
+      //     std::cout << "here1" << std::endl;
+      //   float i = 1;
+      //   Eigen::Vector3d new_position = pow((1 - i), 3) * p_bezier[0] + 3 * pow((1 - i), 2) * i * p_bezier[1] + 3 * (1 - i) * pow(i, 2) * p_bezier[2] + pow(i, 3) * p_bezier[3];
+      //   //add_edges(curr_pos, new_position, Eigen::RowVector3d(1, 0, 0));
+      //   std::cout << "here2" << std::endl;
+
     }
 
     tree = new igl::AABB<Eigen::MatrixXd, 3>();
@@ -110,6 +169,29 @@ IGL_INLINE void igl::opengl::ViewerData::init_mesh() {
     //draw_all(tree);
 }
 
+IGL_INLINE void igl::opengl::ViewerData::bezier_movement(){
+  if (t == 0 || t == 1){
+    bezier_direction *= -1;
+  }
+
+  float t_diff = bezier_direction * 0.01;
+
+  t += t_diff;
+
+  if (t > 1) {
+    t = 1;
+  }
+  else if (t < 0){
+    t = 0;
+  }
+
+  Eigen::Vector3d new_position = pow((1 - t), 3) * p_bezier[0] + 3 * pow((1 - t), 2) * t * p_bezier[1] + 3 * (1 - t) * pow(t, 2) * p_bezier[2] + pow(t, 3) * p_bezier[3];
+  Eigen::Vector3d diff = new_position - current_position;
+  MyTranslate(diff, true);
+  center_dif += diff;
+  current_position = new_position;
+}
+
 IGL_INLINE bool igl::opengl::ViewerData::draw_all(igl::AABB<Eigen::MatrixXd, 3>* tree) {
     bool stam = true;
     if (tree->is_leaf()) {
@@ -131,11 +213,11 @@ IGL_INLINE bool igl::opengl::ViewerData::draw_all(igl::AABB<Eigen::MatrixXd, 3>*
 // 6- outwards
 IGL_INLINE void igl::opengl::ViewerData::SetDirection(int dir) {
     direction = dir;
-    pause = false;
+    to_remove = false;
 }
 
-IGL_INLINE void igl::opengl::ViewerData::Pause() {
-    pause = !pause;
+IGL_INLINE void igl::opengl::ViewerData::to_remove_toggle() {
+    to_remove = !to_remove;
 }
 
 IGL_INLINE void igl::opengl::ViewerData::draw_box(Eigen::AlignedBox<double, 3> box, Eigen::RowVector3d color) {
@@ -221,6 +303,8 @@ IGL_INLINE void igl::opengl::ViewerData::set_mesh(
   dirty |= MeshGL::DIRTY_FACE | MeshGL::DIRTY_POSITION;
   if (id != 0) {
       init_mesh();
+
+      
   }
 }
 

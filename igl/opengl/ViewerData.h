@@ -160,12 +160,12 @@ public:
   Eigen::AlignedBox<double, 3> outer_box;
   Eigen::MatrixXd reset_V;
   Eigen::MatrixXi reset_F;
-  bool pause;
+  bool to_remove;
   int direction;
   IGL_INLINE bool igl::opengl::ViewerData::draw_all(igl::AABB<Eigen::MatrixXd, 3>* tree);
   IGL_INLINE void init_mesh();
   IGL_INLINE void SetDirection(int dir);
-  IGL_INLINE void Pause();
+  IGL_INLINE void to_remove_toggle();
   IGL_INLINE void draw_box(Eigen::AlignedBox<double, 3> box, Eigen::RowVector3d color);
   Eigen::Vector3d center_dif;
   int score;
@@ -183,6 +183,15 @@ public:
   std::vector<double> dis;
   std::vector<Eigen::Vector3d> dT;
   RotationList dQ;
+
+  int movement_effect;
+
+  // bezier
+  float t;
+  Eigen::Vector3d current_position;
+  std::vector<Eigen::Vector3d> p_bezier;
+  float bezier_direction;
+  IGL_INLINE void bezier_movement();
 
 
   // Per face attributes

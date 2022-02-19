@@ -7,6 +7,9 @@
 
 #include <igl/PI.h>
 
+
+
+
 Renderer::Renderer() : selected_core_index(0),
 next_core_id(2)
 {
@@ -86,13 +89,19 @@ IGL_INLINE void Renderer::draw( GLFWwindow* window)
 	if (menu)
 	{
 		menu->post_draw();
-		
 	}
 
 	if (scn->moving == 1) {
 		if (scn->camera_setting == 0) {
 			core().camera_translation = scn->camera_movement;
-			RotateCamera(0, scn->camera_angle);
+			//RotateCamera(0, scn->camera_angle);
+		}
+	}
+
+	for (int i = 2; i < scn->data_list.size(); i++)
+	{
+		if (scn->data_list[i].to_remove) {
+			core().unset(scn->data_list[i].show_faces);
 		}
 	}
 
@@ -110,9 +119,17 @@ IGL_INLINE void Renderer::init(igl::opengl::glfw::Viewer* viewer,int coresNum, i
 	doubleVariable = 0;
 	core().init(); 
 	menu = _menu;
+
+	// std::cout << core().camera_base_zoom << std::endl;
+	// std::cout << core().camera_base_translation << std::endl;
 	core().align_camera_center(scn->data_list[0].V, scn->data_list[0].F);
-	RotateCameraX(90 * igl::PI / 180);
-	core().camera_translation = Eigen::Vector3f(0, 20, 0);
+	// std::cout << core().camera_base_zoom << std::endl;
+	// std::cout << core().camera_base_translation << std::endl;
+	RotateCameraX(-90 * igl::PI / 180);
+	core().camera_translation = Eigen::Vector3f(0, -20, 0);
+	//core().camera_translation = Eigen::Vector3f(0, -1.5, 8);
+
+	
 
 	if (coresNum > 1)
 	{	
@@ -120,8 +137,10 @@ IGL_INLINE void Renderer::init(igl::opengl::glfw::Viewer* viewer,int coresNum, i
 		int height = core().viewport[3];
 		
 		core().viewport = Eigen::Vector4f(0, 0, width/4, height);
-		left_view = core_list[0].id;
-		right_view = append_core(Eigen::Vector4f(width/4, 0, width*3/4, height));
+		//left_view = core_list[0].id;
+		right_view = append_core(Eigen::Vector4f(0, 0, width, height));
+		//right_view = append_core(Eigen::Vector4f(width / 4, 0, width * 3 / 4, height));
+
 		core_index(right_view - 1);
 		for (size_t i = 0; i < scn->data_list.size(); i++)
 		{
@@ -132,7 +151,7 @@ IGL_INLINE void Renderer::init(igl::opengl::glfw::Viewer* viewer,int coresNum, i
 		//Eigen::Vector3d v = -scn->GetCameraPosition();
 		//TranslateCamera(v.cast<float>());
 
-		core_index(left_view - 1);
+		//core_index(left_view - 1);
 	}
 
 	if (menu)
@@ -147,6 +166,9 @@ IGL_INLINE void Renderer::init(igl::opengl::glfw::Viewer* viewer,int coresNum, i
 	}
 
 	//core().toggle(scn->data_list[1].show_faces);
+	for (int i = 1; i < scn->data_list.size(); i++) {
+		core().unset(scn->data_list[i].show_faces);
+	}
 }
 
 void Renderer::UpdatePosition(double xpos, double ypos)
@@ -301,9 +323,9 @@ IGL_INLINE void Renderer::resize(GLFWwindow* window,int w, int h)
 		{
 			// It is up to the user to define the behavior of the post_resize() function
 			// when there are multiple viewports (through the `callback_post_resize` callback)
-			core(left_view).viewport = Eigen::Vector4f(0, 0, w / 4, h);
-			core(right_view).viewport = Eigen::Vector4f(w / 4, 0, w - (w / 4), h);
-
+			//core(left_view).viewport = Eigen::Vector4f(0, 0, w / 4, h);
+			//core(right_view).viewport = Eigen::Vector4f(w / 4, 0, w - (w / 4), h);
+			core(right_view).viewport = Eigen::Vector4f(0, 0, w, h);
 		}
 		//for (unsigned int i = 0; i < plugins.size(); ++i)
 		//{
