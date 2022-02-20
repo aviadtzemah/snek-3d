@@ -94,6 +94,7 @@ namespace glfw
     playing(false),
     direction(0),
     camera_movement(Eigen::Vector3f(0, 0, 0)),
+    camera_direction(Eigen::Vector3f(0, 0, 0)),
     camera_angle(0),
     camera_setting(1),
     moving(0),
@@ -102,7 +103,8 @@ namespace glfw
     game_ended(false),
     level(1),
     req_score(10),
-    velocity(1.5)
+    velocity(1.5),
+    bez_dis(0.01)
   {
     data_list.front().id = 0;
 
@@ -142,7 +144,7 @@ namespace glfw
   IGL_INLINE void Viewer::MoveObjects(){
     for (int i = 2; i < data_list.size(); i++){
       if (!data_list[i].to_remove){
-        data_list[i].bezier_movement();
+        data_list[i].bezier_movement(bez_dis);
       }
     }
   }
@@ -187,7 +189,7 @@ namespace glfw
       PlaySound(TEXT("C:/AnimationProject/snek-3d/tutorial/data/level2.wav"), NULL,  SND_NODEFAULT | SND_ASYNC);
     }
     else if (level == 3) {
-      req_score = 50;
+      req_score = 35;
       PlaySound(TEXT("C:/AnimationProject/snek-3d/tutorial/data/megalovania.wav"), NULL,  SND_NODEFAULT | SND_ASYNC);
     }
 
@@ -283,7 +285,7 @@ namespace glfw
       else if (direction == 2) {
           Eigen::Vector3d target_vec = (snake->C.row(snake->C.rows() - 1) - snake->C.row(snake->C.rows() - 2)).normalized() * velocity;
           //Eigen::Quaterniond rot(Eigen::AngleAxisd(igl::PI * 0.1, Eigen::Vector3d(0, 1, 0)));
-          float amtY = angle * igl::PI / 180;
+          float amtY = -angle * igl::PI / 180;
           Eigen::Matrix3d Mat;
 		       Mat << cos(amtY),0,sin(amtY),  0, 1, 0 ,  -sin(amtY), 0, cos(amtY) ;
            target_vec = Mat * target_vec;
@@ -299,7 +301,7 @@ namespace glfw
       else if (direction == 3) {
           Eigen::Vector3d target_vec = (snake->C.row(snake->C.rows() - 1) - snake->C.row(snake->C.rows() - 2)).normalized() * velocity;
           //Eigen::Quaterniond rot(Eigen::AngleAxisd(-igl::PI * 0.1, Eigen::Vector3d(0, 1, 0)));
-          float amtY = -angle * igl::PI / 180;
+          float amtY = angle * igl::PI / 180;
            Eigen::Matrix3d Mat;
 		       Mat << cos(amtY),0,sin(amtY),  0, 1, 0 ,  -sin(amtY), 0, cos(amtY) ;
            target_vec = Mat * target_vec;
@@ -362,8 +364,10 @@ namespace glfw
           data_list[1].MyTranslate(diff, true);
           //// //camera_movement = -snake->dT[13].cast <float>(); // why do i need to put the minus?
           
-          camera_movement = -C_prime.row(C_prime.rows() - 1).cast <float>();
+          camera_direction = -(C_prime.row(C_prime.rows() - 1) - C_prime.row(C_prime.rows() - 2)).cast <float>();
+          camera_movement = (-C_prime.row(C_prime.rows() - 4).cast <float>());
           camera_movement += Eigen::Vector3f(0, -1.5, 0);
+         
           //camera_movement = C_prime.row(C_prime.rows() - 3)
          
           
@@ -597,9 +601,9 @@ namespace glfw
     }
 
     data().compute_normals();
-    data().uniform_colors(Eigen::Vector3d(51.0/255.0,43.0/255.0,33.3/255.0),
-                   Eigen::Vector3d(255.0/255.0,228.0/255.0,58.0/255.0),
-                   Eigen::Vector3d(255.0/255.0,235.0/255.0,80.0/255.0));
+    //data().uniform_colors(Eigen::Vector3d(51.0/255.0,43.0/255.0,33.3/255.0),
+                   //Eigen::Vector3d(255.0/255.0,228.0/255.0,58.0/255.0),
+                   //Eigen::Vector3d(255.0/255.0,235.0/255.0,80.0/255.0));
 
     // Alec: why?
     if (data().V_uv.rows() == 0)
@@ -832,43 +836,43 @@ namespace glfw
 	  return prevTrans;
   }
 
-  void Viewer::Move() {
-      double velocity = 0.01;
-      for (auto& data : data_list)
-      {
-          if (!data.to_remove) {
-              switch (data.direction)
-              {
-              case 1: // up
-                  data.MyTranslate(Eigen::Vector3d(0, velocity, 0), true);
-                  data.center_dif += Eigen::Vector3d(0, velocity, 0);
-                  break;
-              case 2: // down
-                  data.MyTranslate(Eigen::Vector3d(0, -velocity, 0), true);
-                  data.center_dif += Eigen::Vector3d(0, -velocity, 0);
-                  break;
-              case 3: // left
-                  data.MyTranslate(Eigen::Vector3d(-velocity, 0, 0), true);
-                  data.center_dif += Eigen::Vector3d(-velocity, 0, 0);
-                  break;
-              case 4: // right
-                  data.MyTranslate(Eigen::Vector3d(velocity, 0, 0), true);
-                  data.center_dif += Eigen::Vector3d(velocity, 0, 0);
-                  break;
-              case 5: //inward
-                  data.MyTranslate(Eigen::Vector3d(0, 0, velocity), true);
-                  data.center_dif += Eigen::Vector3d(0, 0, velocity);
-                  break;
-              case 6: //outward
-                  data.MyTranslate(Eigen::Vector3d(0, 0, -velocity), true);
-                  data.center_dif += Eigen::Vector3d(0, 0, -velocity);
-                  break;
-              default:
-                  break;
-              }
-          }
-      }
-  }
+  //void Viewer::Move() {
+  //    double velocity = 0.01;
+  //    for (auto& data : data_list)
+  //    {
+  //        if (!data.to_remove) {
+  //            switch (data.direction)
+  //            {
+  //            case 1: // up
+  //                data.MyTranslate(Eigen::Vector3d(0, velocity, 0), true);
+  //                data.center_dif += Eigen::Vector3d(0, velocity, 0);
+  //                break;
+  //            case 2: // down
+  //                data.MyTranslate(Eigen::Vector3d(0, -velocity, 0), true);
+  //                data.center_dif += Eigen::Vector3d(0, -velocity, 0);
+  //                break;
+  //            case 3: // left
+  //                data.MyTranslate(Eigen::Vector3d(-velocity, 0, 0), true);
+  //                data.center_dif += Eigen::Vector3d(-velocity, 0, 0);
+  //                break;
+  //            case 4: // right
+  //                data.MyTranslate(Eigen::Vector3d(velocity, 0, 0), true);
+  //                data.center_dif += Eigen::Vector3d(velocity, 0, 0);
+  //                break;
+  //            case 5: //inward
+  //                data.MyTranslate(Eigen::Vector3d(0, 0, velocity), true);
+  //                data.center_dif += Eigen::Vector3d(0, 0, velocity);
+  //                break;
+  //            case 6: //outward
+  //                data.MyTranslate(Eigen::Vector3d(0, 0, -velocity), true);
+  //                data.center_dif += Eigen::Vector3d(0, 0, -velocity);
+  //                break;
+  //            default:
+  //                break;
+  //            }
+  //        }
+  //    }
+  //}
 
   double Viewer::sign(int i, int j) {
       if ((i == 0 && j == 1) || (i == 1 && j == 2) || (i == 2 && j == 0)) {
@@ -1010,12 +1014,10 @@ namespace glfw
       if (tree1->is_leaf() && tree2->is_leaf()) {
           if (does_intersect(tree1->m_box, tree2->m_box, obj1->GetRotation(), obj2->GetRotation(), obj1->center_dif, obj2->center_dif)) {
               //std::cout << "collision" << std::endl;
-              obj1->draw_box(tree1->m_box, Eigen::RowVector3d(1, 0, 0));
-              obj2->draw_box(tree2->m_box, Eigen::RowVector3d(1, 0, 0));
-
+              //obj1->draw_box(tree1->m_box, Eigen::RowVector3d(1, 0, 0));
+              //obj2->draw_box(tree2->m_box, Eigen::RowVector3d(1, 0, 0));
               return true;
           }
-
           return false;
       }
 

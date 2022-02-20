@@ -84,49 +84,54 @@ IGL_INLINE void igl::opengl::ViewerData::init_mesh() {
         current_position = p_bezier[0];
         MyTranslate(p_bezier[0], true);
         center_dif += p_bezier[0];
+
         if (id > 1 && id < 5) {
+
             score = 5;
         }
-        if(id == 5){
-          movement_effect = 1.4;
-          V = V * 10;
+        if (id == 5) {
+            movement_effect = 2;
+            V = V * 10;
+            MyTranslate(Eigen::Vector3d(0, -2, 0), true);
+            center_dif += Eigen::Vector3d(0, -2, 0);
         }
         if (id > 5 && id < 8) {
             score = 10;
         }
-        if (id == 8){
-          movement_effect = 0.8;
+        if (id == 8) {
+            movement_effect = 0.6;
         }
         if (id == 9) {
             score = 50;
         }
-        if (id == 10){
-          score = -100;
+        if (id == 10) {
+            score = -100;
         }
         to_remove = true;
+        show_overlay = 0;
 
         // drawing the curve
-      //   Eigen::MatrixXd stam(1, 3);
-      //   stam.row(0) << p_bezier[0];
-      //   //Eigen::Vector3d curr_pos =;
+        //Eigen::MatrixXd stam(1, 3);
+        //stam << p_bezier[0](0), p_bezier[0](1), p_bezier[0](2);
+        Eigen::Vector3d curr_pos = Eigen::Vector3d(0, 0, 0);
+        //Eigen::Vector
 
-      //   for (float i = 0.1; i < 1; i += 0.1){
-      //       Eigen::Vector3d new_position = pow((1 - i), 3) * p_bezier[0] + 3 * pow((1 - i), 2) * i * p_bezier[1] + 3 * (1 - i) * pow(i, 2) * p_bezier[2] + pow(i, 3) * p_bezier[3];
-      //       add_edges(stam, Eigen::RowVector3d(1, 0, 0), Eigen::RowVector3d(1, 0, 0));
-      //       //curr_pos = new_position;
-      //  }
-      //     std::cout << "here1" << std::endl;
-      //   float i = 1;
-      //   Eigen::Vector3d new_position = pow((1 - i), 3) * p_bezier[0] + 3 * pow((1 - i), 2) * i * p_bezier[1] + 3 * (1 - i) * pow(i, 2) * p_bezier[2] + pow(i, 3) * p_bezier[3];
-      //   //add_edges(curr_pos, new_position, Eigen::RowVector3d(1, 0, 0));
-      //   std::cout << "here2" << std::endl;
 
+        for (float i = 0.1; i < 1; i += 0.01) 
+        {
+            Eigen::Vector3d new_position = pow((1 - i), 3) * p_bezier[0] + 3 * pow((1 - i), 2) * i * p_bezier[1] + 3 * (1 - i) * pow(i, 2) * p_bezier[2] + pow(i, 3) * p_bezier[3];
+            add_edges(curr_pos.transpose(), (new_position - p_bezier[0]).transpose(), Eigen::RowVector3d(1, 0, 0));
+            curr_pos = new_position - p_bezier[0];
+        }
+
+        float i = 1;
+        Eigen::Vector3d new_position = pow((1 - i), 3) * p_bezier[0] + 3 * pow((1 - i), 2) * i * p_bezier[1] + 3 * (1 - i) * pow(i, 2) * p_bezier[2] + pow(i, 3) * p_bezier[3];
+        add_edges(curr_pos.transpose(), (new_position - p_bezier[0]).transpose(), Eigen::RowVector3d(1, 0, 0));
     }
 
     tree = new igl::AABB<Eigen::MatrixXd, 3>();
     tree->init(V, F);
     outer_box = tree->m_box;
-
 
     Eigen::MatrixXd V_box(8, 3);
     V_box <<
@@ -154,27 +159,27 @@ IGL_INLINE void igl::opengl::ViewerData::init_mesh() {
         7, 5,
         2, 0;
 
-    // Plot the corners of the bounding box as points
-    add_points(V_box, Eigen::RowVector3d(0, 1, 0));
+    // // Plot the corners of the bounding box as points
+    // add_points(V_box, Eigen::RowVector3d(0, 1, 0));
 
-    // Plot the edges of the bounding box
-    for (unsigned i = 0; i < E_box.rows(); ++i)
-        add_edges
-        (
-            V_box.row(E_box(i, 0)),
-            V_box.row(E_box(i, 1)),
-            Eigen::RowVector3d(0, 1, 0)
-        );
-
+    // // Plot the edges of the bounding box
+    // for (unsigned i = 0; i < E_box.rows(); ++i)
+    //     add_edges
+    //     (
+    //         V_box.row(E_box(i, 0)),
+    //         V_box.row(E_box(i, 1)),
+    //         Eigen::RowVector3d(0, 1, 0)
+    //     );
     //draw_all(tree);
+    
 }
 
-IGL_INLINE void igl::opengl::ViewerData::bezier_movement(){
+IGL_INLINE void igl::opengl::ViewerData::bezier_movement(float dis){
   if (t == 0 || t == 1){
     bezier_direction *= -1;
   }
 
-  float t_diff = bezier_direction * 0.01;
+  float t_diff = bezier_direction * dis;
 
   t += t_diff;
 
@@ -188,6 +193,11 @@ IGL_INLINE void igl::opengl::ViewerData::bezier_movement(){
   Eigen::Vector3d new_position = pow((1 - t), 3) * p_bezier[0] + 3 * pow((1 - t), 2) * t * p_bezier[1] + 3 * (1 - t) * pow(t, 2) * p_bezier[2] + pow(t, 3) * p_bezier[3];
   Eigen::Vector3d diff = new_position - current_position;
   MyTranslate(diff, true);
+  for (int i = 0; i < lines.rows(); i++){
+    Eigen::VectorXd new_row(9); 
+    new_row << lines(i, 0) - diff(0), lines(i, 1) - diff(1), lines(i, 2) - diff(2), lines(i, 3) - diff(0), lines(i, 4) - diff(1), lines(i, 5) - diff(2), lines(i, 6), lines(i, 7), lines(i, 8);
+    lines.row(i) = new_row.transpose();
+  }
   center_dif += diff;
   current_position = new_position;
 }
@@ -283,11 +293,58 @@ IGL_INLINE void igl::opengl::ViewerData::set_mesh(
     F = _F;
 
     compute_normals();
-    uniform_colors(
-      Eigen::Vector3d(GOLD_AMBIENT[0], GOLD_AMBIENT[1], GOLD_AMBIENT[2]),
-      Eigen::Vector3d(GOLD_DIFFUSE[0], GOLD_DIFFUSE[1], GOLD_DIFFUSE[2]),
-      Eigen::Vector3d(GOLD_SPECULAR[0], GOLD_SPECULAR[1], GOLD_SPECULAR[2]));
-	image_texture("C:/AnimationProject/snek-3d/tutorial/textures/snake1.png");
+
+    
+    if (id < 2) {
+        uniform_colors(
+        Eigen::Vector3d(LADISLAV_ORANGE_DIFFUSE[0], LADISLAV_ORANGE_DIFFUSE[1], LADISLAV_ORANGE_DIFFUSE[2]),
+        Eigen::Vector3d(LADISLAV_ORANGE_DIFFUSE[0], LADISLAV_ORANGE_DIFFUSE[1], LADISLAV_ORANGE_DIFFUSE[2]),
+        Eigen::Vector3d(LADISLAV_ORANGE_DIFFUSE[0], LADISLAV_ORANGE_DIFFUSE[1], LADISLAV_ORANGE_DIFFUSE[2]));
+    }
+    if (id > 1 && id < 5) {
+      uniform_colors(
+        Eigen::Vector3d(CYAN_AMBIENT[0], CYAN_AMBIENT[1], CYAN_AMBIENT[2]),
+        Eigen::Vector3d(CYAN_DIFFUSE[0], CYAN_DIFFUSE[1], CYAN_DIFFUSE[2]),
+        Eigen::Vector3d(CYAN_SPECULAR[0], CYAN_SPECULAR[1], CYAN_SPECULAR[2]));
+    }
+    if(id == 5){
+       uniform_colors(
+        Eigen::Vector3d(FAST_GREEN_DIFFUSE[0], FAST_GREEN_DIFFUSE[1], FAST_GREEN_DIFFUSE[2]),
+        Eigen::Vector3d(FAST_GREEN_DIFFUSE[0], FAST_GREEN_DIFFUSE[1], FAST_GREEN_DIFFUSE[2]),
+        Eigen::Vector3d(FAST_GREEN_DIFFUSE[0], FAST_GREEN_DIFFUSE[1], FAST_GREEN_DIFFUSE[2]));
+    }
+    if (id > 5 && id < 8) {
+       uniform_colors(
+        Eigen::Vector3d(SILVER_AMBIENT[0], SILVER_AMBIENT[1], SILVER_AMBIENT[2]),
+        Eigen::Vector3d(SILVER_DIFFUSE[0], SILVER_DIFFUSE[1], SILVER_DIFFUSE[2]),
+        Eigen::Vector3d(SILVER_SPECULAR[0], SILVER_SPECULAR[1], SILVER_SPECULAR[2]));
+    }
+    if (id == 8){
+       uniform_colors(
+        Eigen::Vector3d(FAST_RED_DIFFUSE[0], FAST_RED_DIFFUSE[1], FAST_RED_DIFFUSE[2]),
+        Eigen::Vector3d(FAST_RED_DIFFUSE[0], FAST_RED_DIFFUSE[1], FAST_RED_DIFFUSE[2]),
+        Eigen::Vector3d(FAST_RED_DIFFUSE[0], FAST_RED_DIFFUSE[1], FAST_RED_DIFFUSE[2]));
+    }
+    if (id == 9) {
+       uniform_colors(
+        Eigen::Vector3d(GOLD_AMBIENT[0], GOLD_AMBIENT[1], GOLD_AMBIENT[2]),
+        Eigen::Vector3d(GOLD_DIFFUSE[0], GOLD_DIFFUSE[1], GOLD_DIFFUSE[2]),
+        Eigen::Vector3d(GOLD_SPECULAR[0], GOLD_SPECULAR[1], GOLD_SPECULAR[2]));
+    }
+    if (id == 10){
+       uniform_colors(
+        Eigen::Vector3d(MAYA_RED[0], MAYA_RED[1], MAYA_RED[2]),
+        Eigen::Vector3d(EASTER_RED_DIFFUSE[0], EASTER_RED_DIFFUSE[1], EASTER_RED_DIFFUSE[2]),
+        Eigen::Vector3d(MAYA_RED[0], MAYA_RED[1], MAYA_RED[2]));
+    }
+
+    
+    
+    // uniform_colors(
+    //   Eigen::Vector3d(GOLD_AMBIENT[0], GOLD_AMBIENT[1], GOLD_AMBIENT[2]),
+    //   Eigen::Vector3d(GOLD_DIFFUSE[0], GOLD_DIFFUSE[1], GOLD_DIFFUSE[2]),
+    //   Eigen::Vector3d(GOLD_SPECULAR[0], GOLD_SPECULAR[1], GOLD_SPECULAR[2]));
+	image_texture("C:/AnimationProject/snek-3d/tutorial/textures/clean.png");
 //    grid_texture();
   }
   else
@@ -303,8 +360,6 @@ IGL_INLINE void igl::opengl::ViewerData::set_mesh(
   dirty |= MeshGL::DIRTY_FACE | MeshGL::DIRTY_POSITION;
   if (id != 0) {
       init_mesh();
-
-      
   }
 }
 

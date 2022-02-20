@@ -1,6 +1,8 @@
 #pragma once
 #include "igl/opengl/glfw/Display.h"
 #include "igl/opengl/glfw/Renderer.h"
+#include "igl/look_at.h"
+
 #include "sandBox.h"
 
 #include <igl/PI.h>
@@ -37,9 +39,9 @@ static void glfw_mouse_press(GLFWwindow* window, int button, int action, int mod
 		  }
 	  }
 	  scn->selected_data_index = savedIndx;
-	  scn->data().set_colors(Eigen::RowVector3d(0.9, 0.1, 0.1));
-	  if (lastIndx != savedIndx)
-		  scn->data_list[lastIndx].set_colors(Eigen::RowVector3d(255.0 / 255.0, 228.0 / 255.0, 58.0 / 255.0));
+	  //scn->data().set_colors(Eigen::RowVector3d(0.9, 0.1, 0.1));
+	  //if (lastIndx != savedIndx)
+		  //scn->data_list[lastIndx].set_colors(Eigen::RowVector3d(255.0 / 255.0, 228.0 / 255.0, 58.0 / 255.0));
 
 	  rndr->UpdatePosition(x2, y2);
 
@@ -101,8 +103,10 @@ void glfw_window_size(GLFWwindow* window, int width, int height)
 
 static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int action, int modifier)
 {
+	int i;
 	Renderer* rndr = (Renderer*) glfwGetWindowUserPointer(window);
 	Eigen::Vector3d tmp;
+	//Eigen::Matrix4f view;
 	SandBox* scn = (SandBox*)rndr->GetScene();
 	//Eigen::MatrixXd reset_camera;
 	//reset_camera << 0, 0, 0;
@@ -173,10 +177,10 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 			scn->direction = 1;
 			//rndr->TranslateCamera(Eigen::Vector3f(0, 0.01f,0)); // TODO: move camera according to movement
 			break;
-		case GLFW_KEY_DOWN:
-			scn->direction = 0;
-			//rndr->TranslateCamera(Eigen::Vector3f(0, -0.01f,0));
-			break;
+		//case GLFW_KEY_DOWN:
+		//	scn->direction = 0;
+		//	//rndr->TranslateCamera(Eigen::Vector3f(0, -0.01f,0));
+		//	break;
 		case GLFW_KEY_LEFT:
 			scn->direction = 3;
 			//rndr->TranslateCamera(Eigen::Vector3f(-0.01f, 0,0));
@@ -188,29 +192,25 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 		case '1':
 			
 			if (scn->camera_setting == 1) {
-				// rndr->core().camera_base_zoom = 1;
-				// rndr->core().camera_base_translation = Eigen::Vector3f(0, 0, 0);
-				rndr->RotateCameraX(-90 * igl::PI / 180);
-				//rndr->RotateCamera(0, scn->camera_angle_sum);
-				//rndr->core().align_camera_center(reset_camera);
+				//view = Eigen::Matrix4f::Identity();
+				//igl::look_at(rndr->core().camera_eye, scn->camera_movement, rndr->core().camera_up, view);
+				rndr->core().camera_base_zoom = 1;
+				rndr->RotateCamera(0, -90 * igl::PI / 180);
+				rndr->RotateCameraX(90 * igl::PI / 180);
 				rndr->core().camera_translation = scn->camera_movement;
-				//rndr->RotateCameraZ(180 * igl::PI / 180);
-				
-				
-				//scn->camera_angle_sum = 0;
+				rndr->core().camera_eye = scn->camera_direction;
+
 				scn->camera_setting = 0; // head view
 			}
 			
 			break;
 		case '2':
 			if (scn->camera_setting == 0) {
-				//rndr->RotateCamera(0, -scn->camera_angle_sum);
-				//rndr->core().camera_translation = Eigen::Vector3f(0, -5, 0);
-				//scn->RotateInSystem(Eigen::Vector3d(0, 0, 1), 180 * igl::PI / 180);
-				//rndr->core().align_camera_center(scn->data_list[0].V, scn->data_list[0].F);
-				rndr->RotateCameraX(90 * igl::PI / 180);
-				rndr->core().camera_translation = Eigen::Vector3f(0, 20, 0);
-				//scn->camera_angle_sum = 0;
+				rndr->core().camera_translation = Eigen::Vector3f(0, -25, 0);
+				rndr->RotateCameraX(-90 * igl::PI / 180);
+				rndr->RotateCamera(0, 90 * igl::PI / 180);
+				rndr->core().camera_eye = rndr->top_eye;
+				rndr->core().camera_base_zoom = 0.0781309;
 				scn->camera_setting = 1; // global view
 			}
 			break;
@@ -219,7 +219,11 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 		case 'P':
 		case 'p':
 		{
-			scn->data().to_remove_toggle();
+			for (int i = 2; i < scn->data_list.size(); i++) {
+				if (!scn->data_list[i].to_remove) {
+					scn->data_list[i].show_overlay ^= 2;
+				}
+			}
 			break;
 		}
 		case GLFW_KEY_C:

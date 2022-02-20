@@ -104,9 +104,14 @@ public:
 	void TranslateCamera(Eigen::Vector3f amt);
 	void RotateCamera(float amtX, float amtY);
 	void RotateCameraZ(float amtZ);
-	void Renderer::RotateCameraX(float amtX);
+	void RotateCameraX(float amtX);
 	inline bool IsPicked() { return scn->isPicked; }
 	
+	Eigen::Vector3f top_center;
+	Eigen::Vector3f top_eye;
+	igl::opengl::glfw::imgui::ImGuiMenu* menu;
+
+
 private:
 	// Stores all the viewing options
 	std::vector<igl::opengl::ViewerCore> core_list;
@@ -118,7 +123,6 @@ private:
 	float depth;
 	unsigned int left_view, right_view;
 	double doubleVariable;
-	igl::opengl::glfw::imgui::ImGuiMenu* menu;
 	double z;
 };
 

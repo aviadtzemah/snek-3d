@@ -221,6 +221,20 @@ IGL_INLINE void ImGuiMenu::draw_viewer_menu(igl::opengl::glfw::Viewer *viewer, s
 
     ImGui::End();
 
+    if (viewer->isActive){
+      ImGui::Begin(
+          "Timer", p_open,
+          window_flags
+      );
+      ImGui::SetWindowPos(ImVec2(0, 0), ImGuiCond_Always);
+      ImGui::SetWindowSize(ImVec2(200, 50), ImGuiCond_Always);
+
+      ImGui::Text("Timer: %d", 45 - (int)floor((igl::get_seconds() - viewer->start_game_time)));
+
+      ImGui::End();
+    }
+    
+
     if (!viewer->isActive && !viewer->game_ended){
       ImGui::Begin(
           "Welcome!", p_open,
@@ -236,7 +250,9 @@ IGL_INLINE void ImGuiMenu::draw_viewer_menu(igl::opengl::glfw::Viewer *viewer, s
         for (int i = 2; i < viewer->level * 3 + 2; i++) {
             viewer->data_list[i].to_remove = false;
             core[1].set(viewer->data_list[i].show_faces);
+            viewer->data_list[i].show_overlay = 2;
         }
+        viewer->direction = 1;
         viewer->isActive = true;
         viewer->start_game_time = igl::get_seconds();
       }
@@ -260,6 +276,8 @@ IGL_INLINE void ImGuiMenu::draw_viewer_menu(igl::opengl::glfw::Viewer *viewer, s
         for (int i = 2; i < viewer->level * 3 + 2; i++) {
             core[1].set(viewer->data_list[i].show_faces);
             viewer->data_list[i].to_remove = false;
+            viewer->data_list[i].show_overlay = 2;
+
         }
         viewer->isActive = true;
         viewer->game_ended = false;
@@ -273,6 +291,8 @@ IGL_INLINE void ImGuiMenu::draw_viewer_menu(igl::opengl::glfw::Viewer *viewer, s
         for (int i = 2; i < viewer->level * 3 + 2; i++) {
             core[1].set(viewer->data_list[i].show_faces);
             viewer->data_list[i].to_remove = false;
+            viewer->data_list[i].show_overlay = 2;
+
         }
         viewer->isActive = true;
         viewer->game_ended = false;
@@ -296,6 +316,12 @@ IGL_INLINE void ImGuiMenu::draw_viewer_menu(igl::opengl::glfw::Viewer *viewer, s
 
       if (ImGui::Button("Play last level again")){
         viewer->SetLevel(viewer->level);
+        for (int i = 2; i < viewer->level * 3 + 2; i++) {
+            core[1].set(viewer->data_list[i].show_faces);
+            viewer->data_list[i].to_remove = false;
+            viewer->data_list[i].show_overlay = 2;
+
+        }
         viewer->isActive = true;
         viewer->game_ended = false;
         viewer->score = 0;

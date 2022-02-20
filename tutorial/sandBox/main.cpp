@@ -5,6 +5,7 @@
 
 int main(int argc, char *argv[])
 {
+	srand(static_cast <unsigned> (time(0)));
   Display *disp = new Display(1200, 800, "Snek-3D");
   Renderer renderer;
 

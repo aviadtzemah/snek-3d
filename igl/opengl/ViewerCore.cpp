@@ -401,7 +401,7 @@ IGL_INLINE igl::opengl::ViewerCore::ViewerCore()
   orthographic = false;
   camera_view_angle = 45.0;
   camera_dnear = 1.0;
-  camera_dfar = 100.0;
+  camera_dfar = 300.0;
   camera_base_translation << 0, 0, 0;
   camera_translation << 0, 0, 0;
   camera_eye << 0, 0, 5;

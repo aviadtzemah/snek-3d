@@ -34,11 +34,11 @@
 
 //void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 //void processInput(GLFWwindow* window, int key, int scancode, int action, int modifier);
-//unsigned int loadTexture(const char* path);
-//unsigned int loadCubemap(vector<std::string> faces);
+unsigned int loadTexture(const char* path);
+unsigned int loadCubemap(vector<std::string> faces);
 
 // settings
-/*const unsigned int SCR_WIDTH = 1200;
+const unsigned int SCR_WIDTH = 1200;
 const unsigned int SCR_HEIGHT = 800;
 
 // camera
@@ -49,7 +49,7 @@ bool firstMouse = true;
 
 // timing
 float deltaTime = 0.0f;
-float lastFrame = 0.0f;*/
+float lastFrame = 0.0f;
 
 static void glfw_error_callback(int error, const char* description)
 {
@@ -158,10 +158,11 @@ Display::Display(int windowWidth, int windowHeight, const std::string& title)
 //		init();
 		
 }
-
+bool level2_once = false;
+bool level3_once = false;
 bool Display::launch_rendering(bool loop)
 {
-	/*glEnable(GL_DEPTH_TEST);
+	glEnable(GL_DEPTH_TEST);
 
 	// build and compile shaders
 	// -------------------------
@@ -228,7 +229,7 @@ bool Display::launch_rendering(bool loop)
 		FileSystem::getPath("tutorial/textures/Daylight_Box_Right.bmp"),
 		FileSystem::getPath("tutorial/textures/Daylight_Box_Left.bmp"),
 		FileSystem::getPath("tutorial/textures/Daylight_Box_Top.bmp"),
-		FileSystem::getPath("tutorial/textures/Daylight_Box_Bottom.bmp"),
+		FileSystem::getPath("tutorial/textures/nick.bmp"),
 		FileSystem::getPath("tutorial/textures/Daylight_Box_Front.bmp"),
 		FileSystem::getPath("tutorial/textures/Daylight_Box_Back.bmp")
 	};
@@ -238,7 +239,7 @@ bool Display::launch_rendering(bool loop)
 	//// --------------------
 
 	skyboxShader.use();
-	skyboxShader.setInt("skybox", 0);*/
+	skyboxShader.setInt("skybox", 0);
 
 	// glfwMakeContextCurrent(window);
 	// Rendering loop
@@ -253,22 +254,67 @@ bool Display::launch_rendering(bool loop)
 		renderer->core().toggle(renderer->GetScene()->data_list[i].show_lines);
 	while (!glfwWindowShouldClose(window))
 	{
-
 		double tic = igl::get_seconds();
 		renderer->Animate();
+		if (renderer->menu)
+		{
+			renderer->menu->pre_draw();
+			renderer->menu->callback_draw_viewer_menu();
+		}
 		renderer->draw(window);
-		if(renderer->GetScene()->start_game_time > 0 && (tic - renderer->GetScene()->start_game_time > 45
-			|| renderer->GetScene()->score >= renderer->GetScene()->req_score)){
+
+		if (renderer->GetScene()->level == 3 && tic - renderer->GetScene()->start_game_time >= 16) {
+			if (!level3_once) {
+				renderer->GetScene()->velocity *= 3;
+				renderer->GetScene()->bez_dis = 0.1;
+				level3_once = true;
+			}
+		}
+		if (renderer->GetScene()->level == 2 && tic - renderer->GetScene()->start_game_time >= 22) {
+			if (!level2_once) {
+				renderer->GetScene()->velocity *= 1.8;
+				renderer->GetScene()->bez_dis = 0.05;
+				level2_once = true;
+			}
+		}
+		if (renderer->GetScene()->start_game_time > 0 && (tic - renderer->GetScene()->start_game_time > 45
+			|| renderer->GetScene()->score >= renderer->GetScene()->req_score)) {
 			renderer->GetScene()->isActive = false;
 			renderer->GetScene()->start_game_time = 0;
-			renderer->GetScene()->game_ended = true;;
+			renderer->GetScene()->game_ended = true;
+			renderer->GetScene()->bez_dis = 0.01;
+			level2_once = false;
+			level3_once = false;
 		}
 
+		if (renderer->GetScene()->camera_setting == 0){ //3rd person
+			camera.Pitch = 0.0f;
+
+			Eigen::Vector3f pivot(0, 0, -1.6);
+			Eigen::Vector3f current = renderer->GetScene()->camera_direction;
+            double angle = pivot.dot(current) / (pivot.norm() * current.norm()); // currently holds cos(angle)
+
+            if (angle <= 1 && angle >= -1) {
+                angle = acos(angle) * 180.0 / igl::PI;;
+            }
+            else {
+                angle = angle > 1 ? acos(1) * 180.0 / igl::PI : acos(-1);
+                angle = angle > 1 ? acos(1) * 180.0 / igl::PI : acos(-1) ;
+            }
+			camera.Yaw = -90.0f + angle;
+
+			camera.updateCameraVectors();
+		}
+		else{ // top
+			camera.Yaw = -90.0f;
+			camera.Pitch = -90.0f;
+			camera.updateCameraVectors();
+		}
 
 		//start
-		//float currentFrame = static_cast<float>(glfwGetTime());
-		//deltaTime = currentFrame - lastFrame;
-		//lastFrame = currentFrame;
+		float currentFrame = static_cast<float>(glfwGetTime());
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
 
 		//// input
 		//// -----
@@ -281,9 +327,12 @@ bool Display::launch_rendering(bool loop)
 		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// draw scene as normal
-		/*glm::mat4 model = glm::mat4(1.0f);
+		glm::mat4 model = glm::mat4(1.0f);
 		glm::mat4 view = camera.GetViewMatrix();
-		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 300.0f);
+		//eigen equal
+		//Eigen::Matrix4f view = Eigen::Matrix4f::Identity();;
+		//igl::look_at(renderer->core().camera_eye, renderer->core().camera_center, renderer->core().camera_up, view);
 
 		// draw skybox as last
 		glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
@@ -297,13 +346,19 @@ bool Display::launch_rendering(bool loop)
 		glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		glBindVertexArray(0);
-		glDepthFunc(GL_LESS); // set depth function back to default*/
+		glDepthFunc(GL_LESS); // set depth function back to default
 		//end
 
+		if (renderer->menu)
+		{
+			renderer->menu->post_draw();
+		}
 		glfwSwapBuffers(window);
 		if (renderer->core().is_animating || frame_counter++ < num_extra_frames)
 		{//motion
 			glfwPollEvents();
+
+			
 			// In microseconds
 			double duration = 1000000. * (igl::get_seconds() - tic);
 			const double min_duration = 1000000. / renderer->core().animation_max_fps;
@@ -330,8 +385,8 @@ bool Display::launch_rendering(bool loop)
 #endif
 
 	}
-	//glDeleteVertexArrays(1, &skyboxVAO);
-	//glDeleteBuffers(1, &skyboxVBO);
+	glDeleteVertexArrays(1, &skyboxVAO);
+	glDeleteBuffers(1, &skyboxVBO);
 
 	return EXIT_SUCCESS;
 }
@@ -484,9 +539,9 @@ void glfw_mouse_press(GLFWwindow* window, int button, int action, int modifier)
 			}
 		}
 		scn->selected_data_index = savedIndx;
-		scn->data().set_colors(Eigen::RowVector3d(0.9, 0.1, 0.1));
-		if (lastIndx != savedIndx)
-			scn->data_list[lastIndx].set_colors(Eigen::RowVector3d(255.0 / 255.0, 228.0 / 255.0, 58.0 / 255.0));
+		//scn->data().set_colors(Eigen::RowVector3d(0.9, 0.1, 0.1));
+		//if (lastIndx != savedIndx)
+			//scn->data_list[lastIndx].set_colors(Eigen::RowVector3d(255.0 / 255.0, 228.0 / 255.0, 58.0 / 255.0));
 
 		rndr->UpdatePosition(x2, y2);
 

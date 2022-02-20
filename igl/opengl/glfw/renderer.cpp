@@ -6,7 +6,8 @@
 //#include <Eigen/Dense>
 
 #include <igl/PI.h>
-
+#include <ctime>
+#include <cstdlib>
 
 
 
@@ -65,11 +66,11 @@ IGL_INLINE void Renderer::draw( GLFWwindow* window)
 		core.clear_framebuffers();
 	}
 	int coreIndx = 1;
-	if (menu)
-	{
-		menu->pre_draw();
-		menu->callback_draw_viewer_menu();
-	}
+	//if (menu)
+	//{
+	//	menu->pre_draw();
+	//	menu->callback_draw_viewer_menu();
+	//}
 	for (auto& core : core_list)
 	{
 		int indx = 0;
@@ -86,14 +87,15 @@ IGL_INLINE void Renderer::draw( GLFWwindow* window)
 
 		
 	}
-	if (menu)
-	{
-		menu->post_draw();
-	}
+	//if (menu)
+	//{
+	//	menu->post_draw();
+	//}
 
 	if (scn->moving == 1) {
 		if (scn->camera_setting == 0) {
 			core().camera_translation = scn->camera_movement;
+			core().camera_eye = scn->camera_direction;
 			//RotateCamera(0, scn->camera_angle);
 		}
 	}
@@ -102,6 +104,7 @@ IGL_INLINE void Renderer::draw( GLFWwindow* window)
 	{
 		if (scn->data_list[i].to_remove) {
 			core().unset(scn->data_list[i].show_faces);
+			scn->data_list[i].show_overlay = 0;
 		}
 	}
 
@@ -115,21 +118,16 @@ void Renderer::SetScene(igl::opengl::glfw::Viewer* viewer)
 IGL_INLINE void Renderer::init(igl::opengl::glfw::Viewer* viewer,int coresNum, igl::opengl::glfw::imgui::ImGuiMenu* _menu)
 {
 	scn = viewer;
-	
 	doubleVariable = 0;
 	core().init(); 
 	menu = _menu;
-
-	// std::cout << core().camera_base_zoom << std::endl;
-	// std::cout << core().camera_base_translation << std::endl;
 	core().align_camera_center(scn->data_list[0].V, scn->data_list[0].F);
-	// std::cout << core().camera_base_zoom << std::endl;
-	// std::cout << core().camera_base_translation << std::endl;
-	RotateCameraX(-90 * igl::PI / 180);
-	core().camera_translation = Eigen::Vector3f(0, -20, 0);
-	//core().camera_translation = Eigen::Vector3f(0, -1.5, 8);
 
-	
+	RotateCameraX(-90 * igl::PI / 180);
+	RotateCamera(0, 90 * igl::PI / 180);
+	core().camera_translation = Eigen::Vector3f(0, -25, 0);
+	top_eye = core().camera_eye;
+
 
 	if (coresNum > 1)
 	{	
@@ -244,7 +242,7 @@ void Renderer::RotateCamera(float amtX, float amtY)
 
 void Renderer::RotateCameraX(float amtX)
 {
-	core().camera_eye = core().camera_eye + Eigen::Vector3f(0, 0, amtX);
+	core().camera_eye = core().camera_eye + Eigen::Vector3f(amtX, 0, 0);
 	Eigen::Matrix3f Mat;
 	Mat << 1, 0, 0, 0, cos(amtX), -sin(amtX), 0, sin(amtX), cos(amtX);
 	core().camera_eye = Mat * core().camera_eye;

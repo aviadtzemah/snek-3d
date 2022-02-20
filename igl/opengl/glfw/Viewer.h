@@ -132,7 +132,7 @@ namespace glfw
     IGL_INLINE Eigen::Vector3d Viewer::calculate_target();
     IGL_INLINE void Viewer::play_sound(int song_num);
 
-    IGL_INLINE void Move();
+    //IGL_INLINE void Move();
     IGL_INLINE bool CheckCollision();
     IGL_INLINE void MoveObjects();
     IGL_INLINE bool CheckCollisionRec(igl::opengl::ViewerData* obj1, igl::opengl::ViewerData* obj2, igl::AABB<Eigen::MatrixXd, 3>* tree1, igl::AABB<Eigen::MatrixXd, 3>* tree2);
@@ -159,7 +159,6 @@ namespace glfw
     int next_data_id;
 	bool isPicked;
 	bool isActive;
-    bool game_ended;
 
     //game additions
     int score;
@@ -167,11 +166,14 @@ namespace glfw
     double start_game_time;
     int level;
     float velocity;
+    bool game_ended;
+    float bez_dis;
     
 // movements vars
     int direction; // 0 - not moving, 1 - forward, 2 - forward-right, 3 - forward-left. default 0 until started moving then default is 1
     int camera_setting;
     Eigen::Vector3f camera_movement;
+    Eigen::Vector3f camera_direction;
     float camera_angle;
     float camera_angle_sum;
     int moving;

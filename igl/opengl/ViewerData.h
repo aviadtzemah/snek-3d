@@ -184,14 +184,14 @@ public:
   std::vector<Eigen::Vector3d> dT;
   RotationList dQ;
 
-  int movement_effect;
+  float movement_effect;
 
   // bezier
   float t;
   Eigen::Vector3d current_position;
   std::vector<Eigen::Vector3d> p_bezier;
   float bezier_direction;
-  IGL_INLINE void bezier_movement();
+  IGL_INLINE void bezier_movement(float dis);
 
 
   // Per face attributes
