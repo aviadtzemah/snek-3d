@@ -310,7 +310,7 @@ IGL_INLINE void ImGuiMenu::draw_viewer_menu(igl::opengl::glfw::Viewer *viewer, s
       );
 
       ImGui::SetWindowPos(ImVec2(450, 250), ImGuiCond_Always);
-      ImGui::SetWindowSize(ImVec2(450, 150), ImGuiCond_Always);
+      ImGui::SetWindowSize(ImVec2(550, 150), ImGuiCond_Always);
 
       ImGui::Text("You have finshed the game and got a score of %d in the last level!", viewer->score);
 

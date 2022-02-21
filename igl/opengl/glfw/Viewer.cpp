@@ -377,48 +377,48 @@ namespace glfw
           print(camera_movement);
           print("---------------")*/
           
-         /* Eigen::Quaterniond bend(Eigen::AngleAxisd(-igl::PI * 0.005, Eigen::Vector3d(0, 1, 0)));
-          for (int i = 0; i < C_prime.rows() - 1; i++) {
-              if (i > 0) {
-                  snake->dQ[i] = snake->rest_pose[i] * bend * snake->rest_pose[i].conjugate();
-              }
-              else {
-                snake->dQ[i] = snake->rest_pose[i] * bend * snake->rest_pose[i].conjugate();
-              }
+        //  /* Eigen::Quaterniond bend(Eigen::AngleAxisd(-igl::PI * 0.005, Eigen::Vector3d(0, 1, 0)));
+        //   for (int i = 0; i < C_prime.rows() - 1; i++) {
+        //       if (i > 0) {
+        //           snake->dQ[i] = snake->rest_pose[i] * bend * snake->rest_pose[i].conjugate();
+        //       }
+        //       else {
+        //         snake->dQ[i] = snake->rest_pose[i] * bend * snake->rest_pose[i].conjugate();
+        //       }
 
-          }*/
-          // snake->dT[0] = C_prime.row(0) - snake->C.row(0);
-          // for (int i = 0; i < C_prime.rows() - 1; i++) {
-          //    Eigen::Vector3d RD = snake->C.row(i + 1) - C_prime.row(i);
-          //    Eigen::Vector3d RE = C_prime.row(i + 1) - C_prime.row(i);
+        //   }*/
+        //   // snake->dT[0] = C_prime.row(0) - snake->C.row(0);
+        //   // for (int i = 0; i < C_prime.rows() - 1; i++) {
+        //   //    Eigen::Vector3d RD = snake->C.row(i + 1) - C_prime.row(i);
+        //   //    Eigen::Vector3d RE = C_prime.row(i + 1) - C_prime.row(i);
 
-          //    double angle = RD.dot(RE) / (RE.norm() * RD.norm()); // currently holds cos(angle)
+        //   //    double angle = RD.dot(RE) / (RE.norm() * RD.norm()); // currently holds cos(angle)
 
-          //    if (angle <= 1 && angle >= -1) {
-          //        angle = acos(angle);
-          //    }
-          //    else {
-          //        angle = angle > 1 ? acos(1) : acos(-1);
-          //    }
+        //   //    if (angle <= 1 && angle >= -1) {
+        //   //        angle = acos(angle);
+        //   //    }
+        //   //    else {
+        //   //        angle = angle > 1 ? acos(1) : acos(-1);
+        //   //    }
 
-          //    Eigen::Vector3d plane = RE.cross(RD).normalized();
+        //   //    Eigen::Vector3d plane = RE.cross(RD).normalized();
 
-          //    Eigen::Quaterniond bend;
-          //    if (angle == 0) {
-          //        bend = Eigen::Quaterniond::Identity();
-          //    }
-          //    else {
-          //        bend = Eigen::AngleAxisd(-angle * igl::PI / 180, plane);
-          //    }
-          //    //Eigen::Quaterniond bend(Eigen::AngleAxisd(angle * igl::PI / 180, plane)); // the angle is correct (it needs to be in radians)
+        //   //    Eigen::Quaterniond bend;
+        //   //    if (angle == 0) {
+        //   //        bend = Eigen::Quaterniond::Identity();
+        //   //    }
+        //   //    else {
+        //   //        bend = Eigen::AngleAxisd(-angle * igl::PI / 180, plane);
+        //   //    }
+        //   //    //Eigen::Quaterniond bend(Eigen::AngleAxisd(angle * igl::PI / 180, plane)); // the angle is correct (it needs to be in radians)
 
-          //    if (i > 0) {
-          //       snake->dQ[i] = data().rest_pose[i] * bend * data().rest_pose[i].conjugate();
-          //    }
-          //    else {
-          //      snake->dQ[i] = data().rest_pose[i] * bend * data().rest_pose[i].conjugate();
-          //    }
-          // }
+        //   //    if (i > 0) {
+        //   //       snake->dQ[i] = data().rest_pose[i] * bend * data().rest_pose[i].conjugate();
+        //   //    }
+        //   //    else {
+        //   //      snake->dQ[i] = data().rest_pose[i] * bend * data().rest_pose[i].conjugate();
+        //   //    }
+        //   // }
           snake->C = C_prime;
           //flag--;
       }
@@ -468,10 +468,10 @@ namespace glfw
       }
 
       // nomalizing so the weights would add up to 1 for each vertex
-      for (int i = 0; i < W_bones.rows(); i++) {
-          double row_sum = W_bones.row(i).sum();
-          for (int j = 0; j < W_bones.cols(); j++) {
-              W_bones(i, j) = W_bones(i, j) / row_sum;
+      for (int i = 0; i < W_joints.rows(); i++) {
+          double row_sum = W_joints.row(i).sum();
+          for (int j = 0; j < W_joints.cols(); j++) {
+              W_joints(i, j) = W_joints(i, j) / row_sum;
           }
       }
 
@@ -529,10 +529,10 @@ namespace glfw
     snake->compute_normals();
 
     // resetting movement after skinning
-    for (int i = 0; i < data().dT.size(); i++) {
-        data().dT[i] = Eigen::Vector3d(0, 0, 0);
+    for (int i = 0; i < snake->dT.size(); i++) {
+        snake->dT[i] = Eigen::Vector3d(0, 0, 0);
     }
-    data().dQ = RotationList(data().C.rows(), Eigen::Quaterniond::Identity());
+    snake->dQ = RotationList(snake->C.rows(), Eigen::Quaterniond::Identity());
 
     return false;
   }

@@ -229,7 +229,7 @@ bool Display::launch_rendering(bool loop)
 		FileSystem::getPath("tutorial/textures/Daylight_Box_Right.bmp"),
 		FileSystem::getPath("tutorial/textures/Daylight_Box_Left.bmp"),
 		FileSystem::getPath("tutorial/textures/Daylight_Box_Top.bmp"),
-		FileSystem::getPath("tutorial/textures/nick.bmp"),
+		FileSystem::getPath("tutorial/textures/Daylight_Box_Bottom.bmp"),
 		FileSystem::getPath("tutorial/textures/Daylight_Box_Front.bmp"),
 		FileSystem::getPath("tutorial/textures/Daylight_Box_Back.bmp")
 	};
@@ -637,9 +637,9 @@ void Display::AddKeyCallBack(void(*keyCallback)(GLFWwindow*, int, int, int, int)
 
 void Display::AddMouseCallBacks(void (*mousebuttonfun)(GLFWwindow*, int, int, int), void (*scrollfun)(GLFWwindow*, double, double), void (*cursorposfun)(GLFWwindow*, double, double))
 {
-	glfwSetMouseButtonCallback(window, mousebuttonfun);
-	glfwSetScrollCallback(window, scrollfun);
-	glfwSetCursorPosCallback(window, cursorposfun);
+	//glfwSetMouseButtonCallback(window, mousebuttonfun);
+	//glfwSetScrollCallback(window, scrollfun);
+	//glfwSetCursorPosCallback(window, cursorposfun);
 }
 
 void Display::AddResizeCallBack(void (*windowsizefun)(GLFWwindow*, int, int))
